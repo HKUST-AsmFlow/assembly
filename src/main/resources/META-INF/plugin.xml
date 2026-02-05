@@ -1,0 +1,19 @@
+<idea-plugin>
+    <id>io.github.asmflow.assembly</id>
+
+    <name>Assembly</name>
+    <vendor>HKUST AsmFlow</vendor>
+    <description>Various Assembly language support for the IntelliJ Platform. Part of the AsmFlow project.</description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <resource-bundle>messages.AssemblyBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="ARMv7 Assembly"
+                  language="ARMv7_ASM"
+                  implementationClass="io.github.asmflow.assembly.armv7.ARMv7AssemblyFileType"
+                  extensions="arm"
+                  fieldName="INSTANCE" />
+    </extensions>
+</idea-plugin>
