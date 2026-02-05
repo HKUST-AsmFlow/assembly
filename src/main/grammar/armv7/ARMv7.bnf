@@ -1,0 +1,40 @@
+{
+    parserClass = "io.github.asmflow.assembly.armv7.parser.ARMv7Parser"
+    parserUtilClass = "io.github.asmflow.assembly.armv7.parser.ARMv7ParserUtil"
+
+    extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    elementTypeClass = "io.github.asmflow.assembly.armv7.psi.ARMv7ElementType"
+    elementTypeHolderClass = "io.github.asmflow.assembly.armv7.psi.ARMv7Types"
+
+    psiClassPrefix = "ARMv7"
+    psiPackage = "io.github.asmflow.assembly.armv7.psi"
+    psiImplClassSuffix = "Impl"
+    psiImplPackage = "io.github.asmflow.assembly.armv7.psi.impl"
+
+    tokens = [
+        ADC = "adc"
+
+        // set condition flags (optional)
+        S = "s"
+
+        // condition codes (optional)
+        EQ = "eq"
+        NE = "ne"
+        CS = "cs"
+        HS = "hs"
+        CC = "cc"
+        LO = "lo"
+        MI = "mi"
+        PL = "pl"
+        VS = "vs"
+        VC = "vc"
+        HI = "hi"
+        LS = "ls"
+        GE = "ge"
+        LT = "lt"
+        GT = "gt"
+        LE = "le"
+        AL = "al"
+    ]
+}
