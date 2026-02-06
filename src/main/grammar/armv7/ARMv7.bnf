@@ -67,14 +67,7 @@ Label ::= IDENTIFIER COLON
 
 Item ::= LineFeed | InstructionOrLabel LineFeed?
 
-fake HasConditionCodes ::= {
-    methods = [ getConditionCode ]
-}
 ConditionCodes ::= !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
-
-fake SetsConditionFlags ::= {
-    methods = [ isConditionFlagsSet ]
-}
 
 SetConditionFlags ::= !<<afterWhitespace>> (S)
 
