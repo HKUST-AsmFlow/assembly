@@ -19,12 +19,14 @@ private void enqueue(IElementType t) {
 }
 
 private void queueSetFlagsConditionCodes(String suffix) {
-    if (suffix.startsWith("s"))
+    boolean hasS = suffix.startsWith("s");
+    String cond = hasS ? suffix.substring(1) : suffix;
+
+    if (hasS)
         enqueue(S);
 
-    if (suffix.length() > 1) {
-        String condition = suffix.substring(1);
-        switch (condition) {
+    if (!cond.isEmpty()) {
+        switch (cond) {
             case "eq":
                 enqueue(EQ);
                 break;
@@ -125,7 +127,6 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
     "adc"({S}?{CONDITION_CODES}?) {
           enqueue(ADC);
           queueSetFlagsConditionCodes(yytext().toString().substring(3));
-
           return queue.pollFirst();
       }
 
