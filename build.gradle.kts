@@ -35,6 +35,10 @@ intellijPlatform {
 }
 
 tasks {
+    withType<Copy> {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
     withType<JavaCompile> {
         sourceCompatibility = "21"
         targetCompatibility = "21"
