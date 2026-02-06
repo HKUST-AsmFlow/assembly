@@ -83,7 +83,9 @@ private void queueSetFlagsConditionCodes(String suffix) {
 }
 
 public IElementType advance() throws IOException {
-    if (!queue.isEmpty()) return queue.pollFirst();
+    if (!queue.isEmpty())
+        return queue.pollFirst();
+
     return yyadvance();
 }
 
@@ -120,7 +122,12 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
     ":" { return COLON; }
     "." { return DOT; }
 
-    "adc"({S}?{CONDITION_CODES}?) { queue.add(ADC); queueSetFlagsConditionCodes(yytext().toString().substring(3)); }
+    "adc"({S}?{CONDITION_CODES}?) {
+          enqueue(ADC);
+          queueSetFlagsConditionCodes(yytext().toString().substring(3));
+
+          return queue.pollFirst();
+      }
 
     {IDENTIFIER} { return IDENTIFIER; }
 

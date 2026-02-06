@@ -11,6 +11,7 @@
     psiPackage = "io.github.asmflow.assembly.armv7.psi"
     psiImplClassSuffix = "Impl"
     psiImplPackage = "io.github.asmflow.assembly.armv7.psi.impl"
+    psiImplUtilClass = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7PsiImplUtil"
 
     tokenTypeClass = "io.github.asmflow.assembly.armv7.psi.ARMv7TokenType"
 
@@ -59,19 +60,26 @@ private LineFeed ::= LINE_FEED+ {
 }
 
 private InstructionOrLabel ::= Instruction | Label
-// TODO: Add Directives
+
 private Instruction ::= ARMv7Instructions
 
 Label ::= IDENTIFIER COLON
 
 Item ::= LineFeed | InstructionOrLabel LineFeed?
 
-private ConditionCodes ::=
-    !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
-private SetConditionFlags ::= !<<afterWhitespace>> (S)
+fake HasConditionCodes ::= {
+    methods = [ getConditionCode ]
+}
+ConditionCodes ::= !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
+
+fake SetsConditionFlags ::= {
+    methods = [ isConditionFlagsSet ]
+}
+
+SetConditionFlags ::= !<<afterWhitespace>> (S)
 
 private ARMv7Instructions ::= ARMv7ArithmeticInstructions
 
 private ARMv7ArithmeticInstructions ::= ADCInstruction
 
-ADCInstruction ::= ADC SetConditionFlags? ConditionCodes? // operands..
+ADCInstruction ::= ADC SetConditionFlags? ConditionCodes?

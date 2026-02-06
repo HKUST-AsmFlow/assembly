@@ -362,7 +362,9 @@ private void queueSetFlagsConditionCodes(String suffix) {
 }
 
 public IElementType advance() throws IOException {
-    if (!queue.isEmpty()) return queue.pollFirst();
+    if (!queue.isEmpty())
+        return queue.pollFirst();
+
     return yyadvance();
 }
 
@@ -650,7 +652,15 @@ public IElementType advance() throws IOException {
           // fall through
           case 17: break;
           case 9:
-            { queue.add(ADC); queueSetFlagsConditionCodes(yytext().toString().substring(3));
+            { enqueue(ADC);
+          queueSetFlagsConditionCodes(yytext().toString().substring(3));
+
+          System.out.println("After queuing for '" + yytext() + "':");
+          for (IElementType t : queue) {
+              System.out.println("  - " + t.getDebugName());
+          }
+
+          return queue.pollFirst();
             }
           // fall through
           case 18: break;
