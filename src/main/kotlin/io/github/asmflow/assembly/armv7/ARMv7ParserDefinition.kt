@@ -11,6 +11,9 @@ import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import io.github.asmflow.assembly.armv7.lexer.ARMv7Lexer
 import io.github.asmflow.assembly.armv7.parser.ARMv7Parser
+import io.github.asmflow.assembly.armv7.psi.ARMv7FileElementType
+import io.github.asmflow.assembly.armv7.psi.ARMv7TokenSets
+import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes
 import io.github.asmflow.assembly.lang.AssemblyParserDefinition
 
 class ARMv7ParserDefinition : AssemblyParserDefinition() {
@@ -18,24 +21,13 @@ class ARMv7ParserDefinition : AssemblyParserDefinition() {
 
     override fun createParser(p0: Project?): PsiParser = ARMv7Parser()
 
-    override fun getFileNodeType(): IFileElementType {
-        TODO("Not yet implemented")
-    }
+    override fun getFileNodeType(): IFileElementType = ARMv7FileElementType
 
-    override fun getCommentTokens(): TokenSet {
-        TODO("Not yet implemented")
-    }
+    override fun getCommentTokens(): TokenSet = ARMv7TokenSets.COMMENTS
 
-    override fun getStringLiteralElements(): TokenSet {
-        TODO("Not yet implemented")
-    }
+    override fun getStringLiteralElements(): TokenSet = ARMv7TokenSets.STRINGS
 
-    override fun createElement(p0: ASTNode?): PsiElement {
-        TODO("Not yet implemented")
-    }
+    override fun createElement(node: ASTNode?): PsiElement = ARMv7TokenTypes.Factory.createElement(node)
 
-    override fun createFile(p0: FileViewProvider): PsiFile {
-        TODO("Not yet implemented")
-    }
-
+    override fun createFile(viewProvider: FileViewProvider): PsiFile = ARMv7File(viewProvider)
 }

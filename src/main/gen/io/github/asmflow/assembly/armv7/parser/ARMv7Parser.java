@@ -78,13 +78,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
-  static boolean ConditionCodes(PsiBuilder b, int l) {
+  public static boolean ConditionCodes(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConditionCodes")) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, CONDITION_CODES, "<condition codes>");
     r = ConditionCodes_0(b, l + 1);
     r = r && ConditionCodes_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -212,13 +212,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // !<<afterWhitespace>> (S)
-  static boolean SetConditionFlags(PsiBuilder b, int l) {
+  public static boolean SetConditionFlags(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SetConditionFlags")) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, SET_CONDITION_FLAGS, "<set condition flags>");
     r = SetConditionFlags_0(b, l + 1);
     r = r && consumeToken(b, S);
-    exit_section_(b, m, null, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

@@ -12,32 +12,20 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7ADCInstructionImpl extends ASTWrapperPsiElement implements ARMv7ADCInstruction {
+public class ARMv7SetConditionFlagsImpl extends ASTWrapperPsiElement implements ARMv7SetConditionFlags {
 
-  public ARMv7ADCInstructionImpl(@NotNull ASTNode node) {
+  public ARMv7SetConditionFlagsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitADCInstruction(this);
+    visitor.visitSetConditionFlags(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ARMv7Visitor) accept((ARMv7Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7ConditionCodes getConditionCodes() {
-    return findChildByClass(ARMv7ConditionCodes.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7SetConditionFlags getSetConditionFlags() {
-    return findChildByClass(ARMv7SetConditionFlags.class);
   }
 
 }

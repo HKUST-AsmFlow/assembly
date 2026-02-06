@@ -3,10 +3,13 @@
 
 package io.github.asmflow.assembly.armv7.lexer;
 
+import java.io.IOException;
+import java.util.ArrayDeque;
+
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
+import static com.intellij.psi.TokenType.WHITE_SPACE;import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 
 
 public class ARMv7LexerImpl implements FlexLexer {
@@ -19,8 +22,6 @@ public class ARMv7LexerImpl implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
-  public static final int AFTER_IDENTIFIER = 2;
-  public static final int IN_INSTRUCTION = 4;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -29,7 +30,7 @@ public class ARMv7LexerImpl implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1,  1,  2, 2
+     0, 0
   };
 
   /**
@@ -38,7 +39,8 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_CMAP_TOP = zzUnpackcmap_top();
 
   private static final String ZZ_CMAP_TOP_PACKED_0 =
-    "\1\0\37\u0100\1\u0200\267\u0100\10\u0300\u1020\u0100";
+    "\1\0\25\u0100\1\u0200\11\u0100\1\u0300\17\u0100\1\u0400\247\u0100"+
+    "\10\u0500\u1020\u0100";
 
   private static int [] zzUnpackcmap_top() {
     int [] result = new int[4352];
@@ -66,12 +68,17 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\12\0\1\1\2\2\1\1\54\0\1\3\1\4\5\0"+
-    "\32\5\4\0\1\5\1\0\1\6\1\5\1\7\1\10"+
-    "\26\5\12\0\1\2\u01a2\0\2\2\326\0\u0100\2";
+    "\11\0\1\1\1\2\2\3\1\4\22\0\1\1\1\0"+
+    "\1\5\13\0\1\6\13\0\1\7\1\10\5\0\32\11"+
+    "\1\0\1\12\2\0\1\11\1\0\1\13\1\11\1\14"+
+    "\1\15\1\16\1\11\1\17\1\20\1\21\2\11\1\22"+
+    "\1\23\1\24\1\25\1\26\1\27\1\11\1\30\1\31"+
+    "\1\11\1\32\4\11\12\0\1\3\32\0\1\1\u01df\0"+
+    "\1\1\177\0\13\1\35\0\2\3\5\0\1\1\57\0"+
+    "\1\1\240\0\1\1\377\0\u0100\33";
 
   private static int [] zzUnpackcmap_blocks() {
-    int [] result = new int[1024];
+    int [] result = new int[1536];
     int offset = 0;
     offset = zzUnpackcmap_blocks(ZZ_CMAP_BLOCKS_PACKED_0, offset, result);
     return result;
@@ -95,11 +102,11 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\1\2\0\1\2\1\3\1\4\1\1\1\5\1\2"+
-    "\1\0\1\6";
+    "\1\0\1\1\1\2\2\3\1\4\1\5\1\6\1\7"+
+    "\2\10\1\4\1\0\1\10\1\11\10\10\2\11";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[11];
+    int [] result = new int[25];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -124,11 +131,13 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\11\0\22\0\33\0\33\0\44\0\55\0\33"+
-    "\0\66\0\77\0\33";
+    "\0\0\0\34\0\70\0\70\0\124\0\160\0\34\0\34"+
+    "\0\214\0\250\0\304\0\34\0\340\0\374\0\u0118\0\u0134"+
+    "\0\u0150\0\u016c\0\u0188\0\u01a4\0\u01c0\0\u01dc\0\u01f8\0\u0214"+
+    "\0\250";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[11];
+    int [] result = new int[25];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -151,12 +160,28 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\4\1\5\2\4\1\6\4\7\3\4\1\10\13\4"+
-    "\1\11\2\4\11\0\1\6\2\0\6\6\5\0\4\7"+
-    "\10\0\1\12\7\0\1\13\1\0";
+    "\1\2\1\3\1\4\1\3\1\5\1\6\1\7\1\10"+
+    "\1\11\1\12\1\2\1\13\17\12\1\2\35\0\4\3"+
+    "\30\0\1\3\1\4\2\3\27\0\2\6\1\0\1\6"+
+    "\1\0\1\14\4\6\1\15\21\6\2\11\3\0\26\11"+
+    "\12\0\1\12\1\0\20\12\12\0\1\12\1\0\2\12"+
+    "\1\16\15\12\1\0\2\6\1\0\1\6\1\0\27\6"+
+    "\11\0\1\12\1\0\1\12\1\17\16\12\12\0\1\12"+
+    "\1\0\1\20\1\21\1\12\1\22\1\23\1\24\1\12"+
+    "\1\25\1\26\1\27\1\12\1\20\1\12\1\30\1\12"+
+    "\1\21\12\0\1\12\1\0\7\12\1\31\10\12\12\0"+
+    "\1\12\1\0\1\12\1\31\13\12\1\31\2\12\12\0"+
+    "\1\12\1\0\14\12\1\31\3\12\12\0\1\12\1\0"+
+    "\3\12\1\31\12\12\1\31\1\12\12\0\1\12\1\0"+
+    "\6\12\1\31\6\12\1\31\2\12\12\0\1\12\1\0"+
+    "\3\12\1\31\6\12\1\31\2\12\2\31\1\12\12\0"+
+    "\1\12\1\0\6\12\1\31\11\12\12\0\1\12\1\0"+
+    "\3\12\1\31\14\12\12\0\1\12\1\0\1\20\1\21"+
+    "\1\12\1\22\1\23\1\24\1\12\1\25\1\26\1\27"+
+    "\1\12\1\20\3\12\1\21\1\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[72];
+    int [] result = new int[560];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -194,10 +219,10 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\1\2\0\2\11\2\1\1\11\1\1\1\0\1\11";
+    "\1\0\1\11\4\1\2\11\3\1\1\11\1\0\14\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[11];
+    int [] result = new int[25];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -263,6 +288,84 @@ public class ARMv7LexerImpl implements FlexLexer {
   /** Whether the user-EOF-code has already been executed. */
   @SuppressWarnings("unused")
   private boolean zzEOFDone;
+
+  /* user code: */
+
+private ArrayDeque<IElementType> queue = new ArrayDeque<>();
+
+private void enqueue(IElementType t) {
+    queue.add(t);
+}
+
+private void queueSetFlagsConditionCodes(String suffix) {
+    if (suffix.startsWith("s"))
+        enqueue(S);
+
+    if (suffix.length() > 1) {
+        String condition = suffix.substring(1);
+        switch (condition) {
+            case "eq":
+                enqueue(EQ);
+                break;
+            case "ne":
+                enqueue(NE);
+                break;
+            case "cs":
+                enqueue(CS);
+                break;
+            case "hs":
+                enqueue(HS);
+                break;
+            case "cc":
+                enqueue(CC);
+                break;
+            case "lo":
+                enqueue(LO);
+                break;
+            case "mi":
+                enqueue(MI);
+                break;
+            case "pl":
+                enqueue(PL);
+                break;
+            case "vs":
+                enqueue(VS);
+                break;
+            case "vc":
+                enqueue(VC);
+                break;
+            case "hi":
+                enqueue(HI);
+                break;
+            case "ls":
+                enqueue(LS);
+                break;
+            case "ge":
+                enqueue(GE);
+                break;
+            case "lt":
+                enqueue(LT);
+                break;
+            case "gt":
+                enqueue(GT);
+                break;
+            case "le":
+                enqueue(LE);
+                break;
+            case "al":
+                enqueue(AL);
+                break;
+            default:
+                enqueue(BAD_CHARACTER);
+        }
+    }
+}
+
+public IElementType advance() throws IOException {
+    if (!queue.isEmpty()) return queue.pollFirst();
+    return yyadvance();
+}
+
 
 
   /**
@@ -422,7 +525,7 @@ public class ARMv7LexerImpl implements FlexLexer {
    * @return      the next token
    * @exception   java.io.IOException  if any I/O-Error occurs
    */
-  public IElementType advance() throws java.io.IOException
+  public IElementType yyadvance() throws java.io.IOException
   {
     int zzInput;
     int zzAction;
@@ -507,35 +610,50 @@ public class ARMv7LexerImpl implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { yybegin(AFTER_IDENTIFIER); return IDENTIFIER;
-            }
-          // fall through
-          case 7: break;
-          case 2:
             { return BAD_CHARACTER;
             }
           // fall through
-          case 8: break;
-          case 3:
-            { yybegin(YYINITIAL); return LINE_FEED;
-            }
-          // fall through
-          case 9: break;
-          case 4:
-            { return COMMENT;
-            }
-          // fall through
           case 10: break;
-          case 5:
-            { yybegin(IN_INSTRUCTION); return COLON;
+          case 2:
+            { return WHITE_SPACE;
             }
           // fall through
           case 11: break;
-          case 6:
-            { return ADC;
+          case 3:
+            { return LINE_FEED;
             }
           // fall through
           case 12: break;
+          case 4:
+            { return STRING;
+            }
+          // fall through
+          case 13: break;
+          case 5:
+            { return DOT;
+            }
+          // fall through
+          case 14: break;
+          case 6:
+            { return COLON;
+            }
+          // fall through
+          case 15: break;
+          case 7:
+            { return COMMENT;
+            }
+          // fall through
+          case 16: break;
+          case 8:
+            { return IDENTIFIER;
+            }
+          // fall through
+          case 17: break;
+          case 9:
+            { queue.add(ADC); queueSetFlagsConditionCodes(yytext().toString().substring(3));
+            }
+          // fall through
+          case 18: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

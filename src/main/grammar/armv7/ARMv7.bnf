@@ -20,6 +20,7 @@
         COMMENT = "comment"
         IDENTIFIER = "identifier"
         LINE_FEED = "lf"
+        STRING = "string"
 
         // set condition flags (optional)
         S = "s"
@@ -47,6 +48,7 @@
         ADC = "adc"
 
         COLON = ":"
+        DOT = "."
     ]
 }
 
@@ -57,7 +59,6 @@ private LineFeed ::= LINE_FEED+ {
 }
 
 private InstructionOrLabel ::= Instruction | Label
-
 // TODO: Add Directives
 private Instruction ::= ARMv7Instructions
 

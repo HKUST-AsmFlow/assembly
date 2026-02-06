@@ -10,8 +10,10 @@ import io.github.asmflow.assembly.armv7.psi.impl.*;
 public interface ARMv7TokenTypes {
 
   IElementType ADC_INSTRUCTION = new ARMv7ElementType("ADC_INSTRUCTION");
+  IElementType CONDITION_CODES = new ARMv7ElementType("CONDITION_CODES");
   IElementType ITEM = new ARMv7ElementType("ITEM");
   IElementType LABEL = new ARMv7ElementType("LABEL");
+  IElementType SET_CONDITION_FLAGS = new ARMv7ElementType("SET_CONDITION_FLAGS");
 
   IElementType ADC = new ARMv7TokenType("adc");
   IElementType AL = new ARMv7TokenType("al");
@@ -19,6 +21,7 @@ public interface ARMv7TokenTypes {
   IElementType COLON = new ARMv7TokenType(":");
   IElementType COMMENT = new ARMv7TokenType("comment");
   IElementType CS = new ARMv7TokenType("cs");
+  IElementType DOT = new ARMv7TokenType(".");
   IElementType EQ = new ARMv7TokenType("eq");
   IElementType GE = new ARMv7TokenType("ge");
   IElementType GT = new ARMv7TokenType("gt");
@@ -34,6 +37,7 @@ public interface ARMv7TokenTypes {
   IElementType NE = new ARMv7TokenType("ne");
   IElementType PL = new ARMv7TokenType("pl");
   IElementType S = new ARMv7TokenType("s");
+  IElementType STRING = new ARMv7TokenType("string");
   IElementType VC = new ARMv7TokenType("vc");
   IElementType VS = new ARMv7TokenType("vs");
 
@@ -43,11 +47,17 @@ public interface ARMv7TokenTypes {
       if (type == ADC_INSTRUCTION) {
         return new ARMv7ADCInstructionImpl(node);
       }
+      else if (type == CONDITION_CODES) {
+        return new ARMv7ConditionCodesImpl(node);
+      }
       else if (type == ITEM) {
         return new ARMv7ItemImpl(node);
       }
       else if (type == LABEL) {
         return new ARMv7LabelImpl(node);
+      }
+      else if (type == SET_CONDITION_FLAGS) {
+        return new ARMv7SetConditionFlagsImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

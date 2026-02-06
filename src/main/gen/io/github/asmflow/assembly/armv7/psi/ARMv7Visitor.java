@@ -12,11 +12,19 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitConditionCodes(@NotNull ARMv7ConditionCodes o) {
+    visitPsiElement(o);
+  }
+
   public void visitItem(@NotNull ARMv7Item o) {
     visitPsiElement(o);
   }
 
   public void visitLabel(@NotNull ARMv7Label o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSetConditionFlags(@NotNull ARMv7SetConditionFlags o) {
     visitPsiElement(o);
   }
 
