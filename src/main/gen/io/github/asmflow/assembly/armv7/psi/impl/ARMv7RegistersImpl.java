@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7ADCInstructionImpl extends ASTWrapperPsiElement implements ARMv7ADCInstruction {
+public class ARMv7RegistersImpl extends ASTWrapperPsiElement implements ARMv7Registers {
 
-  public ARMv7ADCInstructionImpl(@NotNull ASTNode node) {
+  public ARMv7RegistersImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitADCInstruction(this);
+    visitor.visitRegisters(this);
   }
 
   @Override
@@ -29,27 +29,9 @@ public class ARMv7ADCInstructionImpl extends ASTWrapperPsiElement implements ARM
   }
 
   @Override
-  @Nullable
-  public ARMv7ConditionCodes getConditionCodes() {
-    return findChildByClass(ARMv7ConditionCodes.class);
-  }
-
-  @Override
   @NotNull
-  public ARMv7Registers getRegisters() {
-    return findNotNullChildByClass(ARMv7Registers.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7SetConditionFlags getSetConditionFlags() {
-    return findChildByClass(ARMv7SetConditionFlags.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7Shift getShift() {
-    return findChildByClass(ARMv7Shift.class);
+  public List<ARMv7Register> getRegisterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
   }
 
 }

@@ -6,18 +6,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7ADCInstruction extends PsiElement {
+public interface ARMv7Shift extends PsiElement {
 
   @Nullable
-  ARMv7ConditionCodes getConditionCodes();
+  ARMv7Number getNumber();
+
+  @Nullable
+  ARMv7Register getRegister();
 
   @NotNull
-  ARMv7Registers getRegisters();
-
-  @Nullable
-  ARMv7SetConditionFlags getSetConditionFlags();
-
-  @Nullable
-  ARMv7Shift getShift();
+  ARMv7ShiftType getShiftType();
 
 }

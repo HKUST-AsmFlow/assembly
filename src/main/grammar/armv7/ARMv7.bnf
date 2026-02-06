@@ -23,6 +23,12 @@
         LINE_FEED = "lf"
         STRING = "string"
 
+        // numbers
+        BINARY_NUMBER = "binary number"
+        DECIMAL_NUMBER = "decimal number"
+        HEXADECIMAL_NUMBER = "hexadecimal number"
+        OCTAL_NUMBER = "octal number"
+
         // set condition flags (optional)
         S = "s"
 
@@ -48,8 +54,38 @@
         // instructions
         ADC = "adc"
 
+        // registers
+        R0 = "r0"
+        R1 = "r1"
+        R2 = "r2"
+        R3 = "r3"
+        R4 = "r4"
+        R5 = "r5"
+        R6 = "r6"
+        R7 = "r7"
+        R8 = "r8"
+        R9 = "r9"
+        R10 = "r10"
+        R11 = "r11"
+        R12 = "r12"
+        SP = "sp"
+        LR = "lr"
+        PC = "PC"
+        CPSR = "CPSR"
+        SPSR = "SPSR"
+
+        // shift type
+        LSL = "lsl"
+        LSR = "lsr"
+        ASR = "asr"
+        ROR = "ror"
+        RRX = "rrx"
+
+        // symbols
+        COMMA = ","
         COLON = ":"
         DOT = "."
+        POUND = "#"
     ]
 }
 
@@ -67,12 +103,23 @@ Label ::= IDENTIFIER COLON
 
 Item ::= LineFeed | InstructionOrLabel LineFeed?
 
+Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
+Number ::= POUND Based
+
 ConditionCodes ::= !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
 
+Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
+Registers ::= <<CommaSeparatedList Register>>
+
 SetConditionFlags ::= !<<afterWhitespace>> (S)
+
+ShiftType ::= ASR | LSL | LSR | ROR | RRX
+Shift ::= ShiftType (Number | Register)
 
 private ARMv7Instructions ::= ARMv7ArithmeticInstructions
 
 private ARMv7ArithmeticInstructions ::= ADCInstruction
 
-ADCInstruction ::= ADC SetConditionFlags? ConditionCodes?
+ADCInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
+
+private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

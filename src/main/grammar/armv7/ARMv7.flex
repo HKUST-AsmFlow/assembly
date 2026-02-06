@@ -12,84 +12,84 @@ import static com.intellij.psi.TokenType.WHITE_SPACE;import static io.github.asm
 
 %{
 
-private ArrayDeque<IElementType> queue = new ArrayDeque<>();
+  private ArrayDeque<IElementType> queue = new ArrayDeque<>();
 
-private void enqueue(IElementType t) {
+  private void enqueue(IElementType t) {
     queue.add(t);
-}
+  }
 
-private void queueSetFlagsConditionCodes(String suffix) {
+  private void queueSetFlagsConditionCodes(String suffix) {
     boolean hasS = suffix.startsWith("s");
     String cond = hasS ? suffix.substring(1) : suffix;
 
     if (hasS)
-        enqueue(S);
+      enqueue(S);
 
     if (!cond.isEmpty()) {
-        switch (cond) {
-            case "eq":
-                enqueue(EQ);
-                break;
-            case "ne":
-                enqueue(NE);
-                break;
-            case "cs":
-                enqueue(CS);
-                break;
-            case "hs":
-                enqueue(HS);
-                break;
-            case "cc":
-                enqueue(CC);
-                break;
-            case "lo":
-                enqueue(LO);
-                break;
-            case "mi":
-                enqueue(MI);
-                break;
-            case "pl":
-                enqueue(PL);
-                break;
-            case "vs":
-                enqueue(VS);
-                break;
-            case "vc":
-                enqueue(VC);
-                break;
-            case "hi":
-                enqueue(HI);
-                break;
-            case "ls":
-                enqueue(LS);
-                break;
-            case "ge":
-                enqueue(GE);
-                break;
-            case "lt":
-                enqueue(LT);
-                break;
-            case "gt":
-                enqueue(GT);
-                break;
-            case "le":
-                enqueue(LE);
-                break;
-            case "al":
-                enqueue(AL);
-                break;
-            default:
-                enqueue(BAD_CHARACTER);
-        }
+      switch (cond) {
+        case "eq":
+          enqueue(EQ);
+          break;
+        case "ne":
+          enqueue(NE);
+          break;
+        case "cs":
+          enqueue(CS);
+          break;
+        case "hs":
+          enqueue(HS);
+          break;
+        case "cc":
+          enqueue(CC);
+          break;
+        case "lo":
+          enqueue(LO);
+          break;
+        case "mi":
+          enqueue(MI);
+          break;
+        case "pl":
+          enqueue(PL);
+          break;
+        case "vs":
+          enqueue(VS);
+          break;
+        case "vc":
+          enqueue(VC);
+          break;
+        case "hi":
+          enqueue(HI);
+          break;
+        case "ls":
+          enqueue(LS);
+          break;
+        case "ge":
+          enqueue(GE);
+          break;
+        case "lt":
+          enqueue(LT);
+          break;
+        case "gt":
+          enqueue(GT);
+          break;
+        case "le":
+          enqueue(LE);
+          break;
+        case "al":
+          enqueue(AL);
+          break;
+        default:
+          enqueue(BAD_CHARACTER);
+      }
     }
-}
+  }
 
-public IElementType advance() throws IOException {
+  public IElementType advance() throws IOException {
     if (!queue.isEmpty())
-        return queue.pollFirst();
+      return queue.pollFirst();
 
     return yyadvance();
-}
+  }
 
 %}
 
@@ -119,22 +119,54 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
 %%
 
 <YYINITIAL> {
-    {CRLF} { return LINE_FEED; }
+  {CRLF} { return LINE_FEED; }
 
-    ":" { return COLON; }
-    "." { return DOT; }
+  ":" { return COLON; }
+  "," { return COMMA; }
+  "." { return DOT; }
+  "#" { return POUND; }
 
-    "adc"({S}?{CONDITION_CODES}?) {
-          enqueue(ADC);
-          queueSetFlagsConditionCodes(yytext().toString().substring(3));
-          return queue.pollFirst();
-      }
+  "r0" { return R0; }
+  "r1" { return R1; }
+  "r2" { return R2; }
+  "r3" { return R3; }
+  "r4" { return R4; }
+  "r5" { return R5; }
+  "r6" { return R6; }
+  "r7" { return R7; }
+  "r8" { return R8; }
+  "r9" { return R9; }
+  "r10" { return R10; }
+  "r11" { return R11; }
+  "r12" { return R12; }
+  "sp" { return SP; }
+  "lr" { return LR; }
+  "pc" { return PC; }
+  "cpsr" { return CPSR; }
+  "spsr" { return SPSR; }
 
-    {IDENTIFIER} { return IDENTIFIER; }
+  "lsl" { return LSL; }
+  "lsr" { return LSR; }
+  "asr" { return ASR; }
+  "ror" { return ROR; }
+  "rrx" { return RRX; }
 
-    {COMMENT} { return COMMENT; }
-    {STRING} { return STRING; }
-    {WHITE_SPACE}+ { return WHITE_SPACE; }
+  "adc"({S}?{CONDITION_CODES}?) {
+    enqueue(ADC);
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return queue.pollFirst();
+  }
+
+  {BINARY_NUMBER} { return BINARY_NUMBER; }
+  {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }
+  {HEXADECIMAL_NUMBER} { return HEXADECIMAL_NUMBER; }
+  {OCTAL_NUMBER} { return OCTAL_NUMBER; }
+
+  {IDENTIFIER} { return IDENTIFIER; }
+
+  {COMMENT} { return COMMENT; }
+  {STRING} { return STRING; }
+  {WHITE_SPACE}+ { return WHITE_SPACE; }
 }
 
 [^] { return BAD_CHARACTER; }

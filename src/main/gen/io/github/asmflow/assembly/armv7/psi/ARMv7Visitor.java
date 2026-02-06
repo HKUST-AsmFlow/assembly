@@ -12,6 +12,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBased(@NotNull ARMv7Based o) {
+    visitPsiElement(o);
+  }
+
   public void visitConditionCodes(@NotNull ARMv7ConditionCodes o) {
     visitPsiElement(o);
   }
@@ -24,7 +28,27 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNumber(@NotNull ARMv7Number o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRegister(@NotNull ARMv7Register o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRegisters(@NotNull ARMv7Registers o) {
+    visitPsiElement(o);
+  }
+
   public void visitSetConditionFlags(@NotNull ARMv7SetConditionFlags o) {
+    visitPsiElement(o);
+  }
+
+  public void visitShift(@NotNull ARMv7Shift o) {
+    visitPsiElement(o);
+  }
+
+  public void visitShiftType(@NotNull ARMv7ShiftType o) {
     visitPsiElement(o);
   }
 
