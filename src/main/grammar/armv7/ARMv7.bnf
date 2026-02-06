@@ -5,15 +5,21 @@
     extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
 
     elementTypeClass = "io.github.asmflow.assembly.armv7.psi.ARMv7ElementType"
-    elementTypeHolderClass = "io.github.asmflow.assembly.armv7.psi.ARMv7Types"
+    elementTypeHolderClass = "io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes"
 
     psiClassPrefix = "ARMv7"
     psiPackage = "io.github.asmflow.assembly.armv7.psi"
     psiImplClassSuffix = "Impl"
     psiImplPackage = "io.github.asmflow.assembly.armv7.psi.impl"
 
+    tokenTypeClass = "io.github.asmflow.assembly.armv7.psi.ARMv7TokenType"
+
+    classHeader = "header.txt"
+
     tokens = [
-        ADC = "adc"
+        COMMENT = "comment"
+        IDENTIFIER = "identifier"
+        LINE_FEED = "lf"
 
         // set condition flags (optional)
         S = "s"
@@ -36,5 +42,35 @@
         GT = "gt"
         LE = "le"
         AL = "al"
+
+        // instructions
+        ADC = "adc"
+
+        COLON = ":"
     ]
 }
+
+File ::= Item*
+
+private LineFeed ::= LINE_FEED+ {
+    consumeTokenMethod = "consumeTokenFast"
+}
+
+private InstructionOrLabel ::= Instruction | Label
+
+// TODO: Add Directives
+private Instruction ::= ARMv7Instructions
+
+Label ::= IDENTIFIER COLON
+
+Item ::= LineFeed | InstructionOrLabel LineFeed?
+
+private ConditionCodes ::=
+    !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
+private SetConditionFlags ::= !<<afterWhitespace>> (S)
+
+private ARMv7Instructions ::= ARMv7ArithmeticInstructions
+
+private ARMv7ArithmeticInstructions ::= ADCInstruction
+
+ADCInstruction ::= ADC SetConditionFlags? ConditionCodes? // operands..

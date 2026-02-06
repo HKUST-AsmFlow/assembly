@@ -45,4 +45,17 @@ kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_21)
     }
+
+    sourceSets {
+        main {
+            kotlin.srcDir("src/main/kotlin")
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java.srcDirs("src/main/gen")
+        resources.srcDirs("src/main/resources")
+    }
 }
