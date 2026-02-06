@@ -8,7 +8,11 @@ import com.intellij.psi.PsiElement;
 
 public class ARMv7Visitor extends PsiElementVisitor {
 
-  public void visitADCInstruction(@NotNull ARMv7ADCInstruction o) {
+  public void visitAdcInstruction(@NotNull ARMv7AdcInstruction o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAddInstruction(@NotNull ARMv7AddInstruction o) {
     visitPsiElement(o);
   }
 

@@ -6,7 +6,8 @@ import java.util.ArrayDeque;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static com.intellij.psi.TokenType.WHITE_SPACE;import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 
 %%
 
@@ -152,9 +153,12 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "rrx" { return RRX; }
 
   "adc"({S}?{CONDITION_CODES}?) {
-    enqueue(ADC);
     queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return queue.pollFirst();
+    return ADC;
+  }
+  "add"({S}?{CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return ADD;
   }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }

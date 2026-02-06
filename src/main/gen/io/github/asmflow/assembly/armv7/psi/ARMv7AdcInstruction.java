@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7ADCInstruction extends PsiElement {
+public interface ARMv7AdcInstruction extends PsiElement {
 
   @Nullable
   ARMv7ConditionCodes getConditionCodes();

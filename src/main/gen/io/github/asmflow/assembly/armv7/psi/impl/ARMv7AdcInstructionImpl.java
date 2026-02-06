@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7ItemImpl extends ASTWrapperPsiElement implements ARMv7Item {
+public class ARMv7AdcInstructionImpl extends ASTWrapperPsiElement implements ARMv7AdcInstruction {
 
-  public ARMv7ItemImpl(@NotNull ASTNode node) {
+  public ARMv7AdcInstructionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitItem(this);
+    visitor.visitAdcInstruction(this);
   }
 
   @Override
@@ -30,20 +30,26 @@ public class ARMv7ItemImpl extends ASTWrapperPsiElement implements ARMv7Item {
 
   @Override
   @Nullable
-  public ARMv7AdcInstruction getAdcInstruction() {
-    return findChildByClass(ARMv7AdcInstruction.class);
+  public ARMv7ConditionCodes getConditionCodes() {
+    return findChildByClass(ARMv7ConditionCodes.class);
+  }
+
+  @Override
+  @NotNull
+  public ARMv7Registers getRegisters() {
+    return findNotNullChildByClass(ARMv7Registers.class);
   }
 
   @Override
   @Nullable
-  public ARMv7AddInstruction getAddInstruction() {
-    return findChildByClass(ARMv7AddInstruction.class);
+  public ARMv7SetConditionFlags getSetConditionFlags() {
+    return findChildByClass(ARMv7SetConditionFlags.class);
   }
 
   @Override
   @Nullable
-  public ARMv7Label getLabel() {
-    return findChildByClass(ARMv7Label.class);
+  public ARMv7Shift getShift() {
+    return findChildByClass(ARMv7Shift.class);
   }
 
 }

@@ -10,6 +10,7 @@ import io.github.asmflow.assembly.armv7.psi.impl.*;
 public interface ARMv7TokenTypes {
 
   IElementType ADC_INSTRUCTION = new ARMv7ElementType("ADC_INSTRUCTION");
+  IElementType ADD_INSTRUCTION = new ARMv7ElementType("ADD_INSTRUCTION");
   IElementType BASED = new ARMv7ElementType("BASED");
   IElementType CONDITION_CODES = new ARMv7ElementType("CONDITION_CODES");
   IElementType ITEM = new ARMv7ElementType("ITEM");
@@ -22,6 +23,7 @@ public interface ARMv7TokenTypes {
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
 
   IElementType ADC = new ARMv7TokenType("adc");
+  IElementType ADD = new ARMv7TokenType("add");
   IElementType AL = new ARMv7TokenType("al");
   IElementType ASR = new ARMv7TokenType("asr");
   IElementType BINARY_NUMBER = new ARMv7TokenType("binary number");
@@ -80,7 +82,10 @@ public interface ARMv7TokenTypes {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
       if (type == ADC_INSTRUCTION) {
-        return new ARMv7ADCInstructionImpl(node);
+        return new ARMv7AdcInstructionImpl(node);
+      }
+      else if (type == ADD_INSTRUCTION) {
+        return new ARMv7AddInstructionImpl(node);
       }
       else if (type == BASED) {
         return new ARMv7BasedImpl(node);

@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7ADCInstructionImpl extends ASTWrapperPsiElement implements ARMv7ADCInstruction {
+public class ARMv7AddInstructionImpl extends ASTWrapperPsiElement implements ARMv7AddInstruction {
 
-  public ARMv7ADCInstructionImpl(@NotNull ASTNode node) {
+  public ARMv7AddInstructionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitADCInstruction(this);
+    visitor.visitAddInstruction(this);
   }
 
   @Override

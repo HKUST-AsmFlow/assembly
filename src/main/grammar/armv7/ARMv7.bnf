@@ -53,6 +53,7 @@
 
         // instructions
         ADC = "adc"
+        ADD = "add"
 
         // registers
         R0 = "r0"
@@ -118,8 +119,9 @@ Shift ::= ShiftType (Number | Register)
 
 private ARMv7Instructions ::= ARMv7ArithmeticInstructions
 
-private ARMv7ArithmeticInstructions ::= ADCInstruction
+private ARMv7ArithmeticInstructions ::= AdcInstruction | AddInstruction
 
-ADCInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
+AdcInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
+AddInstruction ::= ADD SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
 
 private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*
