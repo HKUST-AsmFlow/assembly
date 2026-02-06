@@ -54,7 +54,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ADC SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
+  // ADC SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
   public static boolean AdcInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdcInstruction")) return false;
     if (!nextTokenIs(b, ADC)) return false;
@@ -83,26 +83,35 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (COMMA Shift)?
+  // (COMMA (Number | Shift))?
   private static boolean AdcInstruction_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdcInstruction_4")) return false;
     AdcInstruction_4_0(b, l + 1);
     return true;
   }
 
-  // COMMA Shift
+  // COMMA (Number | Shift)
   private static boolean AdcInstruction_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdcInstruction_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && Shift(b, l + 1);
+    r = r && AdcInstruction_4_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // Number | Shift
+  private static boolean AdcInstruction_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AdcInstruction_4_0_1")) return false;
+    boolean r;
+    r = Number(b, l + 1);
+    if (!r) r = Shift(b, l + 1);
+    return r;
+  }
+
   /* ********************************************************** */
-  // ADD SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
+  // ADD SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
   public static boolean AddInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddInstruction")) return false;
     if (!nextTokenIs(b, ADD)) return false;
@@ -131,21 +140,30 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (COMMA Shift)?
+  // (COMMA (Number | Shift))?
   private static boolean AddInstruction_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddInstruction_4")) return false;
     AddInstruction_4_0(b, l + 1);
     return true;
   }
 
-  // COMMA Shift
+  // COMMA (Number | Shift)
   private static boolean AddInstruction_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddInstruction_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && Shift(b, l + 1);
+    r = r && AddInstruction_4_0_1(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Number | Shift
+  private static boolean AddInstruction_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddInstruction_4_0_1")) return false;
+    boolean r;
+    r = Number(b, l + 1);
+    if (!r) r = Shift(b, l + 1);
     return r;
   }
 

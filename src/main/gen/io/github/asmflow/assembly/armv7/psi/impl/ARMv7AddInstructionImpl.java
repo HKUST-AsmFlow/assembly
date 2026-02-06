@@ -35,6 +35,12 @@ public class ARMv7AddInstructionImpl extends ASTWrapperPsiElement implements ARM
   }
 
   @Override
+  @Nullable
+  public ARMv7Number getNumber() {
+    return findChildByClass(ARMv7Number.class);
+  }
+
+  @Override
   @NotNull
   public ARMv7Registers getRegisters() {
     return findNotNullChildByClass(ARMv7Registers.class);

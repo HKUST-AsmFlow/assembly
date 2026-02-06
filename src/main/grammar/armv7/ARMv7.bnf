@@ -11,7 +11,6 @@
     psiPackage = "io.github.asmflow.assembly.armv7.psi"
     psiImplClassSuffix = "Impl"
     psiImplPackage = "io.github.asmflow.assembly.armv7.psi.impl"
-    psiImplUtilClass = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7PsiImplUtil"
 
     tokenTypeClass = "io.github.asmflow.assembly.armv7.psi.ARMv7TokenType"
 
@@ -121,7 +120,7 @@ private ARMv7Instructions ::= ARMv7ArithmeticInstructions
 
 private ARMv7ArithmeticInstructions ::= AdcInstruction | AddInstruction
 
-AdcInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
-AddInstruction ::= ADD SetConditionFlags? ConditionCodes? Registers (COMMA Shift)?
+AdcInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
+AddInstruction ::= ADD SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
 
 private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

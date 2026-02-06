@@ -11,6 +11,9 @@ public interface ARMv7AdcInstruction extends PsiElement {
   @Nullable
   ARMv7ConditionCodes getConditionCodes();
 
+  @Nullable
+  ARMv7Number getNumber();
+
   @NotNull
   ARMv7Registers getRegisters();
 
