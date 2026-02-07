@@ -11,6 +11,14 @@ object ARMv7TokenSets {
         ADD
     )
 
+    val NUMBERS = TokenSet.create(
+        POUND,
+        BINARY_NUMBER,
+        DECIMAL_NUMBER,
+        HEXADECIMAL_NUMBER,
+        OCTAL_NUMBER
+    )
+
     val REGISTERS = TokenSet.create(
         R0,
         R1,
@@ -29,7 +37,15 @@ object ARMv7TokenSets {
         LR,
         PC,
         CPSR,
-        SPSR,
+        SPSR
+    )
+
+    val SHIFT_TYPES = TokenSet.create(
+        LSL,
+        LSR,
+        ASR,
+        ROR,
+        RRX
     )
 
     val STRINGS = TokenSet.create(STRING)

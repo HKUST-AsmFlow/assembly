@@ -7,7 +7,8 @@ object ARMv7TextAttributes {
     val ARMv7_COMMENT = createTextAttributesKey("ARMv7.comment", DefaultLanguageHighlighterColors.LINE_COMMENT)
     val ARMv7_INSTRUCTION = createTextAttributesKey("ARMv7.instruction", DefaultLanguageHighlighterColors.KEYWORD)
     val ARMv7_LABEL = createTextAttributesKey("ARMv7.label", DefaultLanguageHighlighterColors.LABEL)
-    val ARMv7_NUMBER = createTextAttributesKey("ARMv7.string", DefaultLanguageHighlighterColors.NUMBER)
+    val ARMv7_NUMBER = createTextAttributesKey("ARMv7.number", DefaultLanguageHighlighterColors.NUMBER)
     val ARMv7_REGISTERS = createTextAttributesKey("ARMv7.registers", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
+    val ARMv7_SHIFT_TYPE = createTextAttributesKey("ARMv7.shift.type", DefaultLanguageHighlighterColors.STATIC_FIELD)
     val ARMv7_STRING = createTextAttributesKey("ARMv7.string", DefaultLanguageHighlighterColors.STRING)
 }

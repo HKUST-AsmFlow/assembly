@@ -17,11 +17,12 @@ class ARMv7SyntaxHighlighter : SyntaxHighlighterBase() {
         keys[TokenType.BAD_CHARACTER] = HighlighterColors.BAD_CHARACTER
 
         keys[ARMv7TokenTypes.LABEL] = ARMv7TextAttributes.ARMv7_LABEL
-        keys[ARMv7TokenTypes.NUMBER] = ARMv7TextAttributes.ARMv7_NUMBER
 
         fillMap(keys, ARMv7TokenSets.COMMENTS, ARMv7TextAttributes.ARMv7_COMMENT)
         fillMap(keys, ARMv7TokenSets.INSTRUCTIONS, ARMv7TextAttributes.ARMv7_INSTRUCTION)
+        fillMap(keys, ARMv7TokenSets.NUMBERS, ARMv7TextAttributes.ARMv7_NUMBER)
         fillMap(keys, ARMv7TokenSets.REGISTERS, ARMv7TextAttributes.ARMv7_REGISTERS)
+        fillMap(keys, ARMv7TokenSets.SHIFT_TYPES, ARMv7TextAttributes.ARMv7_SHIFT_TYPE)
         fillMap(keys, ARMv7TokenSets.STRINGS, ARMv7TextAttributes.ARMv7_STRING)
     }
 
