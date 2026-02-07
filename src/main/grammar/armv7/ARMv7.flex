@@ -127,6 +127,32 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "." { return DOT; }
   "#" { return POUND; }
 
+  "align" { return ALIGN; }
+  "ascii" { return ASCII; }
+  "asciz" { return ASCIZ; }
+  "balign" { return BALIGN; }
+  "balignl" { return BALIGNL; }
+  "balignw" { return BALIGNW; }
+  "byte" { return BYTE; }
+  "comm" { return COMM; }
+  "data" { return DATA; }
+  "def" { return DEF; }
+  "desc" { return DESC; }
+  "dim" { return DIM; }
+  "double" { return DOUBLE; }
+  "eject" { return EJECT; }
+  "else" { return ELSE; }
+  "endef" { return ENDEF; }
+  "endif" { return ENDIF; }
+  "equ" { return EQU; }
+  "equiv" { return EQUIV; }
+  "err" { return ERR; }
+  "extern" { return EXTERN; }
+  "file" { return FILE; }
+  "fill" { return FILL; }
+  "float" { return FLOAT; }
+  "global" { return GLOBAL; }
+
   "r0" { return R0; }
   "r1" { return R1; }
   "r2" { return R2; }

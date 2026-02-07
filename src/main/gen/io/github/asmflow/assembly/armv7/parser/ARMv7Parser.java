@@ -48,9 +48,14 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ARMv7ArithmeticInstructions
-  static boolean ARMv7Instructions(PsiBuilder b, int l) {
-    return ARMv7ArithmeticInstructions(b, l + 1);
+  // AlignDirective | AsciiDirective | GlobalDirective
+  static boolean ARMv7Directives(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ARMv7Directives")) return false;
+    boolean r;
+    r = AlignDirective(b, l + 1);
+    if (!r) r = AsciiDirective(b, l + 1);
+    if (!r) r = GlobalDirective(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -168,6 +173,32 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ALIGN <<CommaSeparatedList Based>>
+  public static boolean AlignDirective(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AlignDirective")) return false;
+    if (!nextTokenIs(b, ALIGN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ALIGN);
+    r = r && CommaSeparatedList(b, l + 1, ARMv7Parser::Based);
+    exit_section_(b, m, ALIGN_DIRECTIVE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ASCII <<CommaSeparatedList STRING>>
+  public static boolean AsciiDirective(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AsciiDirective")) return false;
+    if (!nextTokenIs(b, ASCII)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ASCII);
+    r = r && CommaSeparatedList(b, l + 1, STRING_parser_);
+    exit_section_(b, m, ASCII_DIRECTIVE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
   public static boolean Based(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Based")) return false;
@@ -281,6 +312,30 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // DOT ARMv7Directives
+  static boolean Directive(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Directive")) return false;
+    if (!nextTokenIs(b, DOT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && ARMv7Directives(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Directive | Instruction | Label
+  static boolean DirectiveOrInstructionOrLabel(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirectiveOrInstructionOrLabel")) return false;
+    boolean r;
+    r = Directive(b, l + 1);
+    if (!r) r = Instruction(b, l + 1);
+    if (!r) r = Label(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
   // Item*
   static boolean File(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File")) return false;
@@ -293,23 +348,25 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ARMv7Instructions
-  static boolean Instruction(PsiBuilder b, int l) {
-    return ARMv7Instructions(b, l + 1);
-  }
-
-  /* ********************************************************** */
-  // Instruction | Label
-  static boolean InstructionOrLabel(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InstructionOrLabel")) return false;
+  // GLOBAL IDENTIFIER
+  public static boolean GlobalDirective(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalDirective")) return false;
+    if (!nextTokenIs(b, GLOBAL)) return false;
     boolean r;
-    r = Instruction(b, l + 1);
-    if (!r) r = Label(b, l + 1);
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, GLOBAL, IDENTIFIER);
+    exit_section_(b, m, GLOBAL_DIRECTIVE, r);
     return r;
   }
 
   /* ********************************************************** */
-  // LineFeed | InstructionOrLabel LineFeed?
+  // ARMv7ArithmeticInstructions
+  static boolean Instruction(PsiBuilder b, int l) {
+    return ARMv7ArithmeticInstructions(b, l + 1);
+  }
+
+  /* ********************************************************** */
+  // LineFeed | DirectiveOrInstructionOrLabel LineFeed?
   public static boolean Item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Item")) return false;
     boolean r;
@@ -320,12 +377,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // InstructionOrLabel LineFeed?
+  // DirectiveOrInstructionOrLabel LineFeed?
   private static boolean Item_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Item_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = InstructionOrLabel(b, l + 1);
+    r = DirectiveOrInstructionOrLabel(b, l + 1);
     r = r && Item_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -477,4 +534,5 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  static final Parser STRING_parser_ = (b, l) -> consumeToken(b, STRING);
 }

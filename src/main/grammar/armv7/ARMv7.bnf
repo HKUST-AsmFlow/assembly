@@ -50,6 +50,78 @@
         LE = "le"
         AL = "al"
 
+        // directives
+        ALIGN = "align"
+        ASCII = "ascii"
+        ASCIZ = "asciz"
+        BALIGN = "balign"
+        BALIGNL = "balignl"
+        BALIGNW = "balignw"
+        BYTE = "byte"
+        COMM = "comm"
+        DATA = "data"
+        DEF = "def"
+        DESC = "desc"
+        DIM = "dim"
+        DOUBLE = "double"
+        EJECT = "eject"
+        ELSE = "else"
+        ENDEF = "endef"
+        ENDIF = "endif"
+        EQU = "equ"
+        EQUIV = "equiv"
+        ERR = "err"
+        EXTERN = "extern"
+        FILE = "file"
+        FILL = "fill"
+        FLOAT = "float"
+        GLOBAL = "global"
+        HWORD = "hword"
+        IDENT = "ident"
+        IF = "if"
+        INCLUDE = "include"
+        INT = "int"
+        IRP = "irp"
+        IRPC = "irpc"
+        LCOMM = "lcomm"
+        LFLAGS = "lflags"
+        LINKONCE = "linkonce"
+        LN = "ln"
+        LIST = "list"
+        LONG = "long"
+        MACRO = "macro"
+        NOLIST = "nolist"
+        OCTA = "octa"
+        ORG = "org"
+        P2ALIGN = "p2align"
+        P2ALIGNL = "p2alignl"
+        P2ALIGNW = "p2alignw"
+        PSIZE = "psize"
+        QUAD = "quad"
+        REPT = "rept"
+        SBTTL = "sbttl"
+        SCL = "scl"
+        SECTION = "section"
+        SET = "set"
+        SHORT = "short"
+        SINGLE = "single"
+        SIZE = "size"
+        SLEB128 = "sleb128"
+        SKIP = "skip"
+        SPACE = "space"
+        STABD = "stabd"
+        STABN = "stabn"
+        STABS = "stabs"
+        STRING = "string"
+        SYMVER = "symver"
+        TAG = "tag"
+        TEXT = "text"
+        TITLE = "title"
+        TYPE = "type"
+        VAR = "var"
+        ULEB128 = "uleb128"
+        WORD = "word"
+
         // instructions
         ADC = "adc"
         ADD = "add"
@@ -95,13 +167,14 @@ private LineFeed ::= LINE_FEED+ {
     consumeTokenMethod = "consumeTokenFast"
 }
 
-private InstructionOrLabel ::= Instruction | Label
+private DirectiveOrInstructionOrLabel ::= Directive | Instruction | Label
 
-private Instruction ::= ARMv7Instructions
+private Directive ::= DOT ARMv7Directives
+private Instruction ::= ARMv7ArithmeticInstructions
 
 Label ::= IDENTIFIER COLON
 
-Item ::= LineFeed | InstructionOrLabel LineFeed?
+Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
 
 Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
 Number ::= POUND Based
@@ -116,11 +189,15 @@ SetConditionFlags ::= !<<afterWhitespace>> (S)
 ShiftType ::= ASR | LSL | LSR | ROR | RRX
 Shift ::= ShiftType (Number | Register)
 
-private ARMv7Instructions ::= ARMv7ArithmeticInstructions
-
 private ARMv7ArithmeticInstructions ::= AdcInstruction | AddInstruction
 
 AdcInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
+
+private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
+
+AlignDirective ::= ALIGN <<CommaSeparatedList Based>>
+AsciiDirective ::= ASCII <<CommaSeparatedList STRING>>
+GlobalDirective ::= GLOBAL IDENTIFIER
 
 private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

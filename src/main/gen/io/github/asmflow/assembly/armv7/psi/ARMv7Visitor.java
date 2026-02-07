@@ -16,11 +16,23 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAlignDirective(@NotNull ARMv7AlignDirective o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAsciiDirective(@NotNull ARMv7AsciiDirective o) {
+    visitPsiElement(o);
+  }
+
   public void visitBased(@NotNull ARMv7Based o) {
     visitPsiElement(o);
   }
 
   public void visitConditionCodes(@NotNull ARMv7ConditionCodes o) {
+    visitPsiElement(o);
+  }
+
+  public void visitGlobalDirective(@NotNull ARMv7GlobalDirective o) {
     visitPsiElement(o);
   }
 

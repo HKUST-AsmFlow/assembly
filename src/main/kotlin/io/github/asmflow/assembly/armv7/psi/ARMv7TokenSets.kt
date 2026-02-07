@@ -6,6 +6,34 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*
 object ARMv7TokenSets {
     val COMMENTS = TokenSet.create(COMMENT)
 
+    val DIRECTIVES = TokenSet.create(
+        ALIGN,
+        ASCII,
+        ASCIZ,
+        BALIGN,
+        BALIGNL,
+        BALIGNW,
+        BYTE,
+        COMM,
+        DATA,
+        DEF,
+        DESC,
+        DIM,
+        DOUBLE,
+        EJECT,
+        ELSE,
+        ENDEF,
+        ENDIF,
+        EQU,
+        EQUIV,
+        ERR,
+        EXTERN,
+        FILE,
+        FILL,
+        FLOAT,
+        GLOBAL
+    )
+
     val INSTRUCTIONS = TokenSet.create(
         ADC,
         ADD

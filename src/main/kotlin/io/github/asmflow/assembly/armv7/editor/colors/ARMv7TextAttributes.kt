@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributes
 
 object ARMv7TextAttributes {
     val ARMv7_COMMENT = createTextAttributesKey("ARMv7.comment", DefaultLanguageHighlighterColors.LINE_COMMENT)
+    val ARMv7_DIRECTIVE = createTextAttributesKey("ARMv7.directive", DefaultLanguageHighlighterColors.STATIC_METHOD)
     val ARMv7_INSTRUCTION = createTextAttributesKey("ARMv7.instruction", DefaultLanguageHighlighterColors.KEYWORD)
     val ARMv7_LABEL = createTextAttributesKey("ARMv7.label", DefaultLanguageHighlighterColors.LABEL)
     val ARMv7_NUMBER = createTextAttributesKey("ARMv7.number", DefaultLanguageHighlighterColors.NUMBER)

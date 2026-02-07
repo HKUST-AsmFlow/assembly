@@ -17,8 +17,12 @@ class ARMv7ColorSettingsPage : ColorSettingsPage {
     val descriptors = arrayOf(
         createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.comment",
             ARMv7TextAttributes.ARMv7_COMMENT),
+        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.directive",
+            ARMv7TextAttributes.ARMv7_DIRECTIVE),
         createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.instruction",
             ARMv7TextAttributes.ARMv7_INSTRUCTION),
+        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.label",
+            ARMv7TextAttributes.ARMv7_LABEL),
         createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.number",
         ARMv7TextAttributes.ARMv7_NUMBER),
         createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.register",
@@ -31,7 +35,9 @@ class ARMv7ColorSettingsPage : ColorSettingsPage {
 
     override fun getHighlighter(): SyntaxHighlighter = ARMv7SyntaxHighlighter()
 
-    override fun getDemoText(): @NonNls String = "adcsal r0, r1, r2, lsl #3  ; comment"
+    override fun getDemoText(): @NonNls String = ".global main\n\n" +
+            "main:\n" +
+            "    adcsal r0, r1, r2, lsl #3  ; comment"
 
     override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String?, TextAttributesKey?> = emptyMap()
 
