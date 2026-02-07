@@ -42,14 +42,50 @@ public class ARMv7ItemImpl extends ASTWrapperPsiElement implements ARMv7Item {
 
   @Override
   @Nullable
+  public ARMv7AdrInstruction getAdrInstruction() {
+    return findChildByClass(ARMv7AdrInstruction.class);
+  }
+
+  @Override
+  @Nullable
   public ARMv7AlignDirective getAlignDirective() {
     return findChildByClass(ARMv7AlignDirective.class);
   }
 
   @Override
   @Nullable
+  public ARMv7AndInstruction getAndInstruction() {
+    return findChildByClass(ARMv7AndInstruction.class);
+  }
+
+  @Override
+  @Nullable
   public ARMv7AsciiDirective getAsciiDirective() {
     return findChildByClass(ARMv7AsciiDirective.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7AsrInstruction getAsrInstruction() {
+    return findChildByClass(ARMv7AsrInstruction.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7BInstruction getBInstruction() {
+    return findChildByClass(ARMv7BInstruction.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7BfcInstruction getBfcInstruction() {
+    return findChildByClass(ARMv7BfcInstruction.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7BfiInstruction getBfiInstruction() {
+    return findChildByClass(ARMv7BfiInstruction.class);
   }
 
   @Override

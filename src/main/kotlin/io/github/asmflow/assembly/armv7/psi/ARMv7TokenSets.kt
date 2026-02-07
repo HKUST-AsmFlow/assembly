@@ -36,7 +36,13 @@ object ARMv7TokenSets {
 
     val INSTRUCTIONS = TokenSet.create(
         ADC,
-        ADD
+        ADD,
+        ADR,
+        AND,
+        ASR,
+        B,
+        BFC,
+        BFI
     )
 
     val NUMBERS = TokenSet.create(

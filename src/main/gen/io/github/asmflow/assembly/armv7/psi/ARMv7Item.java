@@ -15,10 +15,28 @@ public interface ARMv7Item extends PsiElement {
   ARMv7AddInstruction getAddInstruction();
 
   @Nullable
+  ARMv7AdrInstruction getAdrInstruction();
+
+  @Nullable
   ARMv7AlignDirective getAlignDirective();
 
   @Nullable
+  ARMv7AndInstruction getAndInstruction();
+
+  @Nullable
   ARMv7AsciiDirective getAsciiDirective();
+
+  @Nullable
+  ARMv7AsrInstruction getAsrInstruction();
+
+  @Nullable
+  ARMv7BInstruction getBInstruction();
+
+  @Nullable
+  ARMv7BfcInstruction getBfcInstruction();
+
+  @Nullable
+  ARMv7BfiInstruction getBfiInstruction();
 
   @Nullable
   ARMv7GlobalDirective getGlobalDirective();

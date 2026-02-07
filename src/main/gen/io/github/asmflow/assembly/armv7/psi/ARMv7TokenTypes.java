@@ -11,14 +11,21 @@ public interface ARMv7TokenTypes {
 
   IElementType ADC_INSTRUCTION = new ARMv7ElementType("ADC_INSTRUCTION");
   IElementType ADD_INSTRUCTION = new ARMv7ElementType("ADD_INSTRUCTION");
+  IElementType ADR_INSTRUCTION = new ARMv7ElementType("ADR_INSTRUCTION");
   IElementType ALIGN_DIRECTIVE = new ARMv7ElementType("ALIGN_DIRECTIVE");
+  IElementType AND_INSTRUCTION = new ARMv7ElementType("AND_INSTRUCTION");
   IElementType ASCII_DIRECTIVE = new ARMv7ElementType("ASCII_DIRECTIVE");
+  IElementType ASR_INSTRUCTION = new ARMv7ElementType("ASR_INSTRUCTION");
   IElementType BASED = new ARMv7ElementType("BASED");
+  IElementType BFC_INSTRUCTION = new ARMv7ElementType("BFC_INSTRUCTION");
+  IElementType BFI_INSTRUCTION = new ARMv7ElementType("BFI_INSTRUCTION");
+  IElementType B_INSTRUCTION = new ARMv7ElementType("B_INSTRUCTION");
   IElementType CONDITION_CODES = new ARMv7ElementType("CONDITION_CODES");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
   IElementType ITEM = new ARMv7ElementType("ITEM");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
+  IElementType NUMBERS = new ARMv7ElementType("NUMBERS");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
   IElementType REGISTERS = new ARMv7ElementType("REGISTERS");
   IElementType SET_CONDITION_FLAGS = new ARMv7ElementType("SET_CONDITION_FLAGS");
@@ -27,14 +34,19 @@ public interface ARMv7TokenTypes {
 
   IElementType ADC = new ARMv7TokenType("adc");
   IElementType ADD = new ARMv7TokenType("add");
+  IElementType ADR = new ARMv7TokenType("adr");
   IElementType AL = new ARMv7TokenType("al");
   IElementType ALIGN = new ARMv7TokenType("align");
+  IElementType AND = new ARMv7TokenType("and");
   IElementType ASCII = new ARMv7TokenType("ascii");
   IElementType ASCIZ = new ARMv7TokenType("asciz");
   IElementType ASR = new ARMv7TokenType("asr");
+  IElementType B = new ARMv7TokenType("b");
   IElementType BALIGN = new ARMv7TokenType("balign");
   IElementType BALIGNL = new ARMv7TokenType("balignl");
   IElementType BALIGNW = new ARMv7TokenType("balignw");
+  IElementType BFC = new ARMv7TokenType("bfc");
+  IElementType BFI = new ARMv7TokenType("bfi");
   IElementType BINARY_NUMBER = new ARMv7TokenType("binary number");
   IElementType BYTE = new ARMv7TokenType("byte");
   IElementType CC = new ARMv7TokenType("cc");
@@ -159,14 +171,32 @@ public interface ARMv7TokenTypes {
       else if (type == ADD_INSTRUCTION) {
         return new ARMv7AddInstructionImpl(node);
       }
+      else if (type == ADR_INSTRUCTION) {
+        return new ARMv7AdrInstructionImpl(node);
+      }
       else if (type == ALIGN_DIRECTIVE) {
         return new ARMv7AlignDirectiveImpl(node);
+      }
+      else if (type == AND_INSTRUCTION) {
+        return new ARMv7AndInstructionImpl(node);
       }
       else if (type == ASCII_DIRECTIVE) {
         return new ARMv7AsciiDirectiveImpl(node);
       }
+      else if (type == ASR_INSTRUCTION) {
+        return new ARMv7AsrInstructionImpl(node);
+      }
       else if (type == BASED) {
         return new ARMv7BasedImpl(node);
+      }
+      else if (type == BFC_INSTRUCTION) {
+        return new ARMv7BfcInstructionImpl(node);
+      }
+      else if (type == BFI_INSTRUCTION) {
+        return new ARMv7BfiInstructionImpl(node);
+      }
+      else if (type == B_INSTRUCTION) {
+        return new ARMv7BInstructionImpl(node);
       }
       else if (type == CONDITION_CODES) {
         return new ARMv7ConditionCodesImpl(node);
@@ -182,6 +212,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == NUMBER) {
         return new ARMv7NumberImpl(node);
+      }
+      else if (type == NUMBERS) {
+        return new ARMv7NumbersImpl(node);
       }
       else if (type == REGISTER) {
         return new ARMv7RegisterImpl(node);

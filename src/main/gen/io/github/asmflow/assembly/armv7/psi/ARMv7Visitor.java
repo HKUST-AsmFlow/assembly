@@ -16,7 +16,15 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAdrInstruction(@NotNull ARMv7AdrInstruction o) {
+    visitPsiElement(o);
+  }
+
   public void visitAlignDirective(@NotNull ARMv7AlignDirective o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAndInstruction(@NotNull ARMv7AndInstruction o) {
     visitPsiElement(o);
   }
 
@@ -24,7 +32,23 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAsrInstruction(@NotNull ARMv7AsrInstruction o) {
+    visitPsiElement(o);
+  }
+
+  public void visitBInstruction(@NotNull ARMv7BInstruction o) {
+    visitPsiElement(o);
+  }
+
   public void visitBased(@NotNull ARMv7Based o) {
+    visitPsiElement(o);
+  }
+
+  public void visitBfcInstruction(@NotNull ARMv7BfcInstruction o) {
+    visitPsiElement(o);
+  }
+
+  public void visitBfiInstruction(@NotNull ARMv7BfiInstruction o) {
     visitPsiElement(o);
   }
 
@@ -45,6 +69,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitNumber(@NotNull ARMv7Number o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNumbers(@NotNull ARMv7Numbers o) {
     visitPsiElement(o);
   }
 

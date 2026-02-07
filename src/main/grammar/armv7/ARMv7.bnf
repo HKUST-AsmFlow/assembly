@@ -125,6 +125,13 @@
         // instructions
         ADC = "adc"
         ADD = "add"
+        ADR = "adr"
+        AND = "and"
+        ASR = "asr"
+
+        B = "b"
+        BFC = "bfc"
+        BFI = "bfi"
 
         // registers
         R0 = "r0"
@@ -170,7 +177,7 @@ private LineFeed ::= LINE_FEED+ {
 private DirectiveOrInstructionOrLabel ::= Directive | Instruction | Label
 
 private Directive ::= DOT ARMv7Directives
-private Instruction ::= ARMv7ArithmeticInstructions
+private Instruction ::= ARMv7ArithmeticInstructions | ARMv7BranchInstructions
 
 Label ::= IDENTIFIER COLON
 
@@ -178,6 +185,7 @@ Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
 
 Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
 Number ::= POUND Based
+Numbers ::= <<CommaSeparatedList Number>>
 
 ConditionCodes ::= !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
 
@@ -189,10 +197,25 @@ SetConditionFlags ::= !<<afterWhitespace>> (S)
 ShiftType ::= ASR | LSL | LSR | ROR | RRX
 Shift ::= ShiftType (Number | Register)
 
-private ARMv7ArithmeticInstructions ::= AdcInstruction | AddInstruction
+private ARMv7ArithmeticInstructions ::= AdcInstruction
+    | AddInstruction
+    | AdrInstruction
+    | AndInstruction
+    | AsrInstruction
+    | BfcInstruction
+    | BfiInstruction
+
+private ARMv7BranchInstructions ::= BInstruction
 
 AdcInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
+AdrInstruction ::= ADR ConditionCodes? Register COMMA IDENTIFIER
+AndInstruction ::= AND SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
+AsrInstruction ::= ASR SetConditionFlags? ConditionCodes? Registers (COMMA Number)?
+
+BInstruction ::= B ConditionCodes? IDENTIFIER
+BfcInstruction ::= BFC ConditionCodes? Register COMMA Numbers
+BfiInstruction ::= BFI ConditionCodes? Registers COMMA Numbers
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

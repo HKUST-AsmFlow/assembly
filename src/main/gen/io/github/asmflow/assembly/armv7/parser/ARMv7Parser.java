@@ -37,14 +37,30 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AdcInstruction | AddInstruction
+  // AdcInstruction
+  //     | AddInstruction
+  //     | AdrInstruction
+  //     | AndInstruction
+  //     | AsrInstruction
+  //     | BfcInstruction
+  //     | BfiInstruction
   static boolean ARMv7ArithmeticInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7ArithmeticInstructions")) return false;
-    if (!nextTokenIs(b, "", ADC, ADD)) return false;
     boolean r;
     r = AdcInstruction(b, l + 1);
     if (!r) r = AddInstruction(b, l + 1);
+    if (!r) r = AdrInstruction(b, l + 1);
+    if (!r) r = AndInstruction(b, l + 1);
+    if (!r) r = AsrInstruction(b, l + 1);
+    if (!r) r = BfcInstruction(b, l + 1);
+    if (!r) r = BfiInstruction(b, l + 1);
     return r;
+  }
+
+  /* ********************************************************** */
+  // BInstruction
+  static boolean ARMv7BranchInstructions(PsiBuilder b, int l) {
+    return BInstruction(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -173,6 +189,28 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ADR ConditionCodes? Register COMMA IDENTIFIER
+  public static boolean AdrInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AdrInstruction")) return false;
+    if (!nextTokenIs(b, ADR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ADR);
+    r = r && AdrInstruction_1(b, l + 1);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, IDENTIFIER);
+    exit_section_(b, m, ADR_INSTRUCTION, r);
+    return r;
+  }
+
+  // ConditionCodes?
+  private static boolean AdrInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AdrInstruction_1")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // ALIGN <<CommaSeparatedList Based>>
   public static boolean AlignDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AlignDirective")) return false;
@@ -182,6 +220,63 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = consumeToken(b, ALIGN);
     r = r && CommaSeparatedList(b, l + 1, ARMv7Parser::Based);
     exit_section_(b, m, ALIGN_DIRECTIVE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // AND SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
+  public static boolean AndInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AndInstruction")) return false;
+    if (!nextTokenIs(b, AND)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AND);
+    r = r && AndInstruction_1(b, l + 1);
+    r = r && AndInstruction_2(b, l + 1);
+    r = r && Registers(b, l + 1);
+    r = r && AndInstruction_4(b, l + 1);
+    exit_section_(b, m, AND_INSTRUCTION, r);
+    return r;
+  }
+
+  // SetConditionFlags?
+  private static boolean AndInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AndInstruction_1")) return false;
+    SetConditionFlags(b, l + 1);
+    return true;
+  }
+
+  // ConditionCodes?
+  private static boolean AndInstruction_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AndInstruction_2")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
+  }
+
+  // (COMMA (Number | Shift))?
+  private static boolean AndInstruction_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AndInstruction_4")) return false;
+    AndInstruction_4_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA (Number | Shift)
+  private static boolean AndInstruction_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AndInstruction_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && AndInstruction_4_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Number | Shift
+  private static boolean AndInstruction_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AndInstruction_4_0_1")) return false;
+    boolean r;
+    r = Number(b, l + 1);
+    if (!r) r = Shift(b, l + 1);
     return r;
   }
 
@@ -196,6 +291,75 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = r && CommaSeparatedList(b, l + 1, STRING_parser_);
     exit_section_(b, m, ASCII_DIRECTIVE, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // ASR SetConditionFlags? ConditionCodes? Registers (COMMA Number)?
+  public static boolean AsrInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AsrInstruction")) return false;
+    if (!nextTokenIs(b, ASR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ASR);
+    r = r && AsrInstruction_1(b, l + 1);
+    r = r && AsrInstruction_2(b, l + 1);
+    r = r && Registers(b, l + 1);
+    r = r && AsrInstruction_4(b, l + 1);
+    exit_section_(b, m, ASR_INSTRUCTION, r);
+    return r;
+  }
+
+  // SetConditionFlags?
+  private static boolean AsrInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AsrInstruction_1")) return false;
+    SetConditionFlags(b, l + 1);
+    return true;
+  }
+
+  // ConditionCodes?
+  private static boolean AsrInstruction_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AsrInstruction_2")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
+  }
+
+  // (COMMA Number)?
+  private static boolean AsrInstruction_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AsrInstruction_4")) return false;
+    AsrInstruction_4_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA Number
+  private static boolean AsrInstruction_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AsrInstruction_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Number(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // B ConditionCodes? IDENTIFIER
+  public static boolean BInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BInstruction")) return false;
+    if (!nextTokenIs(b, B)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, B);
+    r = r && BInstruction_1(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, B_INSTRUCTION, r);
+    return r;
+  }
+
+  // ConditionCodes?
+  private static boolean BInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BInstruction_1")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -229,6 +393,52 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, HEXADECIMAL_NUMBER);
     if (!r) r = consumeToken(b, OCTAL_NUMBER);
     return r;
+  }
+
+  /* ********************************************************** */
+  // BFC ConditionCodes? Register COMMA Numbers
+  public static boolean BfcInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BfcInstruction")) return false;
+    if (!nextTokenIs(b, BFC)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BFC);
+    r = r && BfcInstruction_1(b, l + 1);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && Numbers(b, l + 1);
+    exit_section_(b, m, BFC_INSTRUCTION, r);
+    return r;
+  }
+
+  // ConditionCodes?
+  private static boolean BfcInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BfcInstruction_1")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // BFI ConditionCodes? Registers COMMA Numbers
+  public static boolean BfiInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BfiInstruction")) return false;
+    if (!nextTokenIs(b, BFI)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BFI);
+    r = r && BfiInstruction_1(b, l + 1);
+    r = r && Registers(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && Numbers(b, l + 1);
+    exit_section_(b, m, BFI_INSTRUCTION, r);
+    return r;
+  }
+
+  // ConditionCodes?
+  private static boolean BfiInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BfiInstruction_1")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -360,9 +570,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ARMv7ArithmeticInstructions
+  // ARMv7ArithmeticInstructions | ARMv7BranchInstructions
   static boolean Instruction(PsiBuilder b, int l) {
-    return ARMv7ArithmeticInstructions(b, l + 1);
+    if (!recursion_guard_(b, l, "Instruction")) return false;
+    boolean r;
+    r = ARMv7ArithmeticInstructions(b, l + 1);
+    if (!r) r = ARMv7BranchInstructions(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -434,6 +648,18 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = consumeToken(b, POUND);
     r = r && Based(b, l + 1);
     exit_section_(b, m, NUMBER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // <<CommaSeparatedList Number>>
+  public static boolean Numbers(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Numbers")) return false;
+    if (!nextTokenIs(b, POUND)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = CommaSeparatedList(b, l + 1, ARMv7Parser::Number);
+    exit_section_(b, m, NUMBERS, r);
     return r;
   }
 

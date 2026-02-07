@@ -186,6 +186,30 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
     queueSetFlagsConditionCodes(yytext().toString().substring(3));
     return ADD;
   }
+  "adr"({CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return ADR;
+  }
+  "and"({S}?{CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return AND;
+  }
+  "asr"({S}?{CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return ASR;
+  }
+  "b"({CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(1));
+    return B;
+  }
+  "bfc"({CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return BFC;
+  }
+  "bfi"({CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return BFI;
+  }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }
