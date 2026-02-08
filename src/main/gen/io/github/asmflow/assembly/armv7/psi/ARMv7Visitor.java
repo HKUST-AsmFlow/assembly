@@ -52,6 +52,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBicInstruction(@NotNull ARMv7BicInstruction o) {
+    visitPsiElement(o);
+  }
+
   public void visitConditionCodes(@NotNull ARMv7ConditionCodes o) {
     visitPsiElement(o);
   }

@@ -44,6 +44,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | AsrInstruction
   //     | BfcInstruction
   //     | BfiInstruction
+  //     | BicInstruction
   static boolean ARMv7ArithmeticInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7ArithmeticInstructions")) return false;
     boolean r;
@@ -54,6 +55,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = AsrInstruction(b, l + 1);
     if (!r) r = BfcInstruction(b, l + 1);
     if (!r) r = BfiInstruction(b, l + 1);
+    if (!r) r = BicInstruction(b, l + 1);
     return r;
   }
 
@@ -439,6 +441,55 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "BfiInstruction_1")) return false;
     ConditionCodes(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // BIC ConditionCodes? Registers (COMMA (Number | Shift))?
+  public static boolean BicInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BicInstruction")) return false;
+    if (!nextTokenIs(b, BIC)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BIC);
+    r = r && BicInstruction_1(b, l + 1);
+    r = r && Registers(b, l + 1);
+    r = r && BicInstruction_3(b, l + 1);
+    exit_section_(b, m, BIC_INSTRUCTION, r);
+    return r;
+  }
+
+  // ConditionCodes?
+  private static boolean BicInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BicInstruction_1")) return false;
+    ConditionCodes(b, l + 1);
+    return true;
+  }
+
+  // (COMMA (Number | Shift))?
+  private static boolean BicInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BicInstruction_3")) return false;
+    BicInstruction_3_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA (Number | Shift)
+  private static boolean BicInstruction_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BicInstruction_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && BicInstruction_3_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Number | Shift
+  private static boolean BicInstruction_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BicInstruction_3_0_1")) return false;
+    boolean r;
+    r = Number(b, l + 1);
+    if (!r) r = Shift(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */

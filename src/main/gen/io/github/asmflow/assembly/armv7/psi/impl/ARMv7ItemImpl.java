@@ -90,6 +90,12 @@ public class ARMv7ItemImpl extends ASTWrapperPsiElement implements ARMv7Item {
 
   @Override
   @Nullable
+  public ARMv7BicInstruction getBicInstruction() {
+    return findChildByClass(ARMv7BicInstruction.class);
+  }
+
+  @Override
+  @Nullable
   public ARMv7GlobalDirective getGlobalDirective() {
     return findChildByClass(ARMv7GlobalDirective.class);
   }

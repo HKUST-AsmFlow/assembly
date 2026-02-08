@@ -132,6 +132,7 @@
         B = "b"
         BFC = "bfc"
         BFI = "bfi"
+        BIC = "bic"
 
         // registers
         R0 = "r0"
@@ -204,6 +205,7 @@ private ARMv7ArithmeticInstructions ::= AdcInstruction
     | AsrInstruction
     | BfcInstruction
     | BfiInstruction
+    | BicInstruction
 
 private ARMv7BranchInstructions ::= BInstruction
 
@@ -216,6 +218,7 @@ AsrInstruction ::= ASR SetConditionFlags? ConditionCodes? Registers (COMMA Numbe
 BInstruction ::= B ConditionCodes? IDENTIFIER
 BfcInstruction ::= BFC ConditionCodes? Register COMMA Numbers
 BfiInstruction ::= BFI ConditionCodes? Registers COMMA Numbers
+BicInstruction ::= BIC ConditionCodes? Registers (COMMA (Number | Shift))?
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

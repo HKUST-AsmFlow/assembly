@@ -19,6 +19,7 @@ public interface ARMv7TokenTypes {
   IElementType BASED = new ARMv7ElementType("BASED");
   IElementType BFC_INSTRUCTION = new ARMv7ElementType("BFC_INSTRUCTION");
   IElementType BFI_INSTRUCTION = new ARMv7ElementType("BFI_INSTRUCTION");
+  IElementType BIC_INSTRUCTION = new ARMv7ElementType("BIC_INSTRUCTION");
   IElementType B_INSTRUCTION = new ARMv7ElementType("B_INSTRUCTION");
   IElementType CONDITION_CODES = new ARMv7ElementType("CONDITION_CODES");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
@@ -47,6 +48,7 @@ public interface ARMv7TokenTypes {
   IElementType BALIGNW = new ARMv7TokenType("balignw");
   IElementType BFC = new ARMv7TokenType("bfc");
   IElementType BFI = new ARMv7TokenType("bfi");
+  IElementType BIC = new ARMv7TokenType("bic");
   IElementType BINARY_NUMBER = new ARMv7TokenType("binary number");
   IElementType BYTE = new ARMv7TokenType("byte");
   IElementType CC = new ARMv7TokenType("cc");
@@ -194,6 +196,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == BFI_INSTRUCTION) {
         return new ARMv7BfiInstructionImpl(node);
+      }
+      else if (type == BIC_INSTRUCTION) {
+        return new ARMv7BicInstructionImpl(node);
       }
       else if (type == B_INSTRUCTION) {
         return new ARMv7BInstructionImpl(node);

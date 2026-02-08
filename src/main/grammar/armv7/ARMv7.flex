@@ -210,6 +210,10 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
     queueSetFlagsConditionCodes(yytext().toString().substring(3));
     return BFI;
   }
+  "bic"({S}?{CONDITION_CODES}?) {
+    queueSetFlagsConditionCodes(yytext().toString().substring(3));
+    return BIC;
+  }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

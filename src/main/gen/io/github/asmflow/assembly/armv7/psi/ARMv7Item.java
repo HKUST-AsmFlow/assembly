@@ -39,6 +39,9 @@ public interface ARMv7Item extends PsiElement {
   ARMv7BfiInstruction getBfiInstruction();
 
   @Nullable
+  ARMv7BicInstruction getBicInstruction();
+
+  @Nullable
   ARMv7GlobalDirective getGlobalDirective();
 
   @Nullable
