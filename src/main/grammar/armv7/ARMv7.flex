@@ -106,11 +106,14 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "bic"({S}?{CONDITION_CODES}?) { return BIC; }
   "bkpt" { return BKPT; }
   "bl"({CONDITION_CODES}?) { return BL; }
-  "blx"({CONDITION_CODES}?) { return BLX; }
   "bx"({CONDITION_CODES}?) { return BX; }
   "bxj"({CONDITION_CODES}?) { return BXJ; }
   "cbnz" { return CBNZ; }
   "cbz" { return CBZ; }
+  "clrex" { return CLREX; }
+  "clz"({CONDITION_CODES}?) { return CLZ; }
+  "cmn"({CONDITION_CODES}?) { return CMN; }
+  "cmp"({CONDITION_CODES}?) { return CMP; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

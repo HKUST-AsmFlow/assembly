@@ -134,11 +134,14 @@
         BIC = "bic"
         BKPT = "bkpt"
         BL = "bl"
-        BLX = "blx"
         BX = "bx"
         BXJ = "bxj"
         CBNZ = "cbnz"
         CBZ = "cbz"
+        CLREX = "clrex"
+        CLZ = "clz"
+        CMN = "cmn"
+        CMP = "cmp"
 
         // registers
         R0 = "r0"
@@ -189,7 +192,9 @@ private DirectiveOrInstructionOrLabel ::= AssemblerDirective | Instruction | Lab
 private AssemblerDirective ::= ARMv7Directives
 private Instruction ::= ARMv7ArithmeticInstructions
     | ARMv7BranchInstructions
+    | ARMv7ComparisonInstructions
     | ARMv7DebugInstructions
+    | ARMv7LockInstructions
 
 Label ::= IDENTIFIER COLON
 
@@ -213,16 +218,21 @@ private ARMv7ArithmeticInstructions ::= AdcInstruction
     | BfcInstruction
     | BfiInstruction
     | BicInstruction
+    | ClzInstruction
 
 private ARMv7BranchInstructions ::= BInstruction
     | BlInstruction
-    | BlxInstruction
     | BxInstruction
     | BxjInstruction
     | CbnzInstruction
     | CbzInstruction
 
+private ARMv7ComparisonInstructions ::= CmnInstruction
+    | CmpInstruction
+
 private ARMv7DebugInstructions ::= BkptInstruction
+
+private ARMv7LockInstructions ::= ClrexInstruction
 
 AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
@@ -236,12 +246,15 @@ BfiInstruction ::= BFI Registers COMMA Numbers
 BicInstruction ::= BIC Registers (COMMA (Number | Shift))?
 BkptInstruction ::= BKPT Number
 BlInstruction ::= BL IDENTIFIER
-BlxInstruction ::= BLX (IDENTIFIER | Register)
 BxInstruction ::= BX Register
 BxjInstruction ::= BXJ Register
 
 CbnzInstruction ::= CBNZ Register COMMA IDENTIFIER
 CbzInstruction ::= CBZ Register COMMA IDENTIFIER
+ClrexInstruction ::= CLREX
+ClzInstruction ::= CLZ Register COMMA Register
+CmnInstruction ::= CMN Register COMMA (Number | Register (COMMA Shift)?)
+CmpInstruction ::= CMP Register COMMA (Number | Register (COMMA Shift)?)
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

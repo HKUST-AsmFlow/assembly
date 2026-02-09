@@ -6,9 +6,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7BlxInstruction extends IARMv7InstructionSuffix {
+public interface ARMv7CmnInstruction extends IARMv7InstructionSuffix {
 
   @Nullable
-  ARMv7Register getRegister();
+  ARMv7Number getNumber();
+
+  @NotNull
+  List<ARMv7Register> getRegisterList();
+
+  @Nullable
+  ARMv7Shift getShift();
 
 }

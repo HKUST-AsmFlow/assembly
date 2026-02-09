@@ -64,10 +64,6 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitIARMv7InstructionSuffix(o);
   }
 
-  public void visitBlxInstruction(@NotNull ARMv7BlxInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
-
   public void visitBxInstruction(@NotNull ARMv7BxInstruction o) {
     visitIARMv7InstructionSuffix(o);
   }
@@ -81,6 +77,22 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitCbzInstruction(@NotNull ARMv7CbzInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitClrexInstruction(@NotNull ARMv7ClrexInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitClzInstruction(@NotNull ARMv7ClzInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitCmnInstruction(@NotNull ARMv7CmnInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitCmpInstruction(@NotNull ARMv7CmpInstruction o) {
     visitIARMv7InstructionSuffix(o);
   }
 

@@ -21,13 +21,16 @@ public interface ARMv7TokenTypes {
   IElementType BFI_INSTRUCTION = new ARMv7ElementType("BFI_INSTRUCTION");
   IElementType BIC_INSTRUCTION = new ARMv7ElementType("BIC_INSTRUCTION");
   IElementType BKPT_INSTRUCTION = new ARMv7ElementType("BKPT_INSTRUCTION");
-  IElementType BLX_INSTRUCTION = new ARMv7ElementType("BLX_INSTRUCTION");
   IElementType BL_INSTRUCTION = new ARMv7ElementType("BL_INSTRUCTION");
   IElementType BXJ_INSTRUCTION = new ARMv7ElementType("BXJ_INSTRUCTION");
   IElementType BX_INSTRUCTION = new ARMv7ElementType("BX_INSTRUCTION");
   IElementType B_INSTRUCTION = new ARMv7ElementType("B_INSTRUCTION");
   IElementType CBNZ_INSTRUCTION = new ARMv7ElementType("CBNZ_INSTRUCTION");
   IElementType CBZ_INSTRUCTION = new ARMv7ElementType("CBZ_INSTRUCTION");
+  IElementType CLREX_INSTRUCTION = new ARMv7ElementType("CLREX_INSTRUCTION");
+  IElementType CLZ_INSTRUCTION = new ARMv7ElementType("CLZ_INSTRUCTION");
+  IElementType CMN_INSTRUCTION = new ARMv7ElementType("CMN_INSTRUCTION");
+  IElementType CMP_INSTRUCTION = new ARMv7ElementType("CMP_INSTRUCTION");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
@@ -56,13 +59,16 @@ public interface ARMv7TokenTypes {
   IElementType BINARY_NUMBER = new ARMv7TokenType("binary number");
   IElementType BKPT = new ARMv7TokenType("bkpt");
   IElementType BL = new ARMv7TokenType("bl");
-  IElementType BLX = new ARMv7TokenType("blx");
   IElementType BX = new ARMv7TokenType("bx");
   IElementType BXJ = new ARMv7TokenType("bxj");
   IElementType BYTE = new ARMv7TokenType("byte");
   IElementType CBNZ = new ARMv7TokenType("cbnz");
   IElementType CBZ = new ARMv7TokenType("cbz");
   IElementType CC = new ARMv7TokenType("cc");
+  IElementType CLREX = new ARMv7TokenType("clrex");
+  IElementType CLZ = new ARMv7TokenType("clz");
+  IElementType CMN = new ARMv7TokenType("cmn");
+  IElementType CMP = new ARMv7TokenType("cmp");
   IElementType COLON = new ARMv7TokenType(":");
   IElementType COMM = new ARMv7TokenType("comm");
   IElementType COMMA = new ARMv7TokenType(",");
@@ -214,9 +220,6 @@ public interface ARMv7TokenTypes {
       else if (type == BKPT_INSTRUCTION) {
         return new ARMv7BkptInstructionImpl(node);
       }
-      else if (type == BLX_INSTRUCTION) {
-        return new ARMv7BlxInstructionImpl(node);
-      }
       else if (type == BL_INSTRUCTION) {
         return new ARMv7BlInstructionImpl(node);
       }
@@ -234,6 +237,18 @@ public interface ARMv7TokenTypes {
       }
       else if (type == CBZ_INSTRUCTION) {
         return new ARMv7CbzInstructionImpl(node);
+      }
+      else if (type == CLREX_INSTRUCTION) {
+        return new ARMv7ClrexInstructionImpl(node);
+      }
+      else if (type == CLZ_INSTRUCTION) {
+        return new ARMv7ClzInstructionImpl(node);
+      }
+      else if (type == CMN_INSTRUCTION) {
+        return new ARMv7CmnInstructionImpl(node);
+      }
+      else if (type == CMP_INSTRUCTION) {
+        return new ARMv7CmpInstructionImpl(node);
       }
       else if (type == GLOBAL_DIRECTIVE) {
         return new ARMv7GlobalDirectiveImpl(node);

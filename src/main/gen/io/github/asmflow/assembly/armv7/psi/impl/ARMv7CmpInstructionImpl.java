@@ -11,14 +11,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7BlxInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7BlxInstruction {
+public class ARMv7CmpInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7CmpInstruction {
 
-  public ARMv7BlxInstructionImpl(@NotNull ASTNode node) {
+  public ARMv7CmpInstructionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitBlxInstruction(this);
+    visitor.visitCmpInstruction(this);
   }
 
   @Override
@@ -29,8 +29,20 @@ public class ARMv7BlxInstructionImpl extends ARMv7InstructionSuffixImpl implemen
 
   @Override
   @Nullable
-  public ARMv7Register getRegister() {
-    return findChildByClass(ARMv7Register.class);
+  public ARMv7Number getNumber() {
+    return findChildByClass(ARMv7Number.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ARMv7Register> getRegisterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7Shift getShift() {
+    return findChildByClass(ARMv7Shift.class);
   }
 
 }
