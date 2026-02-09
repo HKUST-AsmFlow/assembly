@@ -11,93 +11,10 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 
 %%
 
-%{
-
-  private ArrayDeque<IElementType> queue = new ArrayDeque<>();
-
-  private void enqueue(IElementType t) {
-    queue.add(t);
-  }
-
-  private void queueSetFlagsConditionCodes(String suffix) {
-    boolean hasS = suffix.startsWith("s");
-    String cond = hasS ? suffix.substring(1) : suffix;
-
-    if (hasS)
-      enqueue(S);
-
-    if (!cond.isEmpty()) {
-      switch (cond) {
-        case "eq":
-          enqueue(EQ);
-          break;
-        case "ne":
-          enqueue(NE);
-          break;
-        case "cs":
-          enqueue(CS);
-          break;
-        case "hs":
-          enqueue(HS);
-          break;
-        case "cc":
-          enqueue(CC);
-          break;
-        case "lo":
-          enqueue(LO);
-          break;
-        case "mi":
-          enqueue(MI);
-          break;
-        case "pl":
-          enqueue(PL);
-          break;
-        case "vs":
-          enqueue(VS);
-          break;
-        case "vc":
-          enqueue(VC);
-          break;
-        case "hi":
-          enqueue(HI);
-          break;
-        case "ls":
-          enqueue(LS);
-          break;
-        case "ge":
-          enqueue(GE);
-          break;
-        case "lt":
-          enqueue(LT);
-          break;
-        case "gt":
-          enqueue(GT);
-          break;
-        case "le":
-          enqueue(LE);
-          break;
-        case "al":
-          enqueue(AL);
-          break;
-        default:
-          enqueue(BAD_CHARACTER);
-      }
-    }
-  }
-
-  public IElementType advance() throws IOException {
-    if (!queue.isEmpty())
-      return queue.pollFirst();
-
-    return yyadvance();
-  }
-
-%}
-
 %public
 %class ARMv7LexerImpl
 %implements FlexLexer
-%function yyadvance
+%function advance
 %type IElementType
 
 CRLF = \r | \n | \r\n
@@ -178,42 +95,15 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "ror" { return ROR; }
   "rrx" { return RRX; }
 
-  "adc"({S}?{CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ADC;
-  }
-  "add"({S}?{CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ADD;
-  }
-  "adr"({CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ADR;
-  }
-  "and"({S}?{CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return AND;
-  }
-  "asr"({S}?{CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ASR;
-  }
-  "b"({CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(1));
-    return B;
-  }
-  "bfc"({CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return BFC;
-  }
-  "bfi"({CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return BFI;
-  }
-  "bic"({S}?{CONDITION_CODES}?) {
-    queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return BIC;
-  }
+  "adc"({S}?{CONDITION_CODES}?) { return ADC; }
+  "add"({S}?{CONDITION_CODES}?) { return ADD; }
+  "adr"({CONDITION_CODES}?) { return ADR; }
+  "and"({S}?{CONDITION_CODES}?) { return AND; }
+  "asr"({S}?{CONDITION_CODES}?) { return ASR; }
+  "b"({CONDITION_CODES}?) { return B; }
+  "bfc"({CONDITION_CODES}?) { return BFC; }
+  "bfi"({CONDITION_CODES}?) { return BFI; }
+  "bic"({S}?{CONDITION_CODES}?) { return BIC; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

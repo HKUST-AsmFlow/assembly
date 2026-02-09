@@ -129,12 +129,12 @@ public class ARMv7LexerImpl implements FlexLexer {
     "\1\40\1\13\1\41\2\14\1\42\1\43\1\44\4\13"+
     "\1\45\1\13\1\46\4\13\1\47\1\50\4\13\1\51"+
     "\1\52\1\53\1\54\1\55\1\56\1\57\11\13\1\35"+
-    "\10\13\1\36\21\13\1\40\11\13\1\60\31\13\1\44"+
-    "\1\61\1\62\1\63\1\64\1\65\2\13\1\66\4\13"+
-    "\1\67\1\70\2\13\1\71\1\35\1\36\1\37\1\72"+
-    "\1\40\1\73\1\74\1\60\1\13\1\42\1\43\1\44"+
-    "\1\13\1\75\1\76\1\77\1\100\1\13\1\101\1\13"+
-    "\1\102\1\103\1\104\1\105\1\106\1\107";
+    "\10\13\1\36\21\13\1\40\11\13\1\41\31\13\1\44"+
+    "\1\60\1\61\1\62\1\63\1\64\2\13\1\65\4\13"+
+    "\1\66\1\67\2\13\1\70\1\35\1\36\1\37\1\71"+
+    "\1\40\1\72\1\73\1\41\1\13\1\42\1\43\1\44"+
+    "\1\13\1\74\1\75\1\76\1\77\1\13\1\100\1\13"+
+    "\1\101\1\102\1\103\1\104\1\105\1\106";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[231];
@@ -502,88 +502,6 @@ public class ARMv7LexerImpl implements FlexLexer {
   @SuppressWarnings("unused")
   private boolean zzEOFDone;
 
-  /* user code: */
-
-  private ArrayDeque<IElementType> queue = new ArrayDeque<>();
-
-  private void enqueue(IElementType t) {
-    queue.add(t);
-  }
-
-  private void queueSetFlagsConditionCodes(String suffix) {
-    boolean hasS = suffix.startsWith("s");
-    String cond = hasS ? suffix.substring(1) : suffix;
-
-    if (hasS)
-      enqueue(S);
-
-    if (!cond.isEmpty()) {
-      switch (cond) {
-        case "eq":
-          enqueue(EQ);
-          break;
-        case "ne":
-          enqueue(NE);
-          break;
-        case "cs":
-          enqueue(CS);
-          break;
-        case "hs":
-          enqueue(HS);
-          break;
-        case "cc":
-          enqueue(CC);
-          break;
-        case "lo":
-          enqueue(LO);
-          break;
-        case "mi":
-          enqueue(MI);
-          break;
-        case "pl":
-          enqueue(PL);
-          break;
-        case "vs":
-          enqueue(VS);
-          break;
-        case "vc":
-          enqueue(VC);
-          break;
-        case "hi":
-          enqueue(HI);
-          break;
-        case "ls":
-          enqueue(LS);
-          break;
-        case "ge":
-          enqueue(GE);
-          break;
-        case "lt":
-          enqueue(LT);
-          break;
-        case "gt":
-          enqueue(GT);
-          break;
-        case "le":
-          enqueue(LE);
-          break;
-        case "al":
-          enqueue(AL);
-          break;
-        default:
-          enqueue(BAD_CHARACTER);
-      }
-    }
-  }
-
-  public IElementType advance() throws IOException {
-    if (!queue.isEmpty())
-      return queue.pollFirst();
-
-    return yyadvance();
-  }
-
-
 
   /**
    * Creates a new scanner
@@ -742,7 +660,7 @@ public class ARMv7LexerImpl implements FlexLexer {
    * @return      the next token
    * @exception   java.io.IOException  if any I/O-Error occurs
    */
-  public IElementType yyadvance() throws java.io.IOException
+  public IElementType advance() throws java.io.IOException
   {
     int zzInput;
     int zzAction;
@@ -830,366 +748,352 @@ public class ARMv7LexerImpl implements FlexLexer {
             { return BAD_CHARACTER;
             }
           // fall through
-          case 72: break;
+          case 71: break;
           case 2:
             { return WHITE_SPACE;
             }
           // fall through
-          case 73: break;
+          case 72: break;
           case 3:
             { return LINE_FEED;
             }
           // fall through
-          case 74: break;
+          case 73: break;
           case 4:
             { return STRING;
             }
           // fall through
-          case 75: break;
+          case 74: break;
           case 5:
             { return POUND;
             }
           // fall through
-          case 76: break;
+          case 75: break;
           case 6:
             { return COMMA;
             }
           // fall through
-          case 77: break;
+          case 76: break;
           case 7:
             { return DOT;
             }
           // fall through
-          case 78: break;
+          case 77: break;
           case 8:
             { return DECIMAL_NUMBER;
             }
           // fall through
-          case 79: break;
+          case 78: break;
           case 9:
             { return COLON;
             }
           // fall through
-          case 80: break;
+          case 79: break;
           case 10:
             { return COMMENT;
             }
           // fall through
-          case 81: break;
+          case 80: break;
           case 11:
             { return IDENTIFIER;
             }
           // fall through
-          case 82: break;
+          case 81: break;
           case 12:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(1));
-    return B;
+            { return B;
             }
           // fall through
-          case 83: break;
+          case 82: break;
           case 13:
             { return BINARY_NUMBER;
             }
           // fall through
-          case 84: break;
+          case 83: break;
           case 14:
             { return LR;
             }
           // fall through
-          case 85: break;
+          case 84: break;
           case 15:
             { return OCTAL_NUMBER;
             }
           // fall through
-          case 86: break;
+          case 85: break;
           case 16:
             { return PC;
             }
           // fall through
-          case 87: break;
+          case 86: break;
           case 17:
             { return R0;
             }
           // fall through
-          case 88: break;
+          case 87: break;
           case 18:
             { return R1;
             }
           // fall through
-          case 89: break;
+          case 88: break;
           case 19:
             { return R2;
             }
           // fall through
-          case 90: break;
+          case 89: break;
           case 20:
             { return R3;
             }
           // fall through
-          case 91: break;
+          case 90: break;
           case 21:
             { return R4;
             }
           // fall through
-          case 92: break;
+          case 91: break;
           case 22:
             { return R5;
             }
           // fall through
-          case 93: break;
+          case 92: break;
           case 23:
             { return R6;
             }
           // fall through
-          case 94: break;
+          case 93: break;
           case 24:
             { return R7;
             }
           // fall through
-          case 95: break;
+          case 94: break;
           case 25:
             { return R8;
             }
           // fall through
-          case 96: break;
+          case 95: break;
           case 26:
             { return R9;
             }
           // fall through
-          case 97: break;
+          case 96: break;
           case 27:
             { return SP;
             }
           // fall through
-          case 98: break;
+          case 97: break;
           case 28:
             { return HEXADECIMAL_NUMBER;
             }
           // fall through
-          case 99: break;
+          case 98: break;
           case 29:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ADC;
+            { return ADC;
+            }
+          // fall through
+          case 99: break;
+          case 30:
+            { return ADD;
             }
           // fall through
           case 100: break;
-          case 30:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ADD;
+          case 31:
+            { return ADR;
             }
           // fall through
           case 101: break;
-          case 31:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ADR;
+          case 32:
+            { return AND;
             }
           // fall through
           case 102: break;
-          case 32:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return AND;
-            }
-          // fall through
-          case 103: break;
           case 33:
             { return ASR;
             }
           // fall through
-          case 104: break;
+          case 103: break;
           case 34:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return BFC;
+            { return BFC;
+            }
+          // fall through
+          case 104: break;
+          case 35:
+            { return BFI;
             }
           // fall through
           case 105: break;
-          case 35:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return BFI;
+          case 36:
+            { return BIC;
             }
           // fall through
           case 106: break;
-          case 36:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return BIC;
-            }
-          // fall through
-          case 107: break;
           case 37:
             { return DEF;
             }
           // fall through
-          case 108: break;
+          case 107: break;
           case 38:
             { return DIM;
             }
           // fall through
-          case 109: break;
+          case 108: break;
           case 39:
             { return EQU;
             }
           // fall through
-          case 110: break;
+          case 109: break;
           case 40:
             { return ERR;
             }
           // fall through
-          case 111: break;
+          case 110: break;
           case 41:
             { return LSL;
             }
           // fall through
-          case 112: break;
+          case 111: break;
           case 42:
             { return LSR;
             }
           // fall through
-          case 113: break;
+          case 112: break;
           case 43:
             { return R10;
             }
           // fall through
-          case 114: break;
+          case 113: break;
           case 44:
             { return R11;
             }
           // fall through
-          case 115: break;
+          case 114: break;
           case 45:
             { return R12;
             }
           // fall through
-          case 116: break;
+          case 115: break;
           case 46:
             { return ROR;
             }
           // fall through
-          case 117: break;
+          case 116: break;
           case 47:
             { return RRX;
             }
           // fall through
-          case 118: break;
+          case 117: break;
           case 48:
-            { queueSetFlagsConditionCodes(yytext().toString().substring(3));
-    return ASR;
-            }
-          // fall through
-          case 119: break;
-          case 49:
             { return BYTE;
             }
           // fall through
-          case 120: break;
-          case 50:
+          case 118: break;
+          case 49:
             { return COMM;
             }
           // fall through
-          case 121: break;
-          case 51:
+          case 119: break;
+          case 50:
             { return CPSR;
             }
           // fall through
-          case 122: break;
-          case 52:
+          case 120: break;
+          case 51:
             { return DATA;
             }
           // fall through
-          case 123: break;
-          case 53:
+          case 121: break;
+          case 52:
             { return DESC;
             }
           // fall through
-          case 124: break;
-          case 54:
+          case 122: break;
+          case 53:
             { return ELSE;
             }
           // fall through
-          case 125: break;
-          case 55:
+          case 123: break;
+          case 54:
             { return FILE;
             }
           // fall through
-          case 126: break;
-          case 56:
+          case 124: break;
+          case 55:
             { return FILL;
             }
           // fall through
-          case 127: break;
-          case 57:
+          case 125: break;
+          case 56:
             { return SPSR;
             }
           // fall through
-          case 128: break;
-          case 58:
+          case 126: break;
+          case 57:
             { return ALIGN;
             }
           // fall through
-          case 129: break;
-          case 59:
+          case 127: break;
+          case 58:
             { return ASCII;
             }
           // fall through
-          case 130: break;
-          case 60:
+          case 128: break;
+          case 59:
             { return ASCIZ;
             }
           // fall through
-          case 131: break;
-          case 61:
+          case 129: break;
+          case 60:
             { return EJECT;
             }
           // fall through
-          case 132: break;
-          case 62:
+          case 130: break;
+          case 61:
             { return ENDEF;
             }
           // fall through
-          case 133: break;
-          case 63:
+          case 131: break;
+          case 62:
             { return ENDIF;
             }
           // fall through
-          case 134: break;
-          case 64:
+          case 132: break;
+          case 63:
             { return EQUIV;
             }
           // fall through
-          case 135: break;
-          case 65:
+          case 133: break;
+          case 64:
             { return FLOAT;
             }
           // fall through
-          case 136: break;
-          case 66:
+          case 134: break;
+          case 65:
             { return BALIGN;
             }
           // fall through
-          case 137: break;
-          case 67:
+          case 135: break;
+          case 66:
             { return DOUBLE;
             }
           // fall through
-          case 138: break;
-          case 68:
+          case 136: break;
+          case 67:
             { return EXTERN;
             }
           // fall through
-          case 139: break;
-          case 69:
+          case 137: break;
+          case 68:
             { return GLOBAL;
             }
           // fall through
-          case 140: break;
-          case 70:
+          case 138: break;
+          case 69:
             { return BALIGNL;
             }
           // fall through
-          case 141: break;
-          case 71:
+          case 139: break;
+          case 70:
             { return BALIGNW;
             }
           // fall through
-          case 142: break;
+          case 140: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

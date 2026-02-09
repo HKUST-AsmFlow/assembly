@@ -9,15 +9,15 @@ import com.intellij.psi.PsiElement;
 public class ARMv7Visitor extends PsiElementVisitor {
 
   public void visitAdcInstruction(@NotNull ARMv7AdcInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitAddInstruction(@NotNull ARMv7AddInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitAdrInstruction(@NotNull ARMv7AdrInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitAlignDirective(@NotNull ARMv7AlignDirective o) {
@@ -25,7 +25,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitAndInstruction(@NotNull ARMv7AndInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitAsciiDirective(@NotNull ARMv7AsciiDirective o) {
@@ -33,11 +33,11 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitAsrInstruction(@NotNull ARMv7AsrInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitBInstruction(@NotNull ARMv7BInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitBased(@NotNull ARMv7Based o) {
@@ -45,19 +45,15 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitBfcInstruction(@NotNull ARMv7BfcInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitBfiInstruction(@NotNull ARMv7BfiInstruction o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitBicInstruction(@NotNull ARMv7BicInstruction o) {
-    visitPsiElement(o);
-  }
-
-  public void visitConditionCodes(@NotNull ARMv7ConditionCodes o) {
-    visitPsiElement(o);
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitGlobalDirective(@NotNull ARMv7GlobalDirective o) {
@@ -88,16 +84,16 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSetConditionFlags(@NotNull ARMv7SetConditionFlags o) {
-    visitPsiElement(o);
-  }
-
   public void visitShift(@NotNull ARMv7Shift o) {
     visitPsiElement(o);
   }
 
   public void visitShiftType(@NotNull ARMv7ShiftType o) {
     visitPsiElement(o);
+  }
+
+  public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {
+    visitElement(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

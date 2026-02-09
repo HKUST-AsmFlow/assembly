@@ -9,10 +9,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7BInstructionImpl extends ASTWrapperPsiElement implements ARMv7BInstruction {
+public class ARMv7BInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7BInstruction {
 
   public ARMv7BInstructionImpl(@NotNull ASTNode node) {
     super(node);
@@ -26,12 +25,6 @@ public class ARMv7BInstructionImpl extends ASTWrapperPsiElement implements ARMv7
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ARMv7Visitor) accept((ARMv7Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7ConditionCodes getConditionCodes() {
-    return findChildByClass(ARMv7ConditionCodes.class);
   }
 
 }

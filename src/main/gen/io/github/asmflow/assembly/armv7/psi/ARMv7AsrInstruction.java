@@ -6,18 +6,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7AsrInstruction extends PsiElement {
-
-  @Nullable
-  ARMv7ConditionCodes getConditionCodes();
+public interface ARMv7AsrInstruction extends IARMv7InstructionSuffix {
 
   @Nullable
   ARMv7Number getNumber();
 
   @NotNull
   ARMv7Registers getRegisters();
-
-  @Nullable
-  ARMv7SetConditionFlags getSetConditionFlags();
 
 }

@@ -167,6 +167,9 @@
         DOT = "."
         POUND = "#"
     ]
+
+    mixin(".+Instruction") = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7InstructionSuffixImpl"
+    implements(".+Instruction") = "io.github.asmflow.assembly.armv7.psi.IARMv7InstructionSuffix"
 }
 
 File ::= Item*
@@ -175,9 +178,9 @@ private LineFeed ::= LINE_FEED+ {
     consumeTokenMethod = "consumeTokenFast"
 }
 
-private DirectiveOrInstructionOrLabel ::= Directive | Instruction | Label
+private DirectiveOrInstructionOrLabel ::= AssemblerDirective | Instruction | Label
 
-private Directive ::= DOT ARMv7Directives
+private AssemblerDirective ::= DOT ARMv7Directives
 private Instruction ::= ARMv7ArithmeticInstructions | ARMv7BranchInstructions
 
 Label ::= IDENTIFIER COLON
@@ -188,12 +191,8 @@ Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUM
 Number ::= POUND Based
 Numbers ::= <<CommaSeparatedList Number>>
 
-ConditionCodes ::= !<<afterWhitespace>> (EQ | NE | CS | HS | CC | LO | MI | PL | VS | VC | HI | LS | GE | LT | GT | LE | AL)
-
 Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
 Registers ::= <<CommaSeparatedList Register>>
-
-SetConditionFlags ::= !<<afterWhitespace>> (S)
 
 ShiftType ::= ASR | LSL | LSR | ROR | RRX
 Shift ::= ShiftType (Number | Register)
@@ -209,16 +208,16 @@ private ARMv7ArithmeticInstructions ::= AdcInstruction
 
 private ARMv7BranchInstructions ::= BInstruction
 
-AdcInstruction ::= ADC SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
-AddInstruction ::= ADD SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
-AdrInstruction ::= ADR ConditionCodes? Register COMMA IDENTIFIER
-AndInstruction ::= AND SetConditionFlags? ConditionCodes? Registers (COMMA (Number | Shift))?
-AsrInstruction ::= ASR SetConditionFlags? ConditionCodes? Registers (COMMA Number)?
+AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
+AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
+AdrInstruction ::= ADR Register COMMA IDENTIFIER
+AndInstruction ::= AND Registers (COMMA (Number | Shift))?
+AsrInstruction ::= ASR Registers (COMMA Number)?
 
-BInstruction ::= B ConditionCodes? IDENTIFIER
-BfcInstruction ::= BFC ConditionCodes? Register COMMA Numbers
-BfiInstruction ::= BFI ConditionCodes? Registers COMMA Numbers
-BicInstruction ::= BIC ConditionCodes? Registers (COMMA (Number | Shift))?
+BInstruction ::= B IDENTIFIER
+BfcInstruction ::= BFC Register COMMA Numbers
+BfiInstruction ::= BFI Registers COMMA Numbers
+BicInstruction ::= BIC Registers (COMMA (Number | Shift))?
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

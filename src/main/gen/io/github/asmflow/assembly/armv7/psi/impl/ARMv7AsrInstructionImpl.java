@@ -9,10 +9,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7AsrInstructionImpl extends ASTWrapperPsiElement implements ARMv7AsrInstruction {
+public class ARMv7AsrInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7AsrInstruction {
 
   public ARMv7AsrInstructionImpl(@NotNull ASTNode node) {
     super(node);
@@ -30,12 +29,6 @@ public class ARMv7AsrInstructionImpl extends ASTWrapperPsiElement implements ARM
 
   @Override
   @Nullable
-  public ARMv7ConditionCodes getConditionCodes() {
-    return findChildByClass(ARMv7ConditionCodes.class);
-  }
-
-  @Override
-  @Nullable
   public ARMv7Number getNumber() {
     return findChildByClass(ARMv7Number.class);
   }
@@ -44,12 +37,6 @@ public class ARMv7AsrInstructionImpl extends ASTWrapperPsiElement implements ARM
   @NotNull
   public ARMv7Registers getRegisters() {
     return findNotNullChildByClass(ARMv7Registers.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7SetConditionFlags getSetConditionFlags() {
-    return findChildByClass(ARMv7SetConditionFlags.class);
   }
 
 }

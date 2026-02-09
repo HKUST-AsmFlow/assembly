@@ -21,7 +21,6 @@ public interface ARMv7TokenTypes {
   IElementType BFI_INSTRUCTION = new ARMv7ElementType("BFI_INSTRUCTION");
   IElementType BIC_INSTRUCTION = new ARMv7ElementType("BIC_INSTRUCTION");
   IElementType B_INSTRUCTION = new ARMv7ElementType("B_INSTRUCTION");
-  IElementType CONDITION_CODES = new ARMv7ElementType("CONDITION_CODES");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
   IElementType ITEM = new ARMv7ElementType("ITEM");
   IElementType LABEL = new ARMv7ElementType("LABEL");
@@ -29,7 +28,6 @@ public interface ARMv7TokenTypes {
   IElementType NUMBERS = new ARMv7ElementType("NUMBERS");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
   IElementType REGISTERS = new ARMv7ElementType("REGISTERS");
-  IElementType SET_CONDITION_FLAGS = new ARMv7ElementType("SET_CONDITION_FLAGS");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
 
@@ -203,9 +201,6 @@ public interface ARMv7TokenTypes {
       else if (type == B_INSTRUCTION) {
         return new ARMv7BInstructionImpl(node);
       }
-      else if (type == CONDITION_CODES) {
-        return new ARMv7ConditionCodesImpl(node);
-      }
       else if (type == GLOBAL_DIRECTIVE) {
         return new ARMv7GlobalDirectiveImpl(node);
       }
@@ -226,9 +221,6 @@ public interface ARMv7TokenTypes {
       }
       else if (type == REGISTERS) {
         return new ARMv7RegistersImpl(node);
-      }
-      else if (type == SET_CONDITION_FLAGS) {
-        return new ARMv7SetConditionFlagsImpl(node);
       }
       else if (type == SHIFT) {
         return new ARMv7ShiftImpl(node);
