@@ -61,14 +61,36 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // BInstruction
+  //     | BlInstruction
+  //     | BlxInstruction
+  //     | BxInstruction
+  //     | BxjInstruction
+  //     | CbnzInstruction
+  //     | CbzInstruction
   static boolean ARMv7BranchInstructions(PsiBuilder b, int l) {
-    return BInstruction(b, l + 1);
+    if (!recursion_guard_(b, l, "ARMv7BranchInstructions")) return false;
+    boolean r;
+    r = BInstruction(b, l + 1);
+    if (!r) r = BlInstruction(b, l + 1);
+    if (!r) r = BlxInstruction(b, l + 1);
+    if (!r) r = BxInstruction(b, l + 1);
+    if (!r) r = BxjInstruction(b, l + 1);
+    if (!r) r = CbnzInstruction(b, l + 1);
+    if (!r) r = CbzInstruction(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // BkptInstruction
+  static boolean ARMv7DebugInstructions(PsiBuilder b, int l) {
+    return BkptInstruction(b, l + 1);
   }
 
   /* ********************************************************** */
   // AlignDirective | AsciiDirective | GlobalDirective
   static boolean ARMv7Directives(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7Directives")) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     r = AlignDirective(b, l + 1);
     if (!r) r = AsciiDirective(b, l + 1);
@@ -173,13 +195,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ALIGN <<CommaSeparatedList Based>>
+  // DOT ALIGN <<CommaSeparatedList Based>>
   public static boolean AlignDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AlignDirective")) return false;
-    if (!nextTokenIs(b, ALIGN)) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ALIGN);
+    r = consumeTokens(b, 0, DOT, ALIGN);
     r = r && CommaSeparatedList(b, l + 1, ARMv7Parser::Based);
     exit_section_(b, m, ALIGN_DIRECTIVE, r);
     return r;
@@ -227,13 +249,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ASCII <<CommaSeparatedList STRING>>
+  // DOT ASCII <<CommaSeparatedList STRING>>
   public static boolean AsciiDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AsciiDirective")) return false;
-    if (!nextTokenIs(b, ASCII)) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ASCII);
+    r = consumeTokens(b, 0, DOT, ASCII);
     r = r && CommaSeparatedList(b, l + 1, STRING_parser_);
     exit_section_(b, m, ASCII_DIRECTIVE, r);
     return r;
@@ -272,16 +294,9 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DOT ARMv7Directives
+  // ARMv7Directives
   static boolean AssemblerDirective(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AssemblerDirective")) return false;
-    if (!nextTokenIs(b, DOT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DOT);
-    r = r && ARMv7Directives(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    return ARMv7Directives(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -401,6 +416,107 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // BKPT Number
+  public static boolean BkptInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BkptInstruction")) return false;
+    if (!nextTokenIs(b, BKPT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BKPT);
+    r = r && Number(b, l + 1);
+    exit_section_(b, m, BKPT_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // BL IDENTIFIER
+  public static boolean BlInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlInstruction")) return false;
+    if (!nextTokenIs(b, BL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, BL, IDENTIFIER);
+    exit_section_(b, m, BL_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // BLX (IDENTIFIER | Register)
+  public static boolean BlxInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlxInstruction")) return false;
+    if (!nextTokenIs(b, BLX)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BLX);
+    r = r && BlxInstruction_1(b, l + 1);
+    exit_section_(b, m, BLX_INSTRUCTION, r);
+    return r;
+  }
+
+  // IDENTIFIER | Register
+  private static boolean BlxInstruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlxInstruction_1")) return false;
+    boolean r;
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = Register(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // BX Register
+  public static boolean BxInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BxInstruction")) return false;
+    if (!nextTokenIs(b, BX)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BX);
+    r = r && Register(b, l + 1);
+    exit_section_(b, m, BX_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // BXJ Register
+  public static boolean BxjInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BxjInstruction")) return false;
+    if (!nextTokenIs(b, BXJ)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BXJ);
+    r = r && Register(b, l + 1);
+    exit_section_(b, m, BXJ_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // CBNZ Register COMMA IDENTIFIER
+  public static boolean CbnzInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CbnzInstruction")) return false;
+    if (!nextTokenIs(b, CBNZ)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CBNZ);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, IDENTIFIER);
+    exit_section_(b, m, CBNZ_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // CBZ Register COMMA IDENTIFIER
+  public static boolean CbzInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CbzInstruction")) return false;
+    if (!nextTokenIs(b, CBZ)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CBZ);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, IDENTIFIER);
+    exit_section_(b, m, CBZ_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // <<T>> (COMMA <<T>>)*
   static boolean CommaSeparatedList(PsiBuilder b, int l, Parser _T) {
     if (!recursion_guard_(b, l, "CommaSeparatedList")) return false;
@@ -458,36 +574,39 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // GLOBAL IDENTIFIER
+  // DOT GLOBAL IDENTIFIER
   public static boolean GlobalDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GlobalDirective")) return false;
-    if (!nextTokenIs(b, GLOBAL)) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, GLOBAL, IDENTIFIER);
+    r = consumeTokens(b, 0, DOT, GLOBAL, IDENTIFIER);
     exit_section_(b, m, GLOBAL_DIRECTIVE, r);
     return r;
   }
 
   /* ********************************************************** */
-  // ARMv7ArithmeticInstructions | ARMv7BranchInstructions
+  // ARMv7ArithmeticInstructions
+  //     | ARMv7BranchInstructions
+  //     | ARMv7DebugInstructions
   static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
     boolean r;
     r = ARMv7ArithmeticInstructions(b, l + 1);
     if (!r) r = ARMv7BranchInstructions(b, l + 1);
+    if (!r) r = ARMv7DebugInstructions(b, l + 1);
     return r;
   }
 
   /* ********************************************************** */
   // LineFeed | DirectiveOrInstructionOrLabel LineFeed?
-  public static boolean Item(PsiBuilder b, int l) {
+  static boolean Item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Item")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ITEM, "<item>");
+    Marker m = enter_section_(b);
     r = LineFeed(b, l + 1);
     if (!r) r = Item_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 

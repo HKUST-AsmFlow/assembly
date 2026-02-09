@@ -43,7 +43,14 @@ object ARMv7TokenSets {
         B,
         BFC,
         BFI,
-        BIC
+        BIC,
+        BKPT,
+        BL,
+        BLX,
+        BX,
+        BXJ,
+        CBNZ,
+        CBZ
     )
 
     val NUMBERS = TokenSet.create(

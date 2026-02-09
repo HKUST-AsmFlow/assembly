@@ -20,9 +20,15 @@ public interface ARMv7TokenTypes {
   IElementType BFC_INSTRUCTION = new ARMv7ElementType("BFC_INSTRUCTION");
   IElementType BFI_INSTRUCTION = new ARMv7ElementType("BFI_INSTRUCTION");
   IElementType BIC_INSTRUCTION = new ARMv7ElementType("BIC_INSTRUCTION");
+  IElementType BKPT_INSTRUCTION = new ARMv7ElementType("BKPT_INSTRUCTION");
+  IElementType BLX_INSTRUCTION = new ARMv7ElementType("BLX_INSTRUCTION");
+  IElementType BL_INSTRUCTION = new ARMv7ElementType("BL_INSTRUCTION");
+  IElementType BXJ_INSTRUCTION = new ARMv7ElementType("BXJ_INSTRUCTION");
+  IElementType BX_INSTRUCTION = new ARMv7ElementType("BX_INSTRUCTION");
   IElementType B_INSTRUCTION = new ARMv7ElementType("B_INSTRUCTION");
+  IElementType CBNZ_INSTRUCTION = new ARMv7ElementType("CBNZ_INSTRUCTION");
+  IElementType CBZ_INSTRUCTION = new ARMv7ElementType("CBZ_INSTRUCTION");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
-  IElementType ITEM = new ARMv7ElementType("ITEM");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
   IElementType NUMBERS = new ARMv7ElementType("NUMBERS");
@@ -48,7 +54,14 @@ public interface ARMv7TokenTypes {
   IElementType BFI = new ARMv7TokenType("bfi");
   IElementType BIC = new ARMv7TokenType("bic");
   IElementType BINARY_NUMBER = new ARMv7TokenType("binary number");
+  IElementType BKPT = new ARMv7TokenType("bkpt");
+  IElementType BL = new ARMv7TokenType("bl");
+  IElementType BLX = new ARMv7TokenType("blx");
+  IElementType BX = new ARMv7TokenType("bx");
+  IElementType BXJ = new ARMv7TokenType("bxj");
   IElementType BYTE = new ARMv7TokenType("byte");
+  IElementType CBNZ = new ARMv7TokenType("cbnz");
+  IElementType CBZ = new ARMv7TokenType("cbz");
   IElementType CC = new ARMv7TokenType("cc");
   IElementType COLON = new ARMv7TokenType(":");
   IElementType COMM = new ARMv7TokenType("comm");
@@ -198,14 +211,32 @@ public interface ARMv7TokenTypes {
       else if (type == BIC_INSTRUCTION) {
         return new ARMv7BicInstructionImpl(node);
       }
+      else if (type == BKPT_INSTRUCTION) {
+        return new ARMv7BkptInstructionImpl(node);
+      }
+      else if (type == BLX_INSTRUCTION) {
+        return new ARMv7BlxInstructionImpl(node);
+      }
+      else if (type == BL_INSTRUCTION) {
+        return new ARMv7BlInstructionImpl(node);
+      }
+      else if (type == BXJ_INSTRUCTION) {
+        return new ARMv7BxjInstructionImpl(node);
+      }
+      else if (type == BX_INSTRUCTION) {
+        return new ARMv7BxInstructionImpl(node);
+      }
       else if (type == B_INSTRUCTION) {
         return new ARMv7BInstructionImpl(node);
       }
+      else if (type == CBNZ_INSTRUCTION) {
+        return new ARMv7CbnzInstructionImpl(node);
+      }
+      else if (type == CBZ_INSTRUCTION) {
+        return new ARMv7CbzInstructionImpl(node);
+      }
       else if (type == GLOBAL_DIRECTIVE) {
         return new ARMv7GlobalDirectiveImpl(node);
-      }
-      else if (type == ITEM) {
-        return new ARMv7ItemImpl(node);
       }
       else if (type == LABEL) {
         return new ARMv7LabelImpl(node);

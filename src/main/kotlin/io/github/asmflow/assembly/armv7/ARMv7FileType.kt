@@ -11,7 +11,7 @@ object ARMv7FileType : AssemblyFileType(ARMv7Language) {
 
     override fun getDefaultExtension(): @NlsSafe String = ".arm"
 
-    override fun getIcon(): Icon = AssemblyIcons.ARMV7
+    override fun getIcon(): Icon = AssemblyIcons.ARMv7
 
     override fun getName(): @NonNls String = ARMv7Language.displayName
 }

@@ -128,11 +128,17 @@
         ADR = "adr"
         AND = "and"
         ASR = "asr"
-
         B = "b"
         BFC = "bfc"
         BFI = "bfi"
         BIC = "bic"
+        BKPT = "bkpt"
+        BL = "bl"
+        BLX = "blx"
+        BX = "bx"
+        BXJ = "bxj"
+        CBNZ = "cbnz"
+        CBZ = "cbz"
 
         // registers
         R0 = "r0"
@@ -180,12 +186,14 @@ private LineFeed ::= LINE_FEED+ {
 
 private DirectiveOrInstructionOrLabel ::= AssemblerDirective | Instruction | Label
 
-private AssemblerDirective ::= DOT ARMv7Directives
-private Instruction ::= ARMv7ArithmeticInstructions | ARMv7BranchInstructions
+private AssemblerDirective ::= ARMv7Directives
+private Instruction ::= ARMv7ArithmeticInstructions
+    | ARMv7BranchInstructions
+    | ARMv7DebugInstructions
 
 Label ::= IDENTIFIER COLON
 
-Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
+private Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
 
 Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
 Number ::= POUND Based
@@ -207,6 +215,14 @@ private ARMv7ArithmeticInstructions ::= AdcInstruction
     | BicInstruction
 
 private ARMv7BranchInstructions ::= BInstruction
+    | BlInstruction
+    | BlxInstruction
+    | BxInstruction
+    | BxjInstruction
+    | CbnzInstruction
+    | CbzInstruction
+
+private ARMv7DebugInstructions ::= BkptInstruction
 
 AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
@@ -218,11 +234,19 @@ BInstruction ::= B IDENTIFIER
 BfcInstruction ::= BFC Register COMMA Numbers
 BfiInstruction ::= BFI Registers COMMA Numbers
 BicInstruction ::= BIC Registers (COMMA (Number | Shift))?
+BkptInstruction ::= BKPT Number
+BlInstruction ::= BL IDENTIFIER
+BlxInstruction ::= BLX (IDENTIFIER | Register)
+BxInstruction ::= BX Register
+BxjInstruction ::= BXJ Register
+
+CbnzInstruction ::= CBNZ Register COMMA IDENTIFIER
+CbzInstruction ::= CBZ Register COMMA IDENTIFIER
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 
-AlignDirective ::= ALIGN <<CommaSeparatedList Based>>
-AsciiDirective ::= ASCII <<CommaSeparatedList STRING>>
-GlobalDirective ::= GLOBAL IDENTIFIER
+AlignDirective ::= DOT ALIGN <<CommaSeparatedList Based>>
+AsciiDirective ::= DOT ASCII <<CommaSeparatedList STRING>>
+GlobalDirective ::= DOT GLOBAL IDENTIFIER
 
 private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

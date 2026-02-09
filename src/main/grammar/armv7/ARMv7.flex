@@ -104,6 +104,13 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "bfc"({CONDITION_CODES}?) { return BFC; }
   "bfi"({CONDITION_CODES}?) { return BFI; }
   "bic"({S}?{CONDITION_CODES}?) { return BIC; }
+  "bkpt" { return BKPT; }
+  "bl"({CONDITION_CODES}?) { return BL; }
+  "blx"({CONDITION_CODES}?) { return BLX; }
+  "bx"({CONDITION_CODES}?) { return BX; }
+  "bxj"({CONDITION_CODES}?) { return BXJ; }
+  "cbnz" { return CBNZ; }
+  "cbz" { return CBZ; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }
