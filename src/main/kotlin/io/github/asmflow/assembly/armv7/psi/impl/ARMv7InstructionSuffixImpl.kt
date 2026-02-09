@@ -14,6 +14,9 @@ open class ARMv7InstructionSuffixImpl(node: ASTNode) : IARMv7InstructionSuffix, 
         else
             flagsAndConditionCode
 
+        if (substr.isEmpty())
+            return ARMv7InstructionConditionCode.AL
+
         return try {
             ARMv7InstructionConditionCode.valueOf(substr.uppercase())
         } catch (_: IllegalArgumentException) {
