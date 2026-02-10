@@ -28,28 +28,6 @@
         HEXADECIMAL_NUMBER = "hexadecimal number"
         OCTAL_NUMBER = "octal number"
 
-        // set condition flags (optional)
-        S = "s"
-
-        // condition codes (optional)
-        EQ = "eq"
-        NE = "ne"
-        CS = "cs"
-        HS = "hs"
-        CC = "cc"
-        LO = "lo"
-        MI = "mi"
-        PL = "pl"
-        VS = "vs"
-        VC = "vc"
-        HI = "hi"
-        LS = "ls"
-        GE = "ge"
-        LT = "lt"
-        GT = "gt"
-        LE = "le"
-        AL = "al"
-
         // directives
         ALIGN = "align"
         ASCII = "ascii"
@@ -142,6 +120,8 @@
         CLZ = "clz"
         CMN = "cmn"
         CMP = "cmp"
+        CSDB = "csdb"
+        DBG = "dbg"
 
         // registers
         R0 = "r0"
@@ -195,6 +175,7 @@ private Instruction ::= ARMv7ArithmeticInstructions
     | ARMv7ComparisonInstructions
     | ARMv7DebugInstructions
     | ARMv7LockInstructions
+    | ARMv7SpeculativeInstructions
 
 Label ::= IDENTIFIER COLON
 
@@ -231,8 +212,11 @@ private ARMv7ComparisonInstructions ::= CmnInstruction
     | CmpInstruction
 
 private ARMv7DebugInstructions ::= BkptInstruction
+    | DbgInstruction
 
 private ARMv7LockInstructions ::= ClrexInstruction
+
+private ARMv7SpeculativeInstructions ::= CsdbInstruction
 
 AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
@@ -255,6 +239,9 @@ ClrexInstruction ::= CLREX
 ClzInstruction ::= CLZ Register COMMA Register
 CmnInstruction ::= CMN Register COMMA (Number | Register (COMMA Shift)?)
 CmpInstruction ::= CMP Register COMMA (Number | Register (COMMA Shift)?)
+CsdbInstruction ::= CSDB
+
+DbgInstruction ::= DBG Number
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

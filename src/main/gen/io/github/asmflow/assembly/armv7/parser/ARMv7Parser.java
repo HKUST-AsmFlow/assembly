@@ -94,8 +94,14 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // BkptInstruction
+  //     | DbgInstruction
   static boolean ARMv7DebugInstructions(PsiBuilder b, int l) {
-    return BkptInstruction(b, l + 1);
+    if (!recursion_guard_(b, l, "ARMv7DebugInstructions")) return false;
+    if (!nextTokenIs(b, "", BKPT, DBG)) return false;
+    boolean r;
+    r = BkptInstruction(b, l + 1);
+    if (!r) r = DbgInstruction(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -114,6 +120,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   // ClrexInstruction
   static boolean ARMv7LockInstructions(PsiBuilder b, int l) {
     return ClrexInstruction(b, l + 1);
+  }
+
+  /* ********************************************************** */
+  // CsdbInstruction
+  static boolean ARMv7SpeculativeInstructions(PsiBuilder b, int l) {
+    return CsdbInstruction(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -684,6 +696,31 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // CSDB
+  public static boolean CsdbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CsdbInstruction")) return false;
+    if (!nextTokenIs(b, CSDB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CSDB);
+    exit_section_(b, m, CSDB_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // DBG Number
+  public static boolean DbgInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DbgInstruction")) return false;
+    if (!nextTokenIs(b, DBG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DBG);
+    r = r && Number(b, l + 1);
+    exit_section_(b, m, DBG_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // AssemblerDirective | Instruction | Label
   static boolean DirectiveOrInstructionOrLabel(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveOrInstructionOrLabel")) return false;
@@ -724,6 +761,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | ARMv7ComparisonInstructions
   //     | ARMv7DebugInstructions
   //     | ARMv7LockInstructions
+  //     | ARMv7SpeculativeInstructions
   static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
     boolean r;
@@ -732,6 +770,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = ARMv7ComparisonInstructions(b, l + 1);
     if (!r) r = ARMv7DebugInstructions(b, l + 1);
     if (!r) r = ARMv7LockInstructions(b, l + 1);
+    if (!r) r = ARMv7SpeculativeInstructions(b, l + 1);
     return r;
   }
 

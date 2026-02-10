@@ -31,6 +31,8 @@ public interface ARMv7TokenTypes {
   IElementType CLZ_INSTRUCTION = new ARMv7ElementType("CLZ_INSTRUCTION");
   IElementType CMN_INSTRUCTION = new ARMv7ElementType("CMN_INSTRUCTION");
   IElementType CMP_INSTRUCTION = new ARMv7ElementType("CMP_INSTRUCTION");
+  IElementType CSDB_INSTRUCTION = new ARMv7ElementType("CSDB_INSTRUCTION");
+  IElementType DBG_INSTRUCTION = new ARMv7ElementType("DBG_INSTRUCTION");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
@@ -43,7 +45,6 @@ public interface ARMv7TokenTypes {
   IElementType ADC = new ARMv7TokenType("adc");
   IElementType ADD = new ARMv7TokenType("add");
   IElementType ADR = new ARMv7TokenType("adr");
-  IElementType AL = new ARMv7TokenType("al");
   IElementType ALIGN = new ARMv7TokenType("align");
   IElementType AND = new ARMv7TokenType("and");
   IElementType ASCII = new ARMv7TokenType("ascii");
@@ -64,7 +65,6 @@ public interface ARMv7TokenTypes {
   IElementType BYTE = new ARMv7TokenType("byte");
   IElementType CBNZ = new ARMv7TokenType("cbnz");
   IElementType CBZ = new ARMv7TokenType("cbz");
-  IElementType CC = new ARMv7TokenType("cc");
   IElementType CLREX = new ARMv7TokenType("clrex");
   IElementType CLZ = new ARMv7TokenType("clz");
   IElementType CMN = new ARMv7TokenType("cmn");
@@ -74,8 +74,9 @@ public interface ARMv7TokenTypes {
   IElementType COMMA = new ARMv7TokenType(",");
   IElementType COMMENT = new ARMv7TokenType("comment");
   IElementType CPSR = new ARMv7TokenType("CPSR");
-  IElementType CS = new ARMv7TokenType("cs");
+  IElementType CSDB = new ARMv7TokenType("csdb");
   IElementType DATA = new ARMv7TokenType("data");
+  IElementType DBG = new ARMv7TokenType("dbg");
   IElementType DECIMAL_NUMBER = new ARMv7TokenType("decimal number");
   IElementType DEF = new ARMv7TokenType("def");
   IElementType DESC = new ARMv7TokenType("desc");
@@ -86,7 +87,6 @@ public interface ARMv7TokenTypes {
   IElementType ELSE = new ARMv7TokenType("else");
   IElementType ENDEF = new ARMv7TokenType("endef");
   IElementType ENDIF = new ARMv7TokenType("endif");
-  IElementType EQ = new ARMv7TokenType("eq");
   IElementType EQU = new ARMv7TokenType("equ");
   IElementType EQUIV = new ARMv7TokenType("equiv");
   IElementType ERR = new ARMv7TokenType("err");
@@ -94,12 +94,8 @@ public interface ARMv7TokenTypes {
   IElementType FILE = new ARMv7TokenType("file");
   IElementType FILL = new ARMv7TokenType("fill");
   IElementType FLOAT = new ARMv7TokenType("float");
-  IElementType GE = new ARMv7TokenType("ge");
   IElementType GLOBAL = new ARMv7TokenType("global");
-  IElementType GT = new ARMv7TokenType("gt");
   IElementType HEXADECIMAL_NUMBER = new ARMv7TokenType("hexadecimal number");
-  IElementType HI = new ARMv7TokenType("hi");
-  IElementType HS = new ARMv7TokenType("hs");
   IElementType HWORD = new ARMv7TokenType("hword");
   IElementType IDENT = new ARMv7TokenType("ident");
   IElementType IDENTIFIER = new ARMv7TokenType("identifier");
@@ -109,22 +105,16 @@ public interface ARMv7TokenTypes {
   IElementType IRP = new ARMv7TokenType("irp");
   IElementType IRPC = new ARMv7TokenType("irpc");
   IElementType LCOMM = new ARMv7TokenType("lcomm");
-  IElementType LE = new ARMv7TokenType("le");
   IElementType LFLAGS = new ARMv7TokenType("lflags");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType LINKONCE = new ARMv7TokenType("linkonce");
   IElementType LIST = new ARMv7TokenType("list");
   IElementType LN = new ARMv7TokenType("ln");
-  IElementType LO = new ARMv7TokenType("lo");
   IElementType LONG = new ARMv7TokenType("long");
   IElementType LR = new ARMv7TokenType("lr");
-  IElementType LS = new ARMv7TokenType("ls");
   IElementType LSL = new ARMv7TokenType("lsl");
   IElementType LSR = new ARMv7TokenType("lsr");
-  IElementType LT = new ARMv7TokenType("lt");
   IElementType MACRO = new ARMv7TokenType("macro");
-  IElementType MI = new ARMv7TokenType("mi");
-  IElementType NE = new ARMv7TokenType("ne");
   IElementType NOLIST = new ARMv7TokenType("nolist");
   IElementType OCTA = new ARMv7TokenType("octa");
   IElementType OCTAL_NUMBER = new ARMv7TokenType("octal number");
@@ -133,7 +123,6 @@ public interface ARMv7TokenTypes {
   IElementType P2ALIGNL = new ARMv7TokenType("p2alignl");
   IElementType P2ALIGNW = new ARMv7TokenType("p2alignw");
   IElementType PC = new ARMv7TokenType("PC");
-  IElementType PL = new ARMv7TokenType("pl");
   IElementType POUND = new ARMv7TokenType("#");
   IElementType PSIZE = new ARMv7TokenType("psize");
   IElementType QUAD = new ARMv7TokenType("quad");
@@ -153,7 +142,6 @@ public interface ARMv7TokenTypes {
   IElementType REPT = new ARMv7TokenType("rept");
   IElementType ROR = new ARMv7TokenType("ror");
   IElementType RRX = new ARMv7TokenType("rrx");
-  IElementType S = new ARMv7TokenType("s");
   IElementType SBTTL = new ARMv7TokenType("sbttl");
   IElementType SCL = new ARMv7TokenType("scl");
   IElementType SECTION = new ARMv7TokenType("section");
@@ -177,8 +165,6 @@ public interface ARMv7TokenTypes {
   IElementType TYPE = new ARMv7TokenType("type");
   IElementType ULEB128 = new ARMv7TokenType("uleb128");
   IElementType VAR = new ARMv7TokenType("var");
-  IElementType VC = new ARMv7TokenType("vc");
-  IElementType VS = new ARMv7TokenType("vs");
   IElementType WORD = new ARMv7TokenType("word");
 
   class Factory {
@@ -249,6 +235,12 @@ public interface ARMv7TokenTypes {
       }
       else if (type == CMP_INSTRUCTION) {
         return new ARMv7CmpInstructionImpl(node);
+      }
+      else if (type == CSDB_INSTRUCTION) {
+        return new ARMv7CsdbInstructionImpl(node);
+      }
+      else if (type == DBG_INSTRUCTION) {
+        return new ARMv7DbgInstructionImpl(node);
       }
       else if (type == GLOBAL_DIRECTIVE) {
         return new ARMv7GlobalDirectiveImpl(node);

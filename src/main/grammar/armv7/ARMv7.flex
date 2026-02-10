@@ -114,6 +114,8 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "clz"({CONDITION_CODES}?) { return CLZ; }
   "cmn"({CONDITION_CODES}?) { return CMN; }
   "cmp"({CONDITION_CODES}?) { return CMP; }
+  "csdb"({CONDITION_CODES}?) { return CSDB; }
+  "dbg"({CONDITION_CODES}?) { return DBG; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }
