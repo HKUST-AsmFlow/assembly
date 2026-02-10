@@ -37,7 +37,7 @@ class ARMv7ColorSettingsPage : ColorSettingsPage {
 
     override fun getDemoText(): @NonNls String = ".global main\n\n" +
             "main:\n" +
-            "    adcsal r0, r1, r2, lsl #3  ; comment"
+            "    adcsal r0, r1, r2, lsl #3  @ comment"
 
     override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String?, TextAttributesKey?> = emptyMap()
 

@@ -54,7 +54,8 @@ object ARMv7TokenSets {
         CLZ,
         CMN,
         CMP,
-        CSDB
+        CSDB,
+        DBG
     )
 
     val NUMBERS = TokenSet.create(

@@ -20,7 +20,7 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 CRLF = \r | \n | \r\n
 WHITE_SPACE = [\s]+
 
-COMMENT = ;.*
+COMMENT = @.*
 DIRECTIVE = [.]{IDENTIFIER}
 IDENTIFIER = [a-zA-Z_]+
 
