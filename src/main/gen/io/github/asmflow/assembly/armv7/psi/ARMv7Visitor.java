@@ -149,7 +149,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitRegister(@NotNull ARMv7Register o) {
-    visitPsiElement(o);
+    visitIARMv7RegisterSuffix(o);
   }
 
   public void visitRegisters(@NotNull ARMv7Registers o) {
@@ -165,6 +165,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {
+    visitElement(o);
+  }
+
+  public void visitIARMv7RegisterSuffix(@NotNull IARMv7RegisterSuffix o) {
     visitElement(o);
   }
 

@@ -29,6 +29,7 @@ DECIMAL_NUMBER = [\d]+
 HEXADECIMAL_NUMBER = x[0-9a-fA-F]+
 OCTAL_NUMBER = o[0-7]+
 
+EXCLAMATION_POINT = "!"
 S = "s"
 CONDITION_CODES = "eq"|"ne"|"cs"|"hs"|"cc"|"lo"|"mi"|"pl"|"vs"|"vc"|"hi"|"ls"|"ge"|"lt"|"gt"|"le"|"al"
 
@@ -70,24 +71,24 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "float" { return FLOAT; }
   "global" { return GLOBAL; }
 
-  "r0" { return R0; }
-  "r1" { return R1; }
-  "r2" { return R2; }
-  "r3" { return R3; }
-  "r4" { return R4; }
-  "r5" { return R5; }
-  "r6" { return R6; }
-  "r7" { return R7; }
-  "r8" { return R8; }
-  "r9" { return R9; }
-  "r10" { return R10; }
-  "r11" { return R11; }
-  "r12" { return R12; }
-  "sp" { return SP; }
-  "lr" { return LR; }
-  "pc" { return PC; }
-  "cpsr" { return CPSR; }
-  "spsr" { return SPSR; }
+  "r0"({EXCLAMATION_POINT}?) { return R0; }
+  "r1"({EXCLAMATION_POINT}?) { return R1; }
+  "r2"({EXCLAMATION_POINT}?) { return R2; }
+  "r3"({EXCLAMATION_POINT}?) { return R3; }
+  "r4"({EXCLAMATION_POINT}?) { return R4; }
+  "r5"({EXCLAMATION_POINT}?) { return R5; }
+  "r6"({EXCLAMATION_POINT}?) { return R6; }
+  "r7"({EXCLAMATION_POINT}?) { return R7; }
+  "r8"({EXCLAMATION_POINT}?) { return R8; }
+  "r9"({EXCLAMATION_POINT}?) { return R9; }
+  "r10"({EXCLAMATION_POINT}?) { return R10; }
+  "r11"({EXCLAMATION_POINT}?) { return R11; }
+  "r12"({EXCLAMATION_POINT}?) { return R12; }
+  "sp"({EXCLAMATION_POINT}?) { return SP; }
+  "lr"({EXCLAMATION_POINT}?) { return LR; }
+  "pc"({EXCLAMATION_POINT}?) { return PC; }
+  "cpsr"({EXCLAMATION_POINT}?) { return CPSR; }
+  "spsr"({EXCLAMATION_POINT}?) { return SPSR; }
 
   "lsl" { return LSL; }
   "lsr" { return LSR; }

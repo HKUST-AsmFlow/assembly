@@ -194,7 +194,10 @@ Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUM
 Number ::= POUND Based
 Numbers ::= <<CommaSeparatedList Number>>
 
-Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
+Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterSuffixImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.IARMv7RegisterSuffix"
+}
 Registers ::= <<CommaSeparatedList Register>>
 
 ShiftType ::= ASR | LSL | LSR | ROR | RRX
