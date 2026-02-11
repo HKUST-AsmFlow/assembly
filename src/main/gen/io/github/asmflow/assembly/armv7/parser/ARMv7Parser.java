@@ -46,6 +46,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | BfiInstruction
   //     | BicInstruction
   //     | ClzInstruction
+  //     | EorInstruction
   static boolean ARMv7ArithmeticInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7ArithmeticInstructions")) return false;
     boolean r;
@@ -58,6 +59,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = BfiInstruction(b, l + 1);
     if (!r) r = BicInstruction(b, l + 1);
     if (!r) r = ClzInstruction(b, l + 1);
+    if (!r) r = EorInstruction(b, l + 1);
     return r;
   }
 
@@ -117,6 +119,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // LdmInstruction
+  static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
+    return LdmInstruction(b, l + 1);
+  }
+
+  /* ********************************************************** */
   // ClrexInstruction
   static boolean ARMv7LockInstructions(PsiBuilder b, int l) {
     return ClrexInstruction(b, l + 1);
@@ -124,8 +132,29 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // CsdbInstruction
+  //     | DmbInstruction
+  //     | DsbInstruction
+  //     | IsbInstruction
   static boolean ARMv7SpeculativeInstructions(PsiBuilder b, int l) {
-    return CsdbInstruction(b, l + 1);
+    if (!recursion_guard_(b, l, "ARMv7SpeculativeInstructions")) return false;
+    boolean r;
+    r = CsdbInstruction(b, l + 1);
+    if (!r) r = DmbInstruction(b, l + 1);
+    if (!r) r = DsbInstruction(b, l + 1);
+    if (!r) r = IsbInstruction(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // EretInstruction
+  //     | HvcInstruction
+  static boolean ARmv7SystemInstructions(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ARmv7SystemInstructions")) return false;
+    if (!nextTokenIs(b, "", ERET, HVC)) return false;
+    boolean r;
+    r = EretInstruction(b, l + 1);
+    if (!r) r = HvcInstruction(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -732,6 +761,83 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // DMB IDENTIFIER
+  public static boolean DmbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DmbInstruction")) return false;
+    if (!nextTokenIs(b, DMB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DMB, IDENTIFIER);
+    exit_section_(b, m, DMB_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // DSB IDENTIFIER
+  public static boolean DsbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DsbInstruction")) return false;
+    if (!nextTokenIs(b, DSB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DSB, IDENTIFIER);
+    exit_section_(b, m, DSB_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // EOR Registers (COMMA (Number | Shift))?
+  public static boolean EorInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EorInstruction")) return false;
+    if (!nextTokenIs(b, EOR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EOR);
+    r = r && Registers(b, l + 1);
+    r = r && EorInstruction_2(b, l + 1);
+    exit_section_(b, m, EOR_INSTRUCTION, r);
+    return r;
+  }
+
+  // (COMMA (Number | Shift))?
+  private static boolean EorInstruction_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EorInstruction_2")) return false;
+    EorInstruction_2_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA (Number | Shift)
+  private static boolean EorInstruction_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EorInstruction_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && EorInstruction_2_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Number | Shift
+  private static boolean EorInstruction_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EorInstruction_2_0_1")) return false;
+    boolean r;
+    r = Number(b, l + 1);
+    if (!r) r = Shift(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ERET
+  public static boolean EretInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EretInstruction")) return false;
+    if (!nextTokenIs(b, ERET)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ERET);
+    exit_section_(b, m, ERET_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // Item*
   static boolean File(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File")) return false;
@@ -756,12 +862,27 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // HVC Number
+  public static boolean HvcInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "HvcInstruction")) return false;
+    if (!nextTokenIs(b, HVC)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, HVC);
+    r = r && Number(b, l + 1);
+    exit_section_(b, m, HVC_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ARMv7ArithmeticInstructions
   //     | ARMv7BranchInstructions
   //     | ARMv7ComparisonInstructions
   //     | ARMv7DebugInstructions
+  //     | ARMv7LoadInstructions
   //     | ARMv7LockInstructions
   //     | ARMv7SpeculativeInstructions
+  //     | ARmv7SystemInstructions
   static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
     boolean r;
@@ -769,8 +890,22 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = ARMv7BranchInstructions(b, l + 1);
     if (!r) r = ARMv7ComparisonInstructions(b, l + 1);
     if (!r) r = ARMv7DebugInstructions(b, l + 1);
+    if (!r) r = ARMv7LoadInstructions(b, l + 1);
     if (!r) r = ARMv7LockInstructions(b, l + 1);
     if (!r) r = ARMv7SpeculativeInstructions(b, l + 1);
+    if (!r) r = ARmv7SystemInstructions(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ISB IDENTIFIER
+  public static boolean IsbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IsbInstruction")) return false;
+    if (!nextTokenIs(b, ISB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, ISB, IDENTIFIER);
+    exit_section_(b, m, ISB_INSTRUCTION, r);
     return r;
   }
 
@@ -813,6 +948,18 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, IDENTIFIER, COLON);
     exit_section_(b, m, LABEL, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDM
+  public static boolean LdmInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdmInstruction")) return false;
+    if (!nextTokenIs(b, LDM)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDM);
+    exit_section_(b, m, LDM_INSTRUCTION, r);
     return r;
   }
 

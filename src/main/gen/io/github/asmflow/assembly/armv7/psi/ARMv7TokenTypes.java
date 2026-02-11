@@ -33,8 +33,15 @@ public interface ARMv7TokenTypes {
   IElementType CMP_INSTRUCTION = new ARMv7ElementType("CMP_INSTRUCTION");
   IElementType CSDB_INSTRUCTION = new ARMv7ElementType("CSDB_INSTRUCTION");
   IElementType DBG_INSTRUCTION = new ARMv7ElementType("DBG_INSTRUCTION");
+  IElementType DMB_INSTRUCTION = new ARMv7ElementType("DMB_INSTRUCTION");
+  IElementType DSB_INSTRUCTION = new ARMv7ElementType("DSB_INSTRUCTION");
+  IElementType EOR_INSTRUCTION = new ARMv7ElementType("EOR_INSTRUCTION");
+  IElementType ERET_INSTRUCTION = new ARMv7ElementType("ERET_INSTRUCTION");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
+  IElementType HVC_INSTRUCTION = new ARMv7ElementType("HVC_INSTRUCTION");
+  IElementType ISB_INSTRUCTION = new ARMv7ElementType("ISB_INSTRUCTION");
   IElementType LABEL = new ARMv7ElementType("LABEL");
+  IElementType LDM_INSTRUCTION = new ARMv7ElementType("LDM_INSTRUCTION");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
   IElementType NUMBERS = new ARMv7ElementType("NUMBERS");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
@@ -81,14 +88,18 @@ public interface ARMv7TokenTypes {
   IElementType DEF = new ARMv7TokenType("def");
   IElementType DESC = new ARMv7TokenType("desc");
   IElementType DIM = new ARMv7TokenType("dim");
+  IElementType DMB = new ARMv7TokenType("dmb");
   IElementType DOT = new ARMv7TokenType(".");
   IElementType DOUBLE = new ARMv7TokenType("double");
+  IElementType DSB = new ARMv7TokenType("dsb");
   IElementType EJECT = new ARMv7TokenType("eject");
   IElementType ELSE = new ARMv7TokenType("else");
   IElementType ENDEF = new ARMv7TokenType("endef");
   IElementType ENDIF = new ARMv7TokenType("endif");
+  IElementType EOR = new ARMv7TokenType("eor");
   IElementType EQU = new ARMv7TokenType("equ");
   IElementType EQUIV = new ARMv7TokenType("equiv");
+  IElementType ERET = new ARMv7TokenType("eret");
   IElementType ERR = new ARMv7TokenType("err");
   IElementType EXTERN = new ARMv7TokenType("extern");
   IElementType FILE = new ARMv7TokenType("file");
@@ -96,6 +107,7 @@ public interface ARMv7TokenTypes {
   IElementType FLOAT = new ARMv7TokenType("float");
   IElementType GLOBAL = new ARMv7TokenType("global");
   IElementType HEXADECIMAL_NUMBER = new ARMv7TokenType("hexadecimal number");
+  IElementType HVC = new ARMv7TokenType("hvc");
   IElementType HWORD = new ARMv7TokenType("hword");
   IElementType IDENT = new ARMv7TokenType("ident");
   IElementType IDENTIFIER = new ARMv7TokenType("identifier");
@@ -104,7 +116,9 @@ public interface ARMv7TokenTypes {
   IElementType INT = new ARMv7TokenType("int");
   IElementType IRP = new ARMv7TokenType("irp");
   IElementType IRPC = new ARMv7TokenType("irpc");
+  IElementType ISB = new ARMv7TokenType("isb");
   IElementType LCOMM = new ARMv7TokenType("lcomm");
+  IElementType LDM = new ARMv7TokenType("ldm");
   IElementType LFLAGS = new ARMv7TokenType("lflags");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType LINKONCE = new ARMv7TokenType("linkonce");
@@ -242,11 +256,32 @@ public interface ARMv7TokenTypes {
       else if (type == DBG_INSTRUCTION) {
         return new ARMv7DbgInstructionImpl(node);
       }
+      else if (type == DMB_INSTRUCTION) {
+        return new ARMv7DmbInstructionImpl(node);
+      }
+      else if (type == DSB_INSTRUCTION) {
+        return new ARMv7DsbInstructionImpl(node);
+      }
+      else if (type == EOR_INSTRUCTION) {
+        return new ARMv7EorInstructionImpl(node);
+      }
+      else if (type == ERET_INSTRUCTION) {
+        return new ARMv7EretInstructionImpl(node);
+      }
       else if (type == GLOBAL_DIRECTIVE) {
         return new ARMv7GlobalDirectiveImpl(node);
       }
+      else if (type == HVC_INSTRUCTION) {
+        return new ARMv7HvcInstructionImpl(node);
+      }
+      else if (type == ISB_INSTRUCTION) {
+        return new ARMv7IsbInstructionImpl(node);
+      }
       else if (type == LABEL) {
         return new ARMv7LabelImpl(node);
+      }
+      else if (type == LDM_INSTRUCTION) {
+        return new ARMv7LdmInstructionImpl(node);
       }
       else if (type == NUMBER) {
         return new ARMv7NumberImpl(node);

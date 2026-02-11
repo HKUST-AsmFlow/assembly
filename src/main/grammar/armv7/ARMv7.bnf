@@ -122,6 +122,13 @@
         CMP = "cmp"
         CSDB = "csdb"
         DBG = "dbg"
+        DMB = "dmb"
+        DSB = "dsb"
+        EOR = "eor"
+        ERET = "eret"
+        HVC = "hvc"
+        ISB = "isb"
+        LDM = "ldm"
 
         // registers
         R0 = "r0"
@@ -174,8 +181,10 @@ private Instruction ::= ARMv7ArithmeticInstructions
     | ARMv7BranchInstructions
     | ARMv7ComparisonInstructions
     | ARMv7DebugInstructions
+    | ARMv7LoadInstructions
     | ARMv7LockInstructions
     | ARMv7SpeculativeInstructions
+    | ARmv7SystemInstructions
 
 Label ::= IDENTIFIER COLON
 
@@ -200,6 +209,7 @@ private ARMv7ArithmeticInstructions ::= AdcInstruction
     | BfiInstruction
     | BicInstruction
     | ClzInstruction
+    | EorInstruction
 
 private ARMv7BranchInstructions ::= BInstruction
     | BlInstruction
@@ -214,9 +224,17 @@ private ARMv7ComparisonInstructions ::= CmnInstruction
 private ARMv7DebugInstructions ::= BkptInstruction
     | DbgInstruction
 
+private ARMv7LoadInstructions ::= LdmInstruction
+
 private ARMv7LockInstructions ::= ClrexInstruction
 
 private ARMv7SpeculativeInstructions ::= CsdbInstruction
+    | DmbInstruction
+    | DsbInstruction
+    | IsbInstruction
+
+private ARmv7SystemInstructions ::= EretInstruction
+    | HvcInstruction
 
 AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
@@ -242,6 +260,17 @@ CmpInstruction ::= CMP Register COMMA (Number | Register (COMMA Shift)?)
 CsdbInstruction ::= CSDB
 
 DbgInstruction ::= DBG Number
+DmbInstruction ::= DMB IDENTIFIER
+DsbInstruction ::= DSB IDENTIFIER
+
+EorInstruction ::= EOR Registers (COMMA (Number | Shift))?
+EretInstruction ::= ERET
+
+HvcInstruction ::= HVC Number
+
+IsbInstruction ::= ISB IDENTIFIER
+
+LdmInstruction ::= LDM
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

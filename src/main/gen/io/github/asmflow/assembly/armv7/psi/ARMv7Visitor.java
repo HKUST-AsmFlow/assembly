@@ -104,12 +104,40 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitIARMv7InstructionSuffix(o);
   }
 
+  public void visitDmbInstruction(@NotNull ARMv7DmbInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitDsbInstruction(@NotNull ARMv7DsbInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitEorInstruction(@NotNull ARMv7EorInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitEretInstruction(@NotNull ARMv7EretInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
   public void visitGlobalDirective(@NotNull ARMv7GlobalDirective o) {
     visitPsiElement(o);
   }
 
+  public void visitHvcInstruction(@NotNull ARMv7HvcInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitIsbInstruction(@NotNull ARMv7IsbInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
   public void visitLabel(@NotNull ARMv7Label o) {
     visitPsiElement(o);
+  }
+
+  public void visitLdmInstruction(@NotNull ARMv7LdmInstruction o) {
+    visitIARMv7InstructionSuffix(o);
   }
 
   public void visitNumber(@NotNull ARMv7Number o) {

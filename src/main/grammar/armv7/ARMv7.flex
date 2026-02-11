@@ -116,6 +116,13 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "cmp"({CONDITION_CODES}?) { return CMP; }
   "csdb"({CONDITION_CODES}?) { return CSDB; }
   "dbg"({CONDITION_CODES}?) { return DBG; }
+  "dmb"({CONDITION_CODES}?) { return DMB; }
+  "dsb"({CONDITION_CODES}?) { return DSB; }
+  "eor"({S}?{CONDITION_CODES}?) { return EOR; }
+  "eret"({CONDITION_CODES}?) { return ERET; }
+  "hvc" { return HVC; }
+  "isb"({CONDITION_CODES}?) { return ISB; }
+  "ldm"({CONDITION_CODES}?) { return LDM; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }
