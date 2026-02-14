@@ -11,7 +11,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <colorSettingsPage implementation="io.github.asmflow.assembly.armv7.options.ARMv7ColorSettingsPage"/>
-        <configurationType implementation="io.github.asmflow.assembly.execution.AssemblyRunConfigurationType"/>
+        <configurationType implementation="io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationType"/>
         <fileType name="ARMv7 Assembly"
                   language="ARMv7_ASM"
                   implementationClass="io.github.asmflow.assembly.armv7.ARMv7FileType"

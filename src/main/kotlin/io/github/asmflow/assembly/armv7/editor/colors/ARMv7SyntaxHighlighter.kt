@@ -29,6 +29,5 @@ class ARMv7SyntaxHighlighter : SyntaxHighlighterBase() {
 
     override fun getHighlightingLexer(): Lexer = ARMv7HighlightingLexer()
 
-    override fun getTokenHighlights(elementType: IElementType?): Array<out TextAttributesKey?>
-        = pack(keys[elementType])
+    override fun getTokenHighlights(elementType: IElementType?): Array<out TextAttributesKey?> = pack(keys[elementType])
 }

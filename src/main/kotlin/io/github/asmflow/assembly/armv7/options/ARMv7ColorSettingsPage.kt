@@ -15,20 +15,34 @@ import javax.swing.Icon
 
 class ARMv7ColorSettingsPage : ColorSettingsPage {
     val descriptors = arrayOf(
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.comment",
-            ARMv7TextAttributes.ARMv7_COMMENT),
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.directive",
-            ARMv7TextAttributes.ARMv7_DIRECTIVE),
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.instruction",
-            ARMv7TextAttributes.ARMv7_INSTRUCTION),
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.label",
-            ARMv7TextAttributes.ARMv7_LABEL),
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.number",
-        ARMv7TextAttributes.ARMv7_NUMBER),
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.register",
-            ARMv7TextAttributes.ARMv7_REGISTERS),
-        createAttributesDescriptor("armv7.color.settings.page.group.root", "armv7.attribute.descriptor.shifttype",
-        ARMv7TextAttributes.ARMv7_SHIFT_TYPE)
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.comment",
+            ARMv7TextAttributes.ARMv7_COMMENT
+        ),
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.directive",
+            ARMv7TextAttributes.ARMv7_DIRECTIVE
+        ),
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.instruction",
+            ARMv7TextAttributes.ARMv7_INSTRUCTION
+        ),
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.label",
+            ARMv7TextAttributes.ARMv7_LABEL
+        ),
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.number",
+            ARMv7TextAttributes.ARMv7_NUMBER
+        ),
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.register",
+            ARMv7TextAttributes.ARMv7_REGISTERS
+        ),
+        createAttributesDescriptor(
+            "armv7.color.settings.page.group.root", "armv7.attribute.descriptor.shifttype",
+            ARMv7TextAttributes.ARMv7_SHIFT_TYPE
+        )
     )
 
     override fun getIcon(): Icon = ARMv7FileType.icon
@@ -47,7 +61,11 @@ class ARMv7ColorSettingsPage : ColorSettingsPage {
 
     override fun getDisplayName(): @NlsContexts.ConfigurableName String = ARMv7FileType.displayName
 
-    private fun createAttributesDescriptor(groupKey: String, typeKey: String, textAttributesKey: TextAttributesKey): AttributesDescriptor {
+    private fun createAttributesDescriptor(
+        groupKey: String,
+        typeKey: String,
+        textAttributesKey: TextAttributesKey
+    ): AttributesDescriptor {
         val displayName = AssemblyBundle.message(groupKey) + AssemblyBundle.message(typeKey)
         return AttributesDescriptor(displayName, textAttributesKey)
     }

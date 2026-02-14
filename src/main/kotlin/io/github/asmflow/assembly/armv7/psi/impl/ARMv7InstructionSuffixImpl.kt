@@ -6,7 +6,8 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.psi.IARMv7InstructionSuffix
 
 open class ARMv7InstructionSuffixImpl(node: ASTNode) : IARMv7InstructionSuffix, ASTWrapperPsiElement(node) {
-    val flagsAndConditionCode = firstChild.text.substringAfter(node.elementType.toString().substringBefore('_').lowercase())
+    val flagsAndConditionCode =
+        firstChild.text.substringAfter(node.elementType.toString().substringBefore('_').lowercase())
 
     override fun conditionCode(): ARMv7InstructionConditionCode? {
         val substr = if (setsFlags())

@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.execution
+package io.github.asmflow.assembly.execution.configurations
 
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.icons.AllIcons
@@ -9,8 +9,7 @@ open class AssemblyRunConfigurationType : ConfigurationTypeBase(
     "Run Assembly files",
     NotNullLazyValue.createValue { AllIcons.Nodes.Console }
 ) {
-
     init {
-        addFactory(TODO())
+        addFactory(AssemblyConfigurationFactory(this))
     }
 }
