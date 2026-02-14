@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.armv7.emulation
+package io.github.asmflow.assembly.armv7.execution
 
 enum class ARMv7InstructionConditionCode {
     AL,
