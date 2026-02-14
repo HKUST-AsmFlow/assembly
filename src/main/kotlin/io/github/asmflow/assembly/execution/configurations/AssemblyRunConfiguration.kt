@@ -18,7 +18,8 @@ class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, 
 
     override fun getOptions(): AssemblyRunConfigurationOptions = super.options as AssemblyRunConfigurationOptions
 
-    override fun getState(executor: Executor, executionEnvironment: ExecutionEnvironment): RunProfileState? = null
+    override fun getState(executor: Executor, executionEnvironment: ExecutionEnvironment): RunProfileState =
+        AssemblyRunProfileState()
 
     fun getEmulatorFlavour() = options.getEmulatorFlavour()
 
