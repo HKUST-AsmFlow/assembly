@@ -7,6 +7,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7GlobalDirective extends PsiElement {
+public interface ARMv7GlobalDirective extends IARMv7GlobalDirectiveMixin {
 
 }

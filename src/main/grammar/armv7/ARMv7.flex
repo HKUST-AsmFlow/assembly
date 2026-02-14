@@ -1,8 +1,5 @@
 package io.github.asmflow.assembly.armv7.lexer;
 
-import java.io.IOException;
-import java.util.ArrayDeque;
-
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;

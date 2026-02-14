@@ -12,10 +12,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7GlobalDirectiveImpl extends ASTWrapperPsiElement implements ARMv7GlobalDirective {
+public class ARMv7GlobalDirectiveImpl extends ARMv7GlobalDirectiveMixinImpl implements ARMv7GlobalDirective {
 
     public ARMv7GlobalDirectiveImpl(@NotNull ASTNode node) {
         super(node);

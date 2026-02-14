@@ -121,7 +121,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
     }
 
     public void visitGlobalDirective(@NotNull ARMv7GlobalDirective o) {
-        visitPsiElement(o);
+        visitIARMv7GlobalDirectiveMixin(o);
     }
 
     public void visitHvcInstruction(@NotNull ARMv7HvcInstruction o) {
@@ -162,6 +162,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
 
     public void visitShiftType(@NotNull ARMv7ShiftType o) {
         visitPsiElement(o);
+    }
+
+    public void visitIARMv7GlobalDirectiveMixin(@NotNull IARMv7GlobalDirectiveMixin o) {
+        visitElement(o);
     }
 
     public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {

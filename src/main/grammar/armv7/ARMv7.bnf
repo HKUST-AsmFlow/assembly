@@ -279,6 +279,9 @@ private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 
 AlignDirective ::= DOT ALIGN <<CommaSeparatedList Based>>
 AsciiDirective ::= DOT ASCII <<CommaSeparatedList STRING>>
-GlobalDirective ::= DOT GLOBAL IDENTIFIER
+GlobalDirective ::= DOT GLOBAL IDENTIFIER {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7GlobalDirectiveMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.IARMv7GlobalDirectiveMixin"
+}
 
 private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

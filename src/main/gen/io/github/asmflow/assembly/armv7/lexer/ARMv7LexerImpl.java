@@ -3,9 +3,6 @@
 
 package io.github.asmflow.assembly.armv7.lexer;
 
-import java.io.IOException;
-import java.util.ArrayDeque;
-
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
@@ -37,7 +34,7 @@ public class ARMv7LexerImpl implements FlexLexer {
      * at the beginning of a line
      * l is of the form l = 2*k, k a non negative integer
      */
-    private static final int ZZ_LEXSTATE[] = {
+    private static final int[] ZZ_LEXSTATE = {
             0, 0
     };
 
@@ -659,7 +656,7 @@ public class ARMv7LexerImpl implements FlexLexer {
     /**
      * the input device
      */
-    private java.io.Reader zzReader;
+    private final java.io.Reader zzReader;
 
     /**
      * the current state of the DFA
