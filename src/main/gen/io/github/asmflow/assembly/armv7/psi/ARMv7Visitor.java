@@ -8,172 +8,172 @@ import com.intellij.psi.PsiElement;
 
 public class ARMv7Visitor extends PsiElementVisitor {
 
-  public void visitAdcInstruction(@NotNull ARMv7AdcInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitAdcInstruction(@NotNull ARMv7AdcInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitAddInstruction(@NotNull ARMv7AddInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitAddInstruction(@NotNull ARMv7AddInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitAdrInstruction(@NotNull ARMv7AdrInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitAdrInstruction(@NotNull ARMv7AdrInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitAlignDirective(@NotNull ARMv7AlignDirective o) {
-    visitPsiElement(o);
-  }
+    public void visitAlignDirective(@NotNull ARMv7AlignDirective o) {
+        visitPsiElement(o);
+    }
 
-  public void visitAndInstruction(@NotNull ARMv7AndInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitAndInstruction(@NotNull ARMv7AndInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitAsciiDirective(@NotNull ARMv7AsciiDirective o) {
-    visitPsiElement(o);
-  }
+    public void visitAsciiDirective(@NotNull ARMv7AsciiDirective o) {
+        visitPsiElement(o);
+    }
 
-  public void visitAsrInstruction(@NotNull ARMv7AsrInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitAsrInstruction(@NotNull ARMv7AsrInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBInstruction(@NotNull ARMv7BInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBInstruction(@NotNull ARMv7BInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBased(@NotNull ARMv7Based o) {
-    visitPsiElement(o);
-  }
+    public void visitBased(@NotNull ARMv7Based o) {
+        visitPsiElement(o);
+    }
 
-  public void visitBfcInstruction(@NotNull ARMv7BfcInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBfcInstruction(@NotNull ARMv7BfcInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBfiInstruction(@NotNull ARMv7BfiInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBfiInstruction(@NotNull ARMv7BfiInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBicInstruction(@NotNull ARMv7BicInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBicInstruction(@NotNull ARMv7BicInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBkptInstruction(@NotNull ARMv7BkptInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBkptInstruction(@NotNull ARMv7BkptInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBlInstruction(@NotNull ARMv7BlInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBlInstruction(@NotNull ARMv7BlInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBxInstruction(@NotNull ARMv7BxInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBxInstruction(@NotNull ARMv7BxInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitBxjInstruction(@NotNull ARMv7BxjInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitBxjInstruction(@NotNull ARMv7BxjInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitCbnzInstruction(@NotNull ARMv7CbnzInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitCbnzInstruction(@NotNull ARMv7CbnzInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitCbzInstruction(@NotNull ARMv7CbzInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitCbzInstruction(@NotNull ARMv7CbzInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitClrexInstruction(@NotNull ARMv7ClrexInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitClrexInstruction(@NotNull ARMv7ClrexInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitClzInstruction(@NotNull ARMv7ClzInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitClzInstruction(@NotNull ARMv7ClzInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitCmnInstruction(@NotNull ARMv7CmnInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitCmnInstruction(@NotNull ARMv7CmnInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitCmpInstruction(@NotNull ARMv7CmpInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitCmpInstruction(@NotNull ARMv7CmpInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitCsdbInstruction(@NotNull ARMv7CsdbInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitCsdbInstruction(@NotNull ARMv7CsdbInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitDbgInstruction(@NotNull ARMv7DbgInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitDbgInstruction(@NotNull ARMv7DbgInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitDmbInstruction(@NotNull ARMv7DmbInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitDmbInstruction(@NotNull ARMv7DmbInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitDsbInstruction(@NotNull ARMv7DsbInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitDsbInstruction(@NotNull ARMv7DsbInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitEorInstruction(@NotNull ARMv7EorInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitEorInstruction(@NotNull ARMv7EorInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitEretInstruction(@NotNull ARMv7EretInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitEretInstruction(@NotNull ARMv7EretInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitGlobalDirective(@NotNull ARMv7GlobalDirective o) {
-    visitPsiElement(o);
-  }
+    public void visitGlobalDirective(@NotNull ARMv7GlobalDirective o) {
+        visitPsiElement(o);
+    }
 
-  public void visitHvcInstruction(@NotNull ARMv7HvcInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitHvcInstruction(@NotNull ARMv7HvcInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitIsbInstruction(@NotNull ARMv7IsbInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitIsbInstruction(@NotNull ARMv7IsbInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitLabel(@NotNull ARMv7Label o) {
-    visitPsiElement(o);
-  }
+    public void visitLabel(@NotNull ARMv7Label o) {
+        visitPsiElement(o);
+    }
 
-  public void visitLdmInstruction(@NotNull ARMv7LdmInstruction o) {
-    visitIARMv7InstructionSuffix(o);
-  }
+    public void visitLdmInstruction(@NotNull ARMv7LdmInstruction o) {
+        visitIARMv7InstructionSuffix(o);
+    }
 
-  public void visitNumber(@NotNull ARMv7Number o) {
-    visitPsiElement(o);
-  }
+    public void visitNumber(@NotNull ARMv7Number o) {
+        visitPsiElement(o);
+    }
 
-  public void visitNumbers(@NotNull ARMv7Numbers o) {
-    visitPsiElement(o);
-  }
+    public void visitNumbers(@NotNull ARMv7Numbers o) {
+        visitPsiElement(o);
+    }
 
-  public void visitRegister(@NotNull ARMv7Register o) {
-    visitIARMv7RegisterSuffix(o);
-  }
+    public void visitRegister(@NotNull ARMv7Register o) {
+        visitIARMv7RegisterSuffix(o);
+    }
 
-  public void visitRegisters(@NotNull ARMv7Registers o) {
-    visitPsiElement(o);
-  }
+    public void visitRegisters(@NotNull ARMv7Registers o) {
+        visitPsiElement(o);
+    }
 
-  public void visitShift(@NotNull ARMv7Shift o) {
-    visitPsiElement(o);
-  }
+    public void visitShift(@NotNull ARMv7Shift o) {
+        visitPsiElement(o);
+    }
 
-  public void visitShiftType(@NotNull ARMv7ShiftType o) {
-    visitPsiElement(o);
-  }
+    public void visitShiftType(@NotNull ARMv7ShiftType o) {
+        visitPsiElement(o);
+    }
 
-  public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {
-    visitElement(o);
-  }
+    public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {
+        visitElement(o);
+    }
 
-  public void visitIARMv7RegisterSuffix(@NotNull IARMv7RegisterSuffix o) {
-    visitElement(o);
-  }
+    public void visitIARMv7RegisterSuffix(@NotNull IARMv7RegisterSuffix o) {
+        visitElement(o);
+    }
 
-  public void visitPsiElement(@NotNull PsiElement o) {
-    visitElement(o);
-  }
+    public void visitPsiElement(@NotNull PsiElement o) {
+        visitElement(o);
+    }
 
 }

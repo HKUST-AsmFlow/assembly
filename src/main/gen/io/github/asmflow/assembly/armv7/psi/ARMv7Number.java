@@ -3,12 +3,13 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
+
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7Number extends PsiElement {
 
-  @NotNull
-  ARMv7Based getBased();
+    @NotNull
+    ARMv7Based getBased();
 
 }

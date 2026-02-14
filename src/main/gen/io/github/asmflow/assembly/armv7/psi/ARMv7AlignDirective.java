@@ -3,12 +3,13 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
+
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7AlignDirective extends PsiElement {
 
-  @NotNull
-  List<ARMv7Based> getBasedList();
+    @NotNull
+    List<ARMv7Based> getBasedList();
 
 }

@@ -3,18 +3,19 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
+
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7AndInstruction extends IARMv7InstructionSuffix {
 
-  @Nullable
-  ARMv7Number getNumber();
+    @Nullable
+    ARMv7Number getNumber();
 
-  @NotNull
-  ARMv7Registers getRegisters();
+    @NotNull
+    ARMv7Registers getRegisters();
 
-  @Nullable
-  ARMv7Shift getShift();
+    @Nullable
+    ARMv7Shift getShift();
 
 }

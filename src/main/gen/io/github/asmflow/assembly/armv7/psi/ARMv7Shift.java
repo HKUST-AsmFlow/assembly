@@ -3,18 +3,19 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
+
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7Shift extends PsiElement {
 
-  @Nullable
-  ARMv7Number getNumber();
+    @Nullable
+    ARMv7Number getNumber();
 
-  @Nullable
-  ARMv7Register getRegister();
+    @Nullable
+    ARMv7Register getRegister();
 
-  @NotNull
-  ARMv7ShiftType getShiftType();
+    @NotNull
+    ARMv7ShiftType getShiftType();
 
 }

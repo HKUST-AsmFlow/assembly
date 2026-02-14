@@ -3,12 +3,13 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
+
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7ClzInstruction extends IARMv7InstructionSuffix {
 
-  @NotNull
-  List<ARMv7Register> getRegisterList();
+    @NotNull
+    List<ARMv7Register> getRegisterList();
 
 }
