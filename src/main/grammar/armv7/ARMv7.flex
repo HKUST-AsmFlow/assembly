@@ -134,6 +134,10 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "ldmib"({CONDITION_CODES}?) { return LDMIB; }
   "ldmed"({CONDITION_CODES}?) { return LDMED; }
   "ldr"({CONDITION_CODES}?) { return LDR; }
+  "ldrb"({CONDITION_CODES}?) { return LDRB; }
+  "ldrbt"({CONDITION_CODES}?) { return LDRBT; }
+  "ldrd"({CONDITION_CODES}?) { return LDRD; }
+  "ldrex"({CONDITION_CODES}?) { return LDREX; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

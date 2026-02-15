@@ -129,6 +129,10 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | LdmibInstruction
   //     | LdmedPseudoInstruction
   //     | LdrInstruction
+  //     | LdrbInstruction
+  //     | LdrbtInstruction
+  //     | LdrdInstruction
+  //     | LdrexInstruction
   static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7LoadInstructions")) return false;
     boolean r;
@@ -142,6 +146,10 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = LdmibInstruction(b, l + 1);
     if (!r) r = LdmedPseudoInstruction(b, l + 1);
     if (!r) r = LdrInstruction(b, l + 1);
+    if (!r) r = LdrbInstruction(b, l + 1);
+    if (!r) r = LdrbtInstruction(b, l + 1);
+    if (!r) r = LdrdInstruction(b, l + 1);
+    if (!r) r = LdrexInstruction(b, l + 1);
     return r;
   }
 
@@ -1128,6 +1136,104 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     boolean r;
     r = RegisterWithOffset(b, l + 1);
     if (!r) r = consumeToken(b, IDENTIFIER);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRB Register COMMA (RegisterWithOffset | IDENTIFIER)
+  public static boolean LdrbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrbInstruction")) return false;
+    if (!nextTokenIs(b, LDRB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRB);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrbInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRB_INSTRUCTION, r);
+    return r;
+  }
+
+  // RegisterWithOffset | IDENTIFIER
+  private static boolean LdrbInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrbInstruction_3")) return false;
+    boolean r;
+    r = RegisterWithOffset(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRBT Register COMMA PostindexOffset
+  public static boolean LdrbtInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrbtInstruction")) return false;
+    if (!nextTokenIs(b, LDRBT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRBT);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && PostindexOffset(b, l + 1);
+    exit_section_(b, m, LDRBT_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRD Registers COMMA (RegisterWithOffset | IDENTIFIER)
+  public static boolean LdrdInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrdInstruction")) return false;
+    if (!nextTokenIs(b, LDRD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRD);
+    r = r && Registers(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrdInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRD_INSTRUCTION, r);
+    return r;
+  }
+
+  // RegisterWithOffset | IDENTIFIER
+  private static boolean LdrdInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrdInstruction_3")) return false;
+    boolean r;
+    r = RegisterWithOffset(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDREX Register COMMA LBRACKET Register (COMMA Number)? RBRACKET
+  public static boolean LdrexInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrexInstruction")) return false;
+    if (!nextTokenIs(b, LDREX)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDREX);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, LBRACKET);
+    r = r && Register(b, l + 1);
+    r = r && LdrexInstruction_5(b, l + 1);
+    r = r && consumeToken(b, RBRACKET);
+    exit_section_(b, m, LDREX_INSTRUCTION, r);
+    return r;
+  }
+
+  // (COMMA Number)?
+  private static boolean LdrexInstruction_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrexInstruction_5")) return false;
+    LdrexInstruction_5_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA Number
+  private static boolean LdrexInstruction_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrexInstruction_5_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Number(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 

@@ -50,6 +50,10 @@ public interface ARMv7TokenTypes {
   IElementType LDMIA_PSEUDO_INSTRUCTION = new ARMv7ElementType("LDMIA_PSEUDO_INSTRUCTION");
   IElementType LDMIB_INSTRUCTION = new ARMv7ElementType("LDMIB_INSTRUCTION");
   IElementType LDM_INSTRUCTION = new ARMv7ElementType("LDM_INSTRUCTION");
+  IElementType LDRBT_INSTRUCTION = new ARMv7ElementType("LDRBT_INSTRUCTION");
+  IElementType LDRB_INSTRUCTION = new ARMv7ElementType("LDRB_INSTRUCTION");
+  IElementType LDRD_INSTRUCTION = new ARMv7ElementType("LDRD_INSTRUCTION");
+  IElementType LDREX_INSTRUCTION = new ARMv7ElementType("LDREX_INSTRUCTION");
   IElementType LDR_INSTRUCTION = new ARMv7ElementType("LDR_INSTRUCTION");
   IElementType NO_OFFSET = new ARMv7ElementType("NO_OFFSET");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
@@ -143,6 +147,10 @@ public interface ARMv7TokenTypes {
   IElementType LDMIA = new ARMv7TokenType("ldmia");
   IElementType LDMIB = new ARMv7TokenType("ldmib");
   IElementType LDR = new ARMv7TokenType("ldr");
+  IElementType LDRB = new ARMv7TokenType("ldrb");
+  IElementType LDRBT = new ARMv7TokenType("ldrbt");
+  IElementType LDRD = new ARMv7TokenType("ldrd");
+  IElementType LDREX = new ARMv7TokenType("LDREX");
   IElementType LFLAGS = new ARMv7TokenType("lflags");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType LINKONCE = new ARMv7TokenType("linkonce");
@@ -333,6 +341,18 @@ public interface ARMv7TokenTypes {
       }
       else if (type == LDM_INSTRUCTION) {
         return new ARMv7LdmInstructionImpl(node);
+      }
+      else if (type == LDRBT_INSTRUCTION) {
+        return new ARMv7LdrbtInstructionImpl(node);
+      }
+      else if (type == LDRB_INSTRUCTION) {
+        return new ARMv7LdrbInstructionImpl(node);
+      }
+      else if (type == LDRD_INSTRUCTION) {
+        return new ARMv7LdrdInstructionImpl(node);
+      }
+      else if (type == LDREX_INSTRUCTION) {
+        return new ARMv7LdrexInstructionImpl(node);
       }
       else if (type == LDR_INSTRUCTION) {
         return new ARMv7LdrInstructionImpl(node);
