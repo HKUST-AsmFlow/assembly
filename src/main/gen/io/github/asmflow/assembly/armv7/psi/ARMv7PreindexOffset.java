@@ -6,7 +6,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7PostindexRegisterOffset extends PsiElement {
+public interface ARMv7PreindexOffset extends PsiElement {
+
+  @Nullable
+  ARMv7Number getNumber();
 
   @NotNull
   List<ARMv7Register> getRegisterList();

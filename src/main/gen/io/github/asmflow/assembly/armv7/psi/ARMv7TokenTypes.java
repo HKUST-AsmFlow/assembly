@@ -55,10 +55,8 @@ public interface ARMv7TokenTypes {
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
   IElementType NUMBERS = new ARMv7ElementType("NUMBERS");
   IElementType PC_WITH_IMMEDIATE_OFFSET = new ARMv7ElementType("PC_WITH_IMMEDIATE_OFFSET");
-  IElementType POSTINDEX_IMMEDIATE_OFFSET = new ARMv7ElementType("POSTINDEX_IMMEDIATE_OFFSET");
-  IElementType POSTINDEX_REGISTER_OFFSET = new ARMv7ElementType("POSTINDEX_REGISTER_OFFSET");
-  IElementType PREINDEX_IMMEDIATE_OFFSET = new ARMv7ElementType("PREINDEX_IMMEDIATE_OFFSET");
-  IElementType PREINDEX_REGISTER_OFFSET = new ARMv7ElementType("PREINDEX_REGISTER_OFFSET");
+  IElementType POSTINDEX_OFFSET = new ARMv7ElementType("POSTINDEX_OFFSET");
+  IElementType PREINDEX_OFFSET = new ARMv7ElementType("PREINDEX_OFFSET");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
   IElementType REGISTERS = new ARMv7ElementType("REGISTERS");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
@@ -351,17 +349,11 @@ public interface ARMv7TokenTypes {
       else if (type == PC_WITH_IMMEDIATE_OFFSET) {
         return new ARMv7PCWithImmediateOffsetImpl(node);
       }
-      else if (type == POSTINDEX_IMMEDIATE_OFFSET) {
-        return new ARMv7PostindexImmediateOffsetImpl(node);
+      else if (type == POSTINDEX_OFFSET) {
+        return new ARMv7PostindexOffsetImpl(node);
       }
-      else if (type == POSTINDEX_REGISTER_OFFSET) {
-        return new ARMv7PostindexRegisterOffsetImpl(node);
-      }
-      else if (type == PREINDEX_IMMEDIATE_OFFSET) {
-        return new ARMv7PreindexImmediateOffsetImpl(node);
-      }
-      else if (type == PREINDEX_REGISTER_OFFSET) {
-        return new ARMv7PreindexRegisterOffsetImpl(node);
+      else if (type == PREINDEX_OFFSET) {
+        return new ARMv7PreindexOffsetImpl(node);
       }
       else if (type == REGISTER) {
         return new ARMv7RegisterImpl(node);

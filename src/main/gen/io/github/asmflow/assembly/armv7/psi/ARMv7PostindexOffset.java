@@ -6,12 +6,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7PostindexImmediateOffset extends PsiElement {
+public interface ARMv7PostindexOffset extends PsiElement {
 
-  @NotNull
+  @Nullable
   ARMv7Number getNumber();
 
   @NotNull
-  ARMv7Register getRegister();
+  List<ARMv7Register> getRegisterList();
+
+  @Nullable
+  ARMv7Shift getShift();
 
 }

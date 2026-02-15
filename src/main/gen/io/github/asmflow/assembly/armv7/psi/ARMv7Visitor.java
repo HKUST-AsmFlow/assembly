@@ -192,19 +192,11 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitPostindexImmediateOffset(@NotNull ARMv7PostindexImmediateOffset o) {
+  public void visitPostindexOffset(@NotNull ARMv7PostindexOffset o) {
     visitPsiElement(o);
   }
 
-  public void visitPostindexRegisterOffset(@NotNull ARMv7PostindexRegisterOffset o) {
-    visitPsiElement(o);
-  }
-
-  public void visitPreindexImmediateOffset(@NotNull ARMv7PreindexImmediateOffset o) {
-    visitPsiElement(o);
-  }
-
-  public void visitPreindexRegisterOffset(@NotNull ARMv7PreindexRegisterOffset o) {
+  public void visitPreindexOffset(@NotNull ARMv7PreindexOffset o) {
     visitPsiElement(o);
   }
 

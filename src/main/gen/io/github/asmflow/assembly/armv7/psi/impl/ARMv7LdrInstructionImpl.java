@@ -41,26 +41,14 @@ public class ARMv7LdrInstructionImpl extends ARMv7InstructionSuffixImpl implemen
 
   @Override
   @Nullable
-  public ARMv7PostindexImmediateOffset getPostindexImmediateOffset() {
-    return findChildByClass(ARMv7PostindexImmediateOffset.class);
+  public ARMv7PostindexOffset getPostindexOffset() {
+    return findChildByClass(ARMv7PostindexOffset.class);
   }
 
   @Override
   @Nullable
-  public ARMv7PostindexRegisterOffset getPostindexRegisterOffset() {
-    return findChildByClass(ARMv7PostindexRegisterOffset.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7PreindexImmediateOffset getPreindexImmediateOffset() {
-    return findChildByClass(ARMv7PreindexImmediateOffset.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7PreindexRegisterOffset getPreindexRegisterOffset() {
-    return findChildByClass(ARMv7PreindexRegisterOffset.class);
+  public ARMv7PreindexOffset getPreindexOffset() {
+    return findChildByClass(ARMv7PreindexOffset.class);
   }
 
   @Override

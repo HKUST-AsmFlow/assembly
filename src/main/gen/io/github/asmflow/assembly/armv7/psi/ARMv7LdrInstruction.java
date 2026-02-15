@@ -15,16 +15,10 @@ public interface ARMv7LdrInstruction extends IARMv7InstructionSuffix {
   ARMv7PCWithImmediateOffset getPCWithImmediateOffset();
 
   @Nullable
-  ARMv7PostindexImmediateOffset getPostindexImmediateOffset();
+  ARMv7PostindexOffset getPostindexOffset();
 
   @Nullable
-  ARMv7PostindexRegisterOffset getPostindexRegisterOffset();
-
-  @Nullable
-  ARMv7PreindexImmediateOffset getPreindexImmediateOffset();
-
-  @Nullable
-  ARMv7PreindexRegisterOffset getPreindexRegisterOffset();
+  ARMv7PreindexOffset getPreindexOffset();
 
   @NotNull
   ARMv7Register getRegister();

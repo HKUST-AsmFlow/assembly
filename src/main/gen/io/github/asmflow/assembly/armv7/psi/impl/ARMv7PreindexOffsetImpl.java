@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7PreindexImmediateOffsetImpl extends ASTWrapperPsiElement implements ARMv7PreindexImmediateOffset {
+public class ARMv7PreindexOffsetImpl extends ASTWrapperPsiElement implements ARMv7PreindexOffset {
 
-  public ARMv7PreindexImmediateOffsetImpl(@NotNull ASTNode node) {
+  public ARMv7PreindexOffsetImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitPreindexImmediateOffset(this);
+    visitor.visitPreindexOffset(this);
   }
 
   @Override
@@ -29,15 +29,21 @@ public class ARMv7PreindexImmediateOffsetImpl extends ASTWrapperPsiElement imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ARMv7Number getNumber() {
-    return findNotNullChildByClass(ARMv7Number.class);
+    return findChildByClass(ARMv7Number.class);
   }
 
   @Override
   @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
+  public List<ARMv7Register> getRegisterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7Shift getShift() {
+    return findChildByClass(ARMv7Shift.class);
   }
 
 }
