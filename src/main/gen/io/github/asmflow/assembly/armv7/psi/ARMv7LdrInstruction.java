@@ -3,13 +3,21 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
-
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7LdrInstruction extends IARMv7InstructionSuffix {
 
-    @NotNull
-    ARMv7Register getRegister();
+  @Nullable
+  ARMv7NoOffset getNoOffset();
+
+  @Nullable
+  ARMv7PostindexOffset getPostindexOffset();
+
+  @Nullable
+  ARMv7PreindexOffset getPreindexOffset();
+
+  @NotNull
+  ARMv7Register getRegister();
 
 }

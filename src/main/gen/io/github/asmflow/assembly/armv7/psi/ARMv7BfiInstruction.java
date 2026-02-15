@@ -3,16 +3,15 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
-
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7BfiInstruction extends IARMv7InstructionSuffix {
 
-    @NotNull
-    ARMv7Numbers getNumbers();
+  @NotNull
+  ARMv7Numbers getNumbers();
 
-    @NotNull
-    ARMv7Registers getRegisters();
+  @NotNull
+  ARMv7Registers getRegisters();
 
 }

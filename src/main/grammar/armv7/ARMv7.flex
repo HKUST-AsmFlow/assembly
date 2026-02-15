@@ -40,7 +40,11 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   ":" { return COLON; }
   "," { return COMMA; }
   "." { return DOT; }
+  "[" { return LBRACKET; }
+  "-" { return MINUS; }
+  "+" { return PLUS; }
   "#" { return POUND; }
+  "]" { return RBRACKET; }
 
   "align" { return ALIGN; }
   "ascii" { return ASCII; }

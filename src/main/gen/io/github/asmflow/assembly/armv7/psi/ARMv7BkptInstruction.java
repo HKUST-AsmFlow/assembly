@@ -3,13 +3,12 @@
 package io.github.asmflow.assembly.armv7.psi;
 
 import java.util.List;
-
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
 public interface ARMv7BkptInstruction extends IARMv7InstructionSuffix {
 
-    @NotNull
-    ARMv7Number getNumber();
+  @NotNull
+  ARMv7Number getNumber();
 
 }

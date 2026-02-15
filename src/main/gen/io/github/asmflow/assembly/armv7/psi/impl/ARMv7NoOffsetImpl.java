@@ -9,16 +9,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7AdcInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7AdcInstruction {
+public class ARMv7NoOffsetImpl extends ASTWrapperPsiElement implements ARMv7NoOffset {
 
-  public ARMv7AdcInstructionImpl(@NotNull ASTNode node) {
+  public ARMv7NoOffsetImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitAdcInstruction(this);
+    visitor.visitNoOffset(this);
   }
 
   @Override
@@ -28,21 +29,9 @@ public class ARMv7AdcInstructionImpl extends ARMv7InstructionSuffixImpl implemen
   }
 
   @Override
-  @Nullable
-  public ARMv7Number getNumber() {
-    return findChildByClass(ARMv7Number.class);
-  }
-
-  @Override
   @NotNull
-  public ARMv7Registers getRegisters() {
-    return findNotNullChildByClass(ARMv7Registers.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7Shift getShift() {
-    return findChildByClass(ARMv7Shift.class);
+  public ARMv7Register getRegister() {
+    return findNotNullChildByClass(ARMv7Register.class);
   }
 
 }

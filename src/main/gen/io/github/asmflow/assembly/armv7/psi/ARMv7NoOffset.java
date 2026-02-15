@@ -6,6 +6,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7GlobalDirective extends IARMv7GlobalDirectiveMixin {
+public interface ARMv7NoOffset extends PsiElement {
+
+  @NotNull
+  ARMv7Register getRegister();
 
 }
