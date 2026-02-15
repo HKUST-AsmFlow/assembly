@@ -76,7 +76,10 @@ object ARMv7TokenSets {
         LDRBT,
         LDRD,
         LDREX,
-        LDREXB
+        LDREXB,
+        LDREXD,
+        LDREXH,
+        LDRH
     )
 
     val NUMBERS = TokenSet.create(
