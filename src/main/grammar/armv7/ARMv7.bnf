@@ -141,7 +141,11 @@
         LDRB = "ldrb"
         LDRBT = "ldrbt"
         LDRD = "ldrd"
-        LDREX = "LDREX"
+        LDREX = "ldrex"
+        LDREXB = "ldrexb"
+        LDREXD = "ldrexd"
+        LDREXH = "ldrexh"
+        LDRH = "ldrh"
 
         // registers
         R0 = "r0"
@@ -269,6 +273,10 @@ private ARMv7LoadInstructions ::= LdmInstruction
     | LdrbtInstruction
     | LdrdInstruction
     | LdrexInstruction
+    | LdrexbInstruction
+    | LdrexdInstruction
+    | LdrexhInstruction
+    | LdrhInstruction
 
 private ARMv7LockInstructions ::= ClrexInstruction
 
@@ -328,6 +336,10 @@ LdrbInstruction ::= LDRB Register COMMA (RegisterWithOffset | IDENTIFIER)
 LdrbtInstruction ::= LDRBT Register COMMA PostindexOffset
 LdrdInstruction ::= LDRD Registers COMMA (RegisterWithOffset | IDENTIFIER)
 LdrexInstruction ::= LDREX Register COMMA LBRACKET Register (COMMA Number)? RBRACKET
+LdrexbInstruction ::= LDREXB Register COMMA LBRACKET Register RBRACKET
+LdrexdInstruction ::= LDREXD Registers COMMA LBRACKET Register RBRACKET
+LdrexhInstruction ::= LDREXH Register COMMA LBRACKET Register RBRACKET
+LdrhInstruction ::= LDRH
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

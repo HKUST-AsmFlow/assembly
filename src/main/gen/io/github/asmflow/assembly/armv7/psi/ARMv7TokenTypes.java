@@ -53,7 +53,11 @@ public interface ARMv7TokenTypes {
   IElementType LDRBT_INSTRUCTION = new ARMv7ElementType("LDRBT_INSTRUCTION");
   IElementType LDRB_INSTRUCTION = new ARMv7ElementType("LDRB_INSTRUCTION");
   IElementType LDRD_INSTRUCTION = new ARMv7ElementType("LDRD_INSTRUCTION");
+  IElementType LDREXB_INSTRUCTION = new ARMv7ElementType("LDREXB_INSTRUCTION");
+  IElementType LDREXD_INSTRUCTION = new ARMv7ElementType("LDREXD_INSTRUCTION");
+  IElementType LDREXH_INSTRUCTION = new ARMv7ElementType("LDREXH_INSTRUCTION");
   IElementType LDREX_INSTRUCTION = new ARMv7ElementType("LDREX_INSTRUCTION");
+  IElementType LDRH_INSTRUCTION = new ARMv7ElementType("LDRH_INSTRUCTION");
   IElementType LDR_INSTRUCTION = new ARMv7ElementType("LDR_INSTRUCTION");
   IElementType NO_OFFSET = new ARMv7ElementType("NO_OFFSET");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
@@ -150,7 +154,11 @@ public interface ARMv7TokenTypes {
   IElementType LDRB = new ARMv7TokenType("ldrb");
   IElementType LDRBT = new ARMv7TokenType("ldrbt");
   IElementType LDRD = new ARMv7TokenType("ldrd");
-  IElementType LDREX = new ARMv7TokenType("LDREX");
+  IElementType LDREX = new ARMv7TokenType("ldrex");
+  IElementType LDREXB = new ARMv7TokenType("ldrexb");
+  IElementType LDREXD = new ARMv7TokenType("ldrexd");
+  IElementType LDREXH = new ARMv7TokenType("ldrexh");
+  IElementType LDRH = new ARMv7TokenType("ldrh");
   IElementType LFLAGS = new ARMv7TokenType("lflags");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType LINKONCE = new ARMv7TokenType("linkonce");
@@ -351,8 +359,20 @@ public interface ARMv7TokenTypes {
       else if (type == LDRD_INSTRUCTION) {
         return new ARMv7LdrdInstructionImpl(node);
       }
+      else if (type == LDREXB_INSTRUCTION) {
+        return new ARMv7LdrexbInstructionImpl(node);
+      }
+      else if (type == LDREXD_INSTRUCTION) {
+        return new ARMv7LdrexdInstructionImpl(node);
+      }
+      else if (type == LDREXH_INSTRUCTION) {
+        return new ARMv7LdrexhInstructionImpl(node);
+      }
       else if (type == LDREX_INSTRUCTION) {
         return new ARMv7LdrexInstructionImpl(node);
+      }
+      else if (type == LDRH_INSTRUCTION) {
+        return new ARMv7LdrhInstructionImpl(node);
       }
       else if (type == LDR_INSTRUCTION) {
         return new ARMv7LdrInstructionImpl(node);

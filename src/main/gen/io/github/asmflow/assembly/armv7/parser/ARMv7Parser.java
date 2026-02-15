@@ -133,6 +133,10 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | LdrbtInstruction
   //     | LdrdInstruction
   //     | LdrexInstruction
+  //     | LdrexbInstruction
+  //     | LdrexdInstruction
+  //     | LdrexhInstruction
+  //     | LdrhInstruction
   static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7LoadInstructions")) return false;
     boolean r;
@@ -150,6 +154,10 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = LdrbtInstruction(b, l + 1);
     if (!r) r = LdrdInstruction(b, l + 1);
     if (!r) r = LdrexInstruction(b, l + 1);
+    if (!r) r = LdrexbInstruction(b, l + 1);
+    if (!r) r = LdrexdInstruction(b, l + 1);
+    if (!r) r = LdrexhInstruction(b, l + 1);
+    if (!r) r = LdrhInstruction(b, l + 1);
     return r;
   }
 
@@ -1234,6 +1242,66 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = consumeToken(b, COMMA);
     r = r && Number(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDREXB Register COMMA LBRACKET Register RBRACKET
+  public static boolean LdrexbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrexbInstruction")) return false;
+    if (!nextTokenIs(b, LDREXB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDREXB);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, LBRACKET);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, RBRACKET);
+    exit_section_(b, m, LDREXB_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDREXD Registers COMMA LBRACKET Register RBRACKET
+  public static boolean LdrexdInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrexdInstruction")) return false;
+    if (!nextTokenIs(b, LDREXD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDREXD);
+    r = r && Registers(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, LBRACKET);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, RBRACKET);
+    exit_section_(b, m, LDREXD_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDREXH Register COMMA LBRACKET Register RBRACKET
+  public static boolean LdrexhInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrexhInstruction")) return false;
+    if (!nextTokenIs(b, LDREXH)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDREXH);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, COMMA, LBRACKET);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, RBRACKET);
+    exit_section_(b, m, LDREXH_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRH
+  public static boolean LdrhInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrhInstruction")) return false;
+    if (!nextTokenIs(b, LDRH)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRH);
+    exit_section_(b, m, LDRH_INSTRUCTION, r);
     return r;
   }
 
