@@ -14,14 +14,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7LdmInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdmInstruction {
+public class ARMv7LdmdaInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdmdaInstruction {
 
-    public ARMv7LdmInstructionImpl(@NotNull ASTNode node) {
+    public ARMv7LdmdaInstructionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     public void accept(@NotNull ARMv7Visitor visitor) {
-        visitor.visitLdmInstruction(this);
+        visitor.visitLdmdaInstruction(this);
     }
 
     @Override

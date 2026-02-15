@@ -7,7 +7,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7LdmInstruction extends IARMv7InstructionSuffix {
+public interface ARMv7LdmdaInstruction extends IARMv7InstructionSuffix {
 
     @NotNull
     ARMv7Register getRegister();

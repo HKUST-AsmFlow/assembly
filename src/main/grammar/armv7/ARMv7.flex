@@ -121,6 +121,15 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "hvc" { return HVC; }
   "isb"({CONDITION_CODES}?) { return ISB; }
   "ldm"({CONDITION_CODES}?) { return LDM; }
+  "ldmia"({CONDITION_CODES}?) { return LDMIA; }
+  "ldmfd"({CONDITION_CODES}?) { return LDMFD; }
+  "ldmda"({CONDITION_CODES}?) { return LDMDA; }
+  "ldmfa"({CONDITION_CODES}?) { return LDMFA; }
+  "ldmdb"({CONDITION_CODES}?) { return LDMDB; }
+  "ldmea"({CONDITION_CODES}?) { return LDMEA; }
+  "ldmib"({CONDITION_CODES}?) { return LDMIB; }
+  "ldmed"({CONDITION_CODES}?) { return LDMED; }
+  "ldr"({CONDITION_CODES}?) { return LDR; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

@@ -14,14 +14,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7LdmInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdmInstruction {
+public class ARMv7LdrInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdrInstruction {
 
-    public ARMv7LdmInstructionImpl(@NotNull ASTNode node) {
+    public ARMv7LdrInstructionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     public void accept(@NotNull ARMv7Visitor visitor) {
-        visitor.visitLdmInstruction(this);
+        visitor.visitLdrInstruction(this);
     }
 
     @Override
@@ -34,12 +34,6 @@ public class ARMv7LdmInstructionImpl extends ARMv7InstructionSuffixImpl implemen
     @NotNull
     public ARMv7Register getRegister() {
         return findNotNullChildByClass(ARMv7Register.class);
-    }
-
-    @Override
-    @NotNull
-    public ARMv7Registers getRegisters() {
-        return findNotNullChildByClass(ARMv7Registers.class);
     }
 
 }

@@ -129,6 +129,14 @@
         HVC = "hvc"
         ISB = "isb"
         LDM = "ldm"
+        LDMIA = "ldmia"
+        LDMFD = "ldmfd"
+        LDMDA = "ldmda"
+        LDMFA = "ldmfa"
+        LDMDB = "ldmdb"
+        LDMEA = "ldmea"
+        LDMIB = "ldmib"
+        LDMED = "ldmeb"
 
         // registers
         R0 = "r0"
@@ -228,6 +236,15 @@ private ARMv7DebugInstructions ::= BkptInstruction
     | DbgInstruction
 
 private ARMv7LoadInstructions ::= LdmInstruction
+    | LdmfdPseudoInstruction
+    | LdmiaPseudoInstruction
+    | LdmdaInstruction
+    | LdmfaPseudoInstruction
+    | LdmdbInstruction
+    | LdmeaPseudoInstruction
+    | LdmibInstruction
+    | LdmedPseudoInstruction
+    | LdrInstruction
 
 private ARMv7LockInstructions ::= ClrexInstruction
 
@@ -273,7 +290,16 @@ HvcInstruction ::= HVC Number
 
 IsbInstruction ::= ISB IDENTIFIER
 
-LdmInstruction ::= LDM
+LdmInstruction ::= LDM Register COMMA Registers
+LdmfdPseudoInstruction ::= LDMFD Register COMMA Registers
+LdmiaPseudoInstruction ::= LDMIA Register COMMA Registers
+LdmdaInstruction ::= LDMDA Register COMMA Registers
+LdmfaPseudoInstruction ::= LDMFA Register COMMA Registers
+LdmdbInstruction ::= LDMDB Register COMMA Registers
+LdmeaPseudoInstruction ::= LDMEA Register COMMA Registers
+LdmibInstruction ::= LDMIB Register COMMA Registers
+LdmedPseudoInstruction ::= LDMED Register COMMA Registers
+LdrInstruction ::= LDR Register COMMA
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 

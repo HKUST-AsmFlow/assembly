@@ -122,8 +122,29 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
     /* ********************************************************** */
     // LdmInstruction
+    //     | LdmfdPseudoInstruction
+    //     | LdmiaPseudoInstruction
+    //     | LdmdaInstruction
+    //     | LdmfaPseudoInstruction
+    //     | LdmdbInstruction
+    //     | LdmeaPseudoInstruction
+    //     | LdmibInstruction
+    //     | LdmedPseudoInstruction
+    //     | LdrInstruction
     static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
-        return LdmInstruction(b, l + 1);
+        if (!recursion_guard_(b, l, "ARMv7LoadInstructions")) return false;
+        boolean r;
+        r = LdmInstruction(b, l + 1);
+        if (!r) r = LdmfdPseudoInstruction(b, l + 1);
+        if (!r) r = LdmiaPseudoInstruction(b, l + 1);
+        if (!r) r = LdmdaInstruction(b, l + 1);
+        if (!r) r = LdmfaPseudoInstruction(b, l + 1);
+        if (!r) r = LdmdbInstruction(b, l + 1);
+        if (!r) r = LdmeaPseudoInstruction(b, l + 1);
+        if (!r) r = LdmibInstruction(b, l + 1);
+        if (!r) r = LdmedPseudoInstruction(b, l + 1);
+        if (!r) r = LdrInstruction(b, l + 1);
+        return r;
     }
 
     /* ********************************************************** */
@@ -954,14 +975,151 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // LDM
+    // LDM Register COMMA Registers
     public static boolean LdmInstruction(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "LdmInstruction")) return false;
         if (!nextTokenIs(b, LDM)) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = consumeToken(b, LDM);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
         exit_section_(b, m, LDM_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMDA Register COMMA Registers
+    public static boolean LdmdaInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmdaInstruction")) return false;
+        if (!nextTokenIs(b, LDMDA)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMDA);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMDA_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMDB Register COMMA Registers
+    public static boolean LdmdbInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmdbInstruction")) return false;
+        if (!nextTokenIs(b, LDMDB)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMDB);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMDB_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMEA Register COMMA Registers
+    public static boolean LdmeaPseudoInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmeaPseudoInstruction")) return false;
+        if (!nextTokenIs(b, LDMEA)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMEA);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMEA_PSEUDO_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMED Register COMMA Registers
+    public static boolean LdmedPseudoInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmedPseudoInstruction")) return false;
+        if (!nextTokenIs(b, LDMED)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMED);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMED_PSEUDO_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMFA Register COMMA Registers
+    public static boolean LdmfaPseudoInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmfaPseudoInstruction")) return false;
+        if (!nextTokenIs(b, LDMFA)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMFA);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMFA_PSEUDO_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMFD Register COMMA Registers
+    public static boolean LdmfdPseudoInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmfdPseudoInstruction")) return false;
+        if (!nextTokenIs(b, LDMFD)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMFD);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMFD_PSEUDO_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMIA Register COMMA Registers
+    public static boolean LdmiaPseudoInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmiaPseudoInstruction")) return false;
+        if (!nextTokenIs(b, LDMIA)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMIA);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMIA_PSEUDO_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDMIB Register COMMA Registers
+    public static boolean LdmibInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdmibInstruction")) return false;
+        if (!nextTokenIs(b, LDMIB)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDMIB);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        r = r && Registers(b, l + 1);
+        exit_section_(b, m, LDMIB_INSTRUCTION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // LDR Register COMMA
+    public static boolean LdrInstruction(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LdrInstruction")) return false;
+        if (!nextTokenIs(b, LDR)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LDR);
+        r = r && Register(b, l + 1);
+        r = r && consumeToken(b, COMMA);
+        exit_section_(b, m, LDR_INSTRUCTION, r);
         return r;
     }
 

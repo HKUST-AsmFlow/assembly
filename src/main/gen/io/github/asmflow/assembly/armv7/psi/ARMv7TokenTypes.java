@@ -41,7 +41,16 @@ public interface ARMv7TokenTypes {
     IElementType HVC_INSTRUCTION = new ARMv7ElementType("HVC_INSTRUCTION");
     IElementType ISB_INSTRUCTION = new ARMv7ElementType("ISB_INSTRUCTION");
     IElementType LABEL = new ARMv7ElementType("LABEL");
+    IElementType LDMDA_INSTRUCTION = new ARMv7ElementType("LDMDA_INSTRUCTION");
+    IElementType LDMDB_INSTRUCTION = new ARMv7ElementType("LDMDB_INSTRUCTION");
+    IElementType LDMEA_PSEUDO_INSTRUCTION = new ARMv7ElementType("LDMEA_PSEUDO_INSTRUCTION");
+    IElementType LDMED_PSEUDO_INSTRUCTION = new ARMv7ElementType("LDMED_PSEUDO_INSTRUCTION");
+    IElementType LDMFA_PSEUDO_INSTRUCTION = new ARMv7ElementType("LDMFA_PSEUDO_INSTRUCTION");
+    IElementType LDMFD_PSEUDO_INSTRUCTION = new ARMv7ElementType("LDMFD_PSEUDO_INSTRUCTION");
+    IElementType LDMIA_PSEUDO_INSTRUCTION = new ARMv7ElementType("LDMIA_PSEUDO_INSTRUCTION");
+    IElementType LDMIB_INSTRUCTION = new ARMv7ElementType("LDMIB_INSTRUCTION");
     IElementType LDM_INSTRUCTION = new ARMv7ElementType("LDM_INSTRUCTION");
+    IElementType LDR_INSTRUCTION = new ARMv7ElementType("LDR_INSTRUCTION");
     IElementType NUMBER = new ARMv7ElementType("NUMBER");
     IElementType NUMBERS = new ARMv7ElementType("NUMBERS");
     IElementType REGISTER = new ARMv7ElementType("REGISTER");
@@ -119,6 +128,15 @@ public interface ARMv7TokenTypes {
     IElementType ISB = new ARMv7TokenType("isb");
     IElementType LCOMM = new ARMv7TokenType("lcomm");
     IElementType LDM = new ARMv7TokenType("ldm");
+    IElementType LDMDA = new ARMv7TokenType("ldmda");
+    IElementType LDMDB = new ARMv7TokenType("ldmdb");
+    IElementType LDMEA = new ARMv7TokenType("ldmea");
+    IElementType LDMED = new ARMv7TokenType("ldmeb");
+    IElementType LDMFA = new ARMv7TokenType("ldmfa");
+    IElementType LDMFD = new ARMv7TokenType("ldmfd");
+    IElementType LDMIA = new ARMv7TokenType("ldmia");
+    IElementType LDMIB = new ARMv7TokenType("ldmib");
+    IElementType LDR = new ARMv7TokenType("LDR");
     IElementType LFLAGS = new ARMv7TokenType("lflags");
     IElementType LINE_FEED = new ARMv7TokenType("lf");
     IElementType LINKONCE = new ARMv7TokenType("linkonce");
@@ -248,8 +266,26 @@ public interface ARMv7TokenTypes {
                 return new ARMv7IsbInstructionImpl(node);
             } else if (type == LABEL) {
                 return new ARMv7LabelImpl(node);
+            } else if (type == LDMDA_INSTRUCTION) {
+                return new ARMv7LdmdaInstructionImpl(node);
+            } else if (type == LDMDB_INSTRUCTION) {
+                return new ARMv7LdmdbInstructionImpl(node);
+            } else if (type == LDMEA_PSEUDO_INSTRUCTION) {
+                return new ARMv7LdmeaPseudoInstructionImpl(node);
+            } else if (type == LDMED_PSEUDO_INSTRUCTION) {
+                return new ARMv7LdmedPseudoInstructionImpl(node);
+            } else if (type == LDMFA_PSEUDO_INSTRUCTION) {
+                return new ARMv7LdmfaPseudoInstructionImpl(node);
+            } else if (type == LDMFD_PSEUDO_INSTRUCTION) {
+                return new ARMv7LdmfdPseudoInstructionImpl(node);
+            } else if (type == LDMIA_PSEUDO_INSTRUCTION) {
+                return new ARMv7LdmiaPseudoInstructionImpl(node);
+            } else if (type == LDMIB_INSTRUCTION) {
+                return new ARMv7LdmibInstructionImpl(node);
             } else if (type == LDM_INSTRUCTION) {
                 return new ARMv7LdmInstructionImpl(node);
+            } else if (type == LDR_INSTRUCTION) {
+                return new ARMv7LdrInstructionImpl(node);
             } else if (type == NUMBER) {
                 return new ARMv7NumberImpl(node);
             } else if (type == NUMBERS) {
