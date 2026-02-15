@@ -1108,7 +1108,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LDR Register COMMA RegisterWithOffset
+  // LDR Register COMMA (RegisterWithRegisterOffset | RegisterWithImmediateOffset | IDENTIFIER)
   public static boolean LdrInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrInstruction")) return false;
     if (!nextTokenIs(b, LDR)) return false;
@@ -1117,8 +1117,18 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = consumeToken(b, LDR);
     r = r && Register(b, l + 1);
     r = r && consumeToken(b, COMMA);
-    r = r && RegisterWithOffset(b, l + 1);
+    r = r && LdrInstruction_3(b, l + 1);
     exit_section_(b, m, LDR_INSTRUCTION, r);
+    return r;
+  }
+
+  // RegisterWithRegisterOffset | RegisterWithImmediateOffset | IDENTIFIER
+  private static boolean LdrInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrInstruction_3")) return false;
+    boolean r;
+    r = RegisterWithRegisterOffset(b, l + 1);
+    if (!r) r = RegisterWithImmediateOffset(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
     return r;
   }
 
@@ -1196,9 +1206,23 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // LBRACKET PC COMMA Number RBRACKET
+  public static boolean PCWithImmediateOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PCWithImmediateOffset")) return false;
+    if (!nextTokenIs(b, LBRACKET)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, LBRACKET, PC, COMMA);
+    r = r && Number(b, l + 1);
+    r = r && consumeToken(b, RBRACKET);
+    exit_section_(b, m, PC_WITH_IMMEDIATE_OFFSET, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // LBRACKET Register RBRACKET COMMA Number
-  public static boolean PostindexOffset(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PostindexOffset")) return false;
+  public static boolean PostindexImmediateOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PostindexImmediateOffset")) return false;
     if (!nextTokenIs(b, LBRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
@@ -1206,14 +1230,65 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = r && Register(b, l + 1);
     r = r && consumeTokens(b, 0, RBRACKET, COMMA);
     r = r && Number(b, l + 1);
-    exit_section_(b, m, POSTINDEX_OFFSET, r);
+    exit_section_(b, m, POSTINDEX_IMMEDIATE_OFFSET, r);
     return r;
   }
 
   /* ********************************************************** */
-  // LBRACKET Register COMMA Number RBRACKET
-  public static boolean PreindexOffset(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PreindexOffset")) return false;
+  // LBRACKET Register RBRACKET COMMA (PLUS | MINUS)? Register (COMMA Shift)?
+  public static boolean PostindexRegisterOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PostindexRegisterOffset")) return false;
+    if (!nextTokenIs(b, LBRACKET)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACKET);
+    r = r && Register(b, l + 1);
+    r = r && consumeTokens(b, 0, RBRACKET, COMMA);
+    r = r && PostindexRegisterOffset_4(b, l + 1);
+    r = r && Register(b, l + 1);
+    r = r && PostindexRegisterOffset_6(b, l + 1);
+    exit_section_(b, m, POSTINDEX_REGISTER_OFFSET, r);
+    return r;
+  }
+
+  // (PLUS | MINUS)?
+  private static boolean PostindexRegisterOffset_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PostindexRegisterOffset_4")) return false;
+    PostindexRegisterOffset_4_0(b, l + 1);
+    return true;
+  }
+
+  // PLUS | MINUS
+  private static boolean PostindexRegisterOffset_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PostindexRegisterOffset_4_0")) return false;
+    boolean r;
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    return r;
+  }
+
+  // (COMMA Shift)?
+  private static boolean PostindexRegisterOffset_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PostindexRegisterOffset_6")) return false;
+    PostindexRegisterOffset_6_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA Shift
+  private static boolean PostindexRegisterOffset_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PostindexRegisterOffset_6_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Shift(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LBRACKET Register COMMA Number RBRACKET BANG
+  public static boolean PreindexImmediateOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexImmediateOffset")) return false;
     if (!nextTokenIs(b, LBRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
@@ -1221,17 +1296,79 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = r && Register(b, l + 1);
     r = r && consumeToken(b, COMMA);
     r = r && Number(b, l + 1);
-    r = r && consumeToken(b, RBRACKET);
-    exit_section_(b, m, PREINDEX_OFFSET, r);
+    r = r && consumeTokens(b, 0, RBRACKET, BANG);
+    exit_section_(b, m, PREINDEX_IMMEDIATE_OFFSET, r);
     return r;
   }
 
   /* ********************************************************** */
-  // R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
+  // LBRACKET Register COMMA (PLUS | MINUS)? Register (COMMA Shift)? RBRACKET BANG
+  public static boolean PreindexRegisterOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexRegisterOffset")) return false;
+    if (!nextTokenIs(b, LBRACKET)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACKET);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && PreindexRegisterOffset_3(b, l + 1);
+    r = r && Register(b, l + 1);
+    r = r && PreindexRegisterOffset_5(b, l + 1);
+    r = r && consumeTokens(b, 0, RBRACKET, BANG);
+    exit_section_(b, m, PREINDEX_REGISTER_OFFSET, r);
+    return r;
+  }
+
+  // (PLUS | MINUS)?
+  private static boolean PreindexRegisterOffset_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexRegisterOffset_3")) return false;
+    PreindexRegisterOffset_3_0(b, l + 1);
+    return true;
+  }
+
+  // PLUS | MINUS
+  private static boolean PreindexRegisterOffset_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexRegisterOffset_3_0")) return false;
+    boolean r;
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    return r;
+  }
+
+  // (COMMA Shift)?
+  private static boolean PreindexRegisterOffset_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexRegisterOffset_5")) return false;
+    PreindexRegisterOffset_5_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA Shift
+  private static boolean PreindexRegisterOffset_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexRegisterOffset_5_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Shift(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR) BANG?
   public static boolean Register(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Register")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, REGISTER, "<register>");
+    r = Register_0(b, l + 1);
+    r = r && Register_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
+  private static boolean Register_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Register_0")) return false;
+    boolean r;
     r = consumeToken(b, R0);
     if (!r) r = consumeToken(b, R1);
     if (!r) r = consumeToken(b, R2);
@@ -1250,19 +1387,41 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, PC);
     if (!r) r = consumeToken(b, CPSR);
     if (!r) r = consumeToken(b, SPSR);
-    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // BANG?
+  private static boolean Register_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Register_1")) return false;
+    consumeToken(b, BANG);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PCWithImmediateOffset
+  //     | PostindexImmediateOffset
+  //     | NoOffset
+  //     | PreindexImmediateOffset
+  static boolean RegisterWithImmediateOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterWithImmediateOffset")) return false;
+    if (!nextTokenIs(b, LBRACKET)) return false;
+    boolean r;
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = PostindexImmediateOffset(b, l + 1);
+    if (!r) r = NoOffset(b, l + 1);
+    if (!r) r = PreindexImmediateOffset(b, l + 1);
     return r;
   }
 
   /* ********************************************************** */
-  // PostindexOffset | NoOffset | PreindexOffset
-  static boolean RegisterWithOffset(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RegisterWithOffset")) return false;
+  // PostindexRegisterOffset | NoOffset | PreindexRegisterOffset
+  static boolean RegisterWithRegisterOffset(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterWithRegisterOffset")) return false;
     if (!nextTokenIs(b, LBRACKET)) return false;
     boolean r;
-    r = PostindexOffset(b, l + 1);
+    r = PostindexRegisterOffset(b, l + 1);
     if (!r) r = NoOffset(b, l + 1);
-    if (!r) r = PreindexOffset(b, l + 1);
+    if (!r) r = PreindexRegisterOffset(b, l + 1);
     return r;
   }
 

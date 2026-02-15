@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7PreindexOffsetImpl extends ASTWrapperPsiElement implements ARMv7PreindexOffset {
+public class ARMv7PreindexImmediateOffsetImpl extends ASTWrapperPsiElement implements ARMv7PreindexImmediateOffset {
 
-  public ARMv7PreindexOffsetImpl(@NotNull ASTNode node) {
+  public ARMv7PreindexImmediateOffsetImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitPreindexOffset(this);
+    visitor.visitPreindexImmediateOffset(this);
   }
 
   @Override

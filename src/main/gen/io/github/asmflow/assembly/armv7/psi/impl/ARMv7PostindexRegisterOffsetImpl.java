@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7PostindexOffsetImpl extends ASTWrapperPsiElement implements ARMv7PostindexOffset {
+public class ARMv7PostindexRegisterOffsetImpl extends ASTWrapperPsiElement implements ARMv7PostindexRegisterOffset {
 
-  public ARMv7PostindexOffsetImpl(@NotNull ASTNode node) {
+  public ARMv7PostindexRegisterOffsetImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitPostindexOffset(this);
+    visitor.visitPostindexRegisterOffset(this);
   }
 
   @Override
@@ -30,14 +30,14 @@ public class ARMv7PostindexOffsetImpl extends ASTWrapperPsiElement implements AR
 
   @Override
   @NotNull
-  public ARMv7Number getNumber() {
-    return findNotNullChildByClass(ARMv7Number.class);
+  public List<ARMv7Register> getRegisterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
   }
 
   @Override
-  @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
+  @Nullable
+  public ARMv7Shift getShift() {
+    return findChildByClass(ARMv7Shift.class);
   }
 
 }

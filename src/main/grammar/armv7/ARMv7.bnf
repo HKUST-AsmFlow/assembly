@@ -137,6 +137,7 @@
         LDMEA = "ldmea"
         LDMIB = "ldmib"
         LDMED = "ldmeb"
+        LDR = "ldr"
 
         // registers
         R0 = "r0"
@@ -166,6 +167,7 @@
         RRX = "rrx"
 
         // symbols
+        BANG = "!"
         COMMA = ","
         COLON = ":"
         DOT = "."
@@ -206,15 +208,24 @@ Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUM
 Number ::= POUND (PLUS | MINUS)? Based
 Numbers ::= <<CommaSeparatedList Number>>
 
-Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR {
+Register ::= (R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR) BANG? {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterSuffixImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.IARMv7RegisterSuffix"
 }
-private RegisterWithOffset ::= PostindexOffset | NoOffset | PreindexOffset
-NoOffset ::= LBRACKET Register RBRACKET
-PreindexOffset ::= LBRACKET Register COMMA Number RBRACKET
-PostindexOffset ::= LBRACKET Register RBRACKET COMMA Number
 Registers ::= <<CommaSeparatedList Register>>
+
+private RegisterWithImmediateOffset ::= PCWithImmediateOffset
+    | PostindexImmediateOffset
+    | NoOffset
+    | PreindexImmediateOffset
+private RegisterWithRegisterOffset ::= PostindexRegisterOffset | NoOffset | PreindexRegisterOffset
+
+NoOffset ::= LBRACKET Register RBRACKET
+PCWithImmediateOffset ::= LBRACKET PC COMMA Number RBRACKET
+PreindexImmediateOffset ::= LBRACKET Register COMMA Number RBRACKET BANG
+PreindexRegisterOffset ::= LBRACKET Register COMMA (PLUS | MINUS)? Register (COMMA Shift)? RBRACKET BANG
+PostindexImmediateOffset ::= LBRACKET Register RBRACKET COMMA Number
+PostindexRegisterOffset ::= LBRACKET Register RBRACKET COMMA (PLUS | MINUS)? Register (COMMA Shift)?
 
 ShiftType ::= ASR | LSL | LSR | ROR | RRX
 Shift ::= ShiftType (Number | Register)
@@ -307,7 +318,7 @@ LdmdbInstruction ::= LDMDB Register COMMA Registers
 LdmeaPseudoInstruction ::= LDMEA Register COMMA Registers
 LdmibInstruction ::= LDMIB Register COMMA Registers
 LdmedPseudoInstruction ::= LDMED Register COMMA Registers
-LdrInstruction ::= LDR Register COMMA RegisterWithOffset
+LdrInstruction ::= LDR Register COMMA (RegisterWithRegisterOffset | RegisterWithImmediateOffset | IDENTIFIER)
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 
