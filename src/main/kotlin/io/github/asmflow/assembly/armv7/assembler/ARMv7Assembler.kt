@@ -4,7 +4,7 @@ import io.github.asmflow.assembly.armv7.ARMv7File
 import io.github.asmflow.assembly.armv7.psi.ARMv7Label
 import io.github.asmflow.assembly.armv7.psi.IARMv7InstructionSuffix
 
-class Armv7Assembler(var file: ARMv7File) {
+class ARMv7Assembler(var file: ARMv7File) {
     fun assemble() {
         val symbols = HashMap<String, Int>()
         var instructionCounter = 0
