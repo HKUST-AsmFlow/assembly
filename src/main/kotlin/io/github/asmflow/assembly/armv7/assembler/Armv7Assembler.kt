@@ -11,14 +11,14 @@ class Armv7Assembler(var file: ARMv7File) {
     fun assemble() {
         val symbols = HashMap<String, Int>()
         var instructionCounter = 0
-        for (child in file.children){
+        for (child in file.children) {
             if (child.elementType == ARMv7TokenTypes.LABEL) {
                 // (child as ARMv7Label).
                 // some way to get the label name without using PsiElement.getText()
                 val labelName = child.text.drop(1)
                 symbols[labelName] = instructionCounter
             }
-            if (child is IARMv7InstructionSuffix){
+            if (child is IARMv7InstructionSuffix) {
                 instructionCounter += 4 // Each instruction is 4 bytes ignoring Thumb state
             }
         }

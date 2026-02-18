@@ -28,5 +28,4 @@ class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, 
     fun getScriptPath() = options.getScriptPath()
 
     fun setScriptPath(path: String) = options.setScriptPath(path)
-
 }
