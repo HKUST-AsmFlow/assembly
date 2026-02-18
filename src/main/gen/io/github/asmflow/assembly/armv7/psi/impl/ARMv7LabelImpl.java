@@ -9,10 +9,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7LabelImpl extends ASTWrapperPsiElement implements ARMv7Label {
+public class ARMv7LabelImpl extends ARMv7LabelMixinImpl implements ARMv7Label {
 
   public ARMv7LabelImpl(@NotNull ASTNode node) {
     super(node);

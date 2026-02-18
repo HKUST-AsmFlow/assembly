@@ -208,7 +208,10 @@ private Instruction ::= ARMv7ArithmeticInstructions
     | ARMv7SpeculativeInstructions
     | ARmv7SystemInstructions
 
-Label ::= IDENTIFIER COLON
+Label ::= IDENTIFIER COLON {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7LabelMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.IARMv7LabelMixin"
+}
 
 private Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
 

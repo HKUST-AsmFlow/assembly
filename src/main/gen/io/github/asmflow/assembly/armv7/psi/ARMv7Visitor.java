@@ -133,7 +133,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitLabel(@NotNull ARMv7Label o) {
-    visitPsiElement(o);
+    visitIARMv7LabelMixin(o);
   }
 
   public void visitLdmInstruction(@NotNull ARMv7LdmInstruction o) {
@@ -253,6 +253,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {
+    visitElement(o);
+  }
+
+  public void visitIARMv7LabelMixin(@NotNull IARMv7LabelMixin o) {
     visitElement(o);
   }
 
