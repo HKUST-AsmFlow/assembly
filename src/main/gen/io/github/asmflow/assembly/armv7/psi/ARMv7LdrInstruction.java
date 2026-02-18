@@ -9,6 +9,9 @@ import com.intellij.psi.PsiElement;
 public interface ARMv7LdrInstruction extends IARMv7InstructionSuffix {
 
   @Nullable
+  ARMv7Id getId();
+
+  @Nullable
   ARMv7NoOffset getNoOffset();
 
   @Nullable

@@ -8,4 +8,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ARMv7DmbInstruction extends IARMv7InstructionSuffix {
 
+  @NotNull
+  ARMv7Id getId();
+
 }

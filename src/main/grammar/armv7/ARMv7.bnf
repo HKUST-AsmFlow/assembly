@@ -11,6 +11,7 @@
     psiPackage = "io.github.asmflow.assembly.armv7.psi"
     psiImplClassSuffix = "Impl"
     psiImplPackage = "io.github.asmflow.assembly.armv7.psi.impl"
+    psiImplUtilClass = "io.github.asmflow.assembly.armv7.psi.util.ARMv7PsiImplUtil"
 
     tokenTypeClass = "io.github.asmflow.assembly.armv7.psi.ARMv7TokenType"
 
@@ -208,9 +209,14 @@ private Instruction ::= ARMv7ArithmeticInstructions
     | ARMv7SpeculativeInstructions
     | ARmv7SystemInstructions
 
-Label ::= IDENTIFIER COLON {
+Id ::= IDENTIFIER
+Label ::= Id COLON {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7LabelMixinImpl"
-  implements = "io.github.asmflow.assembly.armv7.psi.IARMv7LabelMixin"
+  implements = [
+    "io.github.asmflow.assembly.armv7.psi.ARMv7NamedElement"
+    "io.github.asmflow.assembly.armv7.psi.IARMv7LabelMixin"
+  ]
+  methods = [getName getNameIdentifier setName]
 }
 
 private Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
@@ -293,21 +299,21 @@ private ARmv7SystemInstructions ::= EretInstruction
 
 AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
 AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
-AdrInstruction ::= ADR Register COMMA IDENTIFIER
+AdrInstruction ::= ADR Register COMMA Id
 AndInstruction ::= AND Registers (COMMA (Number | Shift))?
 AsrInstruction ::= ASR Registers (COMMA Number)?
 
-BInstruction ::= B IDENTIFIER
+BInstruction ::= B Id
 BfcInstruction ::= BFC Register COMMA Numbers
 BfiInstruction ::= BFI Registers COMMA Numbers
 BicInstruction ::= BIC Registers (COMMA (Number | Shift))?
 BkptInstruction ::= BKPT Number
-BlInstruction ::= BL IDENTIFIER
+BlInstruction ::= BL Id
 BxInstruction ::= BX Register
 BxjInstruction ::= BXJ Register
 
-CbnzInstruction ::= CBNZ Register COMMA IDENTIFIER
-CbzInstruction ::= CBZ Register COMMA IDENTIFIER
+CbnzInstruction ::= CBNZ Register COMMA Id
+CbzInstruction ::= CBZ Register COMMA Id
 ClrexInstruction ::= CLREX
 ClzInstruction ::= CLZ Register COMMA Register
 CmnInstruction ::= CMN Register COMMA (Number | Register (COMMA Shift)?)
@@ -315,15 +321,15 @@ CmpInstruction ::= CMP Register COMMA (Number | Register (COMMA Shift)?)
 CsdbInstruction ::= CSDB
 
 DbgInstruction ::= DBG Number
-DmbInstruction ::= DMB IDENTIFIER
-DsbInstruction ::= DSB IDENTIFIER
+DmbInstruction ::= DMB Id
+DsbInstruction ::= DSB Id
 
 EorInstruction ::= EOR Registers (COMMA (Number | Shift))?
 EretInstruction ::= ERET
 
 HvcInstruction ::= HVC Number
 
-IsbInstruction ::= ISB IDENTIFIER
+IsbInstruction ::= ISB Id
 
 LdmInstruction ::= LDM Register COMMA Registers
 LdmfdPseudoInstruction ::= LDMFD Register COMMA Registers
@@ -334,10 +340,10 @@ LdmdbInstruction ::= LDMDB Register COMMA Registers
 LdmeaPseudoInstruction ::= LDMEA Register COMMA Registers
 LdmibInstruction ::= LDMIB Register COMMA Registers
 LdmedPseudoInstruction ::= LDMED Register COMMA Registers
-LdrInstruction ::= LDR Register COMMA (RegisterWithOffset | IDENTIFIER)
-LdrbInstruction ::= LDRB Register COMMA (RegisterWithOffset | IDENTIFIER)
+LdrInstruction ::= LDR Register COMMA (RegisterWithOffset | Id)
+LdrbInstruction ::= LDRB Register COMMA (RegisterWithOffset | Id)
 LdrbtInstruction ::= LDRBT Register COMMA PostindexOffset
-LdrdInstruction ::= LDRD Registers COMMA (RegisterWithOffset | IDENTIFIER)
+LdrdInstruction ::= LDRD Registers COMMA (RegisterWithOffset | Id)
 LdrexInstruction ::= LDREX Register COMMA LBRACKET Register (COMMA Number)? RBRACKET
 LdrexbInstruction ::= LDREXB Register COMMA LBRACKET Register RBRACKET
 LdrexdInstruction ::= LDREXD Registers COMMA LBRACKET Register RBRACKET
@@ -348,7 +354,7 @@ private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 
 AlignDirective ::= DOT ALIGN <<CommaSeparatedList Based>>
 AsciiDirective ::= DOT ASCII <<CommaSeparatedList STRING>>
-GlobalDirective ::= DOT GLOBAL IDENTIFIER {
+GlobalDirective ::= DOT GLOBAL Id {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7GlobalDirectiveMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.IARMv7GlobalDirectiveMixin"
 }

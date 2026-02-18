@@ -9,6 +9,9 @@ import com.intellij.psi.PsiElement;
 public interface ARMv7CbzInstruction extends IARMv7InstructionSuffix {
 
   @NotNull
+  ARMv7Id getId();
+
+  @NotNull
   ARMv7Register getRegister();
 
 }

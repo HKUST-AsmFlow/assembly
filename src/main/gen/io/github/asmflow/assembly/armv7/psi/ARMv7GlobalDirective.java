@@ -8,4 +8,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ARMv7GlobalDirective extends IARMv7GlobalDirectiveMixin {
 
+  @NotNull
+  ARMv7Id getId();
+
 }

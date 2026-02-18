@@ -39,6 +39,7 @@ public interface ARMv7TokenTypes {
   IElementType ERET_INSTRUCTION = new ARMv7ElementType("ERET_INSTRUCTION");
   IElementType GLOBAL_DIRECTIVE = new ARMv7ElementType("GLOBAL_DIRECTIVE");
   IElementType HVC_INSTRUCTION = new ARMv7ElementType("HVC_INSTRUCTION");
+  IElementType ID = new ARMv7ElementType("ID");
   IElementType ISB_INSTRUCTION = new ARMv7ElementType("ISB_INSTRUCTION");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType LDMDA_INSTRUCTION = new ARMv7ElementType("LDMDA_INSTRUCTION");
@@ -316,6 +317,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == HVC_INSTRUCTION) {
         return new ARMv7HvcInstructionImpl(node);
+      }
+      else if (type == ID) {
+        return new ARMv7IdImpl(node);
       }
       else if (type == ISB_INSTRUCTION) {
         return new ARMv7IsbInstructionImpl(node);

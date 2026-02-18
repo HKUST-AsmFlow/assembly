@@ -6,6 +6,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Label extends IARMv7LabelMixin {
+public interface ARMv7Label extends ARMv7NamedElement, IARMv7LabelMixin {
+
+  @NotNull
+  ARMv7Id getId();
+
+  @NotNull String getName();
+
+  @Nullable PsiElement getNameIdentifier();
+
+  @NotNull ARMv7Label setName(@NotNull String name);
 
 }

@@ -128,12 +128,17 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitIARMv7InstructionSuffix(o);
   }
 
+  public void visitId(@NotNull ARMv7Id o) {
+    visitPsiElement(o);
+  }
+
   public void visitIsbInstruction(@NotNull ARMv7IsbInstruction o) {
     visitIARMv7InstructionSuffix(o);
   }
 
   public void visitLabel(@NotNull ARMv7Label o) {
-    visitIARMv7LabelMixin(o);
+    visitNamedElement(o);
+    // visitIARMv7LabelMixin(o);
   }
 
   public void visitLdmInstruction(@NotNull ARMv7LdmInstruction o) {
@@ -248,15 +253,15 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNamedElement(@NotNull ARMv7NamedElement o) {
+    visitPsiElement(o);
+  }
+
   public void visitIARMv7GlobalDirectiveMixin(@NotNull IARMv7GlobalDirectiveMixin o) {
     visitElement(o);
   }
 
   public void visitIARMv7InstructionSuffix(@NotNull IARMv7InstructionSuffix o) {
-    visitElement(o);
-  }
-
-  public void visitIARMv7LabelMixin(@NotNull IARMv7LabelMixin o) {
     visitElement(o);
   }
 

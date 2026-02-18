@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import io.github.asmflow.assembly.armv7.psi.*;
+import io.github.asmflow.assembly.armv7.psi.util.ARMv7PsiImplUtil;
 
 public class ARMv7LdmfaPseudoInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdmfaPseudoInstruction {
 

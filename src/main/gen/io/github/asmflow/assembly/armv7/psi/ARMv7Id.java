@@ -6,9 +6,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7IsbInstruction extends IARMv7InstructionSuffix {
-
-  @NotNull
-  ARMv7Id getId();
+public interface ARMv7Id extends PsiElement {
 
 }
