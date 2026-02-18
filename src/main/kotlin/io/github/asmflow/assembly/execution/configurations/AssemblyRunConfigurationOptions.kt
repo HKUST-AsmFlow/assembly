@@ -5,11 +5,18 @@ import com.intellij.execution.configurations.RunConfigurationOptions
 class AssemblyRunConfigurationOptions : RunConfigurationOptions() {
     private val emulatorFlavour = enum(EmulatorFlavour.ARMv7)
         .provideDelegate(this, "emulator-flavour")
+    private val scriptPath = string("").provideDelegate(this, "script-path")
 
     fun getEmulatorFlavour() = emulatorFlavour.getValue(this)
 
     fun setEmulatorFlavour(newFlavour: EmulatorFlavour) {
         emulatorFlavour.setValue(this, newFlavour)
+    }
+
+    fun getScriptPath() = scriptPath.getValue(this)
+
+    fun setScriptPath(newPath: String) {
+        scriptPath.setValue(this, newPath)
     }
 
     enum class EmulatorFlavour {

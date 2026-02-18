@@ -14,14 +14,19 @@ import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurat
 class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, name: String) :
     RunConfigurationBase<AssemblyRunConfigurationOptions>(project, factory, name) {
     override fun getConfigurationEditor(): SettingsEditor<out RunConfiguration?> =
-        AssemblyRunConfigurationOptionsSettingsEditor()
+        AssemblyRunConfigurationOptionsSettingsEditor(project)
 
     override fun getOptions(): AssemblyRunConfigurationOptions = super.options as AssemblyRunConfigurationOptions
 
     override fun getState(executor: Executor, executionEnvironment: ExecutionEnvironment): RunProfileState =
-        AssemblyRunProfileState()
+        AssemblyRunProfileState(executionEnvironment, this)
 
     fun getEmulatorFlavour() = options.getEmulatorFlavour()
 
     fun setEmulatorFlavour(newFlavour: AssemblyEmulatorFlavour) = options.setEmulatorFlavour(newFlavour)
+
+    fun getScriptPath() = options.getScriptPath()
+
+    fun setScriptPath(path: String) = options.setScriptPath(path)
+
 }
