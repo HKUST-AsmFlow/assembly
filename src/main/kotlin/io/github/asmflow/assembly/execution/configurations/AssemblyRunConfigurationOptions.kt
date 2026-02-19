@@ -1,8 +1,8 @@
 package io.github.asmflow.assembly.execution.configurations
 
-import com.intellij.execution.configurations.RunConfigurationOptions
+import com.intellij.execution.configurations.LocatableRunConfigurationOptions
 
-class AssemblyRunConfigurationOptions : RunConfigurationOptions() {
+class AssemblyRunConfigurationOptions : LocatableRunConfigurationOptions() {
     private val emulatorFlavour = enum(EmulatorFlavour.ARMv7)
         .provideDelegate(this, "emulator-flavour")
     private val scriptPath = string("").provideDelegate(this, "script-path")

@@ -2,17 +2,19 @@ package io.github.asmflow.assembly.execution.configurations
 
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.ConfigurationFactory
+import com.intellij.execution.configurations.LocatableConfigurationBase
 import com.intellij.execution.configurations.RunConfiguration
-import com.intellij.execution.configurations.RunConfigurationBase
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.JDOMExternalizerUtil
 import io.github.asmflow.assembly.openapi.options.AssemblyRunConfigurationOptionsSettingsEditor
 import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour as AssemblyEmulatorFlavour
+import org.jdom.Element
 
 class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, name: String) :
-    RunConfigurationBase<AssemblyRunConfigurationOptions>(project, factory, name) {
+    LocatableConfigurationBase<AssemblyRunConfigurationOptions>(project, factory, name) {
     override fun getConfigurationEditor(): SettingsEditor<out RunConfiguration?> =
         AssemblyRunConfigurationOptionsSettingsEditor(project)
 
@@ -20,6 +22,27 @@ class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, 
 
     override fun getState(executor: Executor, executionEnvironment: ExecutionEnvironment): RunProfileState =
         AssemblyRunProfileState(executionEnvironment, this)
+
+    override fun readExternal(element: Element) {
+        super.readExternal(element)
+
+        setEmulatorFlavour(
+            AssemblyEmulatorFlavour.valueOf(
+                JDOMExternalizerUtil.readField(
+                    element,
+                    "emulatorFlavour"
+                )!!
+            )
+        )
+        setScriptPath(JDOMExternalizerUtil.readField(element, "scriptPath")!!)
+    }
+
+    override fun writeExternal(element: Element) {
+        super.writeExternal(element)
+
+        JDOMExternalizerUtil.writeField(element, "emulatorFlavour", getEmulatorFlavour().name)
+        JDOMExternalizerUtil.writeField(element, "scriptPath", getScriptPath())
+    }
 
     fun getEmulatorFlavour() = options.getEmulatorFlavour()
 
