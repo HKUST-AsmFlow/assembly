@@ -10,7 +10,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import io.github.asmflow.assembly.armv7.psi.*;
-import io.github.asmflow.assembly.armv7.psi.util.ARMv7PsiImplUtil;
 
 public class ARMv7LabelImpl extends ARMv7LabelMixinImpl implements ARMv7Label {
 
@@ -32,21 +31,6 @@ public class ARMv7LabelImpl extends ARMv7LabelMixinImpl implements ARMv7Label {
   @NotNull
   public ARMv7Id getId() {
     return findNotNullChildByClass(ARMv7Id.class);
-  }
-
-  @Override
-  public @NotNull String getName() {
-    return ARMv7PsiImplUtil.getName(this);
-  }
-
-  @Override
-  public @Nullable PsiElement getNameIdentifier() {
-    return ARMv7PsiImplUtil.getNameIdentifier(this);
-  }
-
-  @Override
-  public @NotNull ARMv7Label setName(@NotNull String name) {
-    return ARMv7PsiImplUtil.setName(this, name);
   }
 
 }
