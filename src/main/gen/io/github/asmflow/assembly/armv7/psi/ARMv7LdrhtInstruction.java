@@ -6,16 +6,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7LdrhInstruction extends IARMv7InstructionSuffix {
-
-  @Nullable
-  ARMv7Id getId();
+public interface ARMv7LdrhtInstruction extends IARMv7InstructionSuffix {
 
   @Nullable
   ARMv7NoOffset getNoOffset();
-
-  @Nullable
-  ARMv7PCWithImmediateOffset getPCWithImmediateOffset();
 
   @Nullable
   ARMv7PostindexOffset getPostindexOffset();

@@ -58,6 +58,7 @@ public interface ARMv7TokenTypes {
   IElementType LDREXD_INSTRUCTION = new ARMv7ElementType("LDREXD_INSTRUCTION");
   IElementType LDREXH_INSTRUCTION = new ARMv7ElementType("LDREXH_INSTRUCTION");
   IElementType LDREX_INSTRUCTION = new ARMv7ElementType("LDREX_INSTRUCTION");
+  IElementType LDRHT_INSTRUCTION = new ARMv7ElementType("LDRHT_INSTRUCTION");
   IElementType LDRH_INSTRUCTION = new ARMv7ElementType("LDRH_INSTRUCTION");
   IElementType LDR_INSTRUCTION = new ARMv7ElementType("LDR_INSTRUCTION");
   IElementType NO_OFFSET = new ARMv7ElementType("NO_OFFSET");
@@ -160,6 +161,7 @@ public interface ARMv7TokenTypes {
   IElementType LDREXD = new ARMv7TokenType("ldrexd");
   IElementType LDREXH = new ARMv7TokenType("ldrexh");
   IElementType LDRH = new ARMv7TokenType("ldrh");
+  IElementType LDRHT = new ARMv7TokenType("ldrth");
   IElementType LFLAGS = new ARMv7TokenType("lflags");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType LINKONCE = new ARMv7TokenType("linkonce");
@@ -374,6 +376,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == LDREX_INSTRUCTION) {
         return new ARMv7LdrexInstructionImpl(node);
+      }
+      else if (type == LDRHT_INSTRUCTION) {
+        return new ARMv7LdrhtInstructionImpl(node);
       }
       else if (type == LDRH_INSTRUCTION) {
         return new ARMv7LdrhInstructionImpl(node);

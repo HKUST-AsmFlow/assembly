@@ -11,14 +11,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7LdrhInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdrhInstruction {
+public class ARMv7LdrhtInstructionImpl extends ARMv7InstructionSuffixImpl implements ARMv7LdrhtInstruction {
 
-  public ARMv7LdrhInstructionImpl(@NotNull ASTNode node) {
+  public ARMv7LdrhtInstructionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitLdrhInstruction(this);
+    visitor.visitLdrhtInstruction(this);
   }
 
   @Override
@@ -29,20 +29,8 @@ public class ARMv7LdrhInstructionImpl extends ARMv7InstructionSuffixImpl impleme
 
   @Override
   @Nullable
-  public ARMv7Id getId() {
-    return findChildByClass(ARMv7Id.class);
-  }
-
-  @Override
-  @Nullable
   public ARMv7NoOffset getNoOffset() {
     return findChildByClass(ARMv7NoOffset.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7PCWithImmediateOffset getPCWithImmediateOffset() {
-    return findChildByClass(ARMv7PCWithImmediateOffset.class);
   }
 
   @Override

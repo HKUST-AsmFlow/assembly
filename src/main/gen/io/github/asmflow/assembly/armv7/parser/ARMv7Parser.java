@@ -137,6 +137,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | LdrexdInstruction
   //     | LdrexhInstruction
   //     | LdrhInstruction
+  //     | LdrhtInstruction
   static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7LoadInstructions")) return false;
     boolean r;
@@ -158,6 +159,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = LdrexdInstruction(b, l + 1);
     if (!r) r = LdrexhInstruction(b, l + 1);
     if (!r) r = LdrhInstruction(b, l + 1);
+    if (!r) r = LdrhtInstruction(b, l + 1);
     return r;
   }
 
@@ -1146,7 +1148,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LDR Register COMMA (RegisterWithOffset | Id)
+  // LDR Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
   public static boolean LdrInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrInstruction")) return false;
     if (!nextTokenIs(b, LDR)) return false;
@@ -1160,17 +1162,18 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // RegisterWithOffset | Id
+  // PCWithImmediateOffset | RegisterWithOffset | Id
   private static boolean LdrInstruction_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrInstruction_3")) return false;
     boolean r;
-    r = RegisterWithOffset(b, l + 1);
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = RegisterWithOffset(b, l + 1);
     if (!r) r = Id(b, l + 1);
     return r;
   }
 
   /* ********************************************************** */
-  // LDRB Register COMMA (RegisterWithOffset | Id)
+  // LDRB Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
   public static boolean LdrbInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrbInstruction")) return false;
     if (!nextTokenIs(b, LDRB)) return false;
@@ -1184,11 +1187,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // RegisterWithOffset | Id
+  // PCWithImmediateOffset | RegisterWithOffset | Id
   private static boolean LdrbInstruction_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrbInstruction_3")) return false;
     boolean r;
-    r = RegisterWithOffset(b, l + 1);
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = RegisterWithOffset(b, l + 1);
     if (!r) r = Id(b, l + 1);
     return r;
   }
@@ -1209,7 +1213,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LDRD Registers COMMA (RegisterWithOffset | Id)
+  // LDRD Registers COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
   public static boolean LdrdInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrdInstruction")) return false;
     if (!nextTokenIs(b, LDRD)) return false;
@@ -1223,11 +1227,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // RegisterWithOffset | Id
+  // PCWithImmediateOffset | RegisterWithOffset | Id
   private static boolean LdrdInstruction_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrdInstruction_3")) return false;
     boolean r;
-    r = RegisterWithOffset(b, l + 1);
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = RegisterWithOffset(b, l + 1);
     if (!r) r = Id(b, l + 1);
     return r;
   }
@@ -1316,14 +1321,52 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LDRH
+  // LDRH Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
   public static boolean LdrhInstruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LdrhInstruction")) return false;
     if (!nextTokenIs(b, LDRH)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LDRH);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrhInstruction_3(b, l + 1);
     exit_section_(b, m, LDRH_INSTRUCTION, r);
+    return r;
+  }
+
+  // PCWithImmediateOffset | RegisterWithOffset | Id
+  private static boolean LdrhInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrhInstruction_3")) return false;
+    boolean r;
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = RegisterWithOffset(b, l + 1);
+    if (!r) r = Id(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRHT Register COMMA (RegisterWithOffset)
+  public static boolean LdrhtInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrhtInstruction")) return false;
+    if (!nextTokenIs(b, LDRHT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRHT);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrhtInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRHT_INSTRUCTION, r);
+    return r;
+  }
+
+  // (RegisterWithOffset)
+  private static boolean LdrhtInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrhtInstruction_3")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RegisterWithOffset(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1604,16 +1647,14 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PCWithImmediateOffset
-  //     | PostindexOffset
+  // PostindexOffset
   //     | NoOffset
   //     | PreindexOffset
   static boolean RegisterWithOffset(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithOffset")) return false;
     if (!nextTokenIs(b, LBRACKET)) return false;
     boolean r;
-    r = PCWithImmediateOffset(b, l + 1);
-    if (!r) r = PostindexOffset(b, l + 1);
+    r = PostindexOffset(b, l + 1);
     if (!r) r = NoOffset(b, l + 1);
     if (!r) r = PreindexOffset(b, l + 1);
     return r;
