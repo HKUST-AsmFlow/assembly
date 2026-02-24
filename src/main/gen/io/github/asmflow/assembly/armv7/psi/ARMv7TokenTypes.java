@@ -60,6 +60,9 @@ public interface ARMv7TokenTypes {
   IElementType LDREX_INSTRUCTION = new ARMv7ElementType("LDREX_INSTRUCTION");
   IElementType LDRHT_INSTRUCTION = new ARMv7ElementType("LDRHT_INSTRUCTION");
   IElementType LDRH_INSTRUCTION = new ARMv7ElementType("LDRH_INSTRUCTION");
+  IElementType LDRSBT_INSTRUCTION = new ARMv7ElementType("LDRSBT_INSTRUCTION");
+  IElementType LDRSB_INSTRUCTION = new ARMv7ElementType("LDRSB_INSTRUCTION");
+  IElementType LDRSH_INSTRUCTION = new ARMv7ElementType("LDRSH_INSTRUCTION");
   IElementType LDR_INSTRUCTION = new ARMv7ElementType("LDR_INSTRUCTION");
   IElementType NO_OFFSET = new ARMv7ElementType("NO_OFFSET");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
@@ -161,7 +164,10 @@ public interface ARMv7TokenTypes {
   IElementType LDREXD = new ARMv7TokenType("ldrexd");
   IElementType LDREXH = new ARMv7TokenType("ldrexh");
   IElementType LDRH = new ARMv7TokenType("ldrh");
-  IElementType LDRHT = new ARMv7TokenType("ldrth");
+  IElementType LDRHT = new ARMv7TokenType("ldrht");
+  IElementType LDRSB = new ARMv7TokenType("ldrsb");
+  IElementType LDRSBT = new ARMv7TokenType("ldrsbt");
+  IElementType LDRSH = new ARMv7TokenType("ldrsh");
   IElementType LFLAGS = new ARMv7TokenType("lflags");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType LINKONCE = new ARMv7TokenType("linkonce");
@@ -382,6 +388,15 @@ public interface ARMv7TokenTypes {
       }
       else if (type == LDRH_INSTRUCTION) {
         return new ARMv7LdrhInstructionImpl(node);
+      }
+      else if (type == LDRSBT_INSTRUCTION) {
+        return new ARMv7LdrsbtInstructionImpl(node);
+      }
+      else if (type == LDRSB_INSTRUCTION) {
+        return new ARMv7LdrsbInstructionImpl(node);
+      }
+      else if (type == LDRSH_INSTRUCTION) {
+        return new ARMv7LdrshInstructionImpl(node);
       }
       else if (type == LDR_INSTRUCTION) {
         return new ARMv7LdrInstructionImpl(node);

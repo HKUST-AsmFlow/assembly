@@ -138,6 +138,9 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | LdrexhInstruction
   //     | LdrhInstruction
   //     | LdrhtInstruction
+  //     | LdrsbInstruction
+  //     | LdrsbtInstruction
+  //     | LdrshInstruction
   static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7LoadInstructions")) return false;
     boolean r;
@@ -160,6 +163,9 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = LdrexhInstruction(b, l + 1);
     if (!r) r = LdrhInstruction(b, l + 1);
     if (!r) r = LdrhtInstruction(b, l + 1);
+    if (!r) r = LdrsbInstruction(b, l + 1);
+    if (!r) r = LdrsbtInstruction(b, l + 1);
+    if (!r) r = LdrshInstruction(b, l + 1);
     return r;
   }
 
@@ -1371,6 +1377,71 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // LDRSB Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
+  public static boolean LdrsbInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrsbInstruction")) return false;
+    if (!nextTokenIs(b, LDRSB)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRSB);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrsbInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRSB_INSTRUCTION, r);
+    return r;
+  }
+
+  // PCWithImmediateOffset | RegisterWithOffset | Id
+  private static boolean LdrsbInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrsbInstruction_3")) return false;
+    boolean r;
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = RegisterWithOffset(b, l + 1);
+    if (!r) r = Id(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRSBT Register COMMA RegisterWithOffset
+  public static boolean LdrsbtInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrsbtInstruction")) return false;
+    if (!nextTokenIs(b, LDRSBT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRSBT);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && RegisterWithOffset(b, l + 1);
+    exit_section_(b, m, LDRSBT_INSTRUCTION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRSH Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
+  public static boolean LdrshInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrshInstruction")) return false;
+    if (!nextTokenIs(b, LDRSH)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRSH);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrshInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRSH_INSTRUCTION, r);
+    return r;
+  }
+
+  // PCWithImmediateOffset | RegisterWithOffset | Id
+  private static boolean LdrshInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrshInstruction_3")) return false;
+    boolean r;
+    r = PCWithImmediateOffset(b, l + 1);
+    if (!r) r = RegisterWithOffset(b, l + 1);
+    if (!r) r = Id(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
   // LINE_FEED+
   static boolean LineFeed(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LineFeed")) return false;
@@ -1530,7 +1601,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LBRACKET Register COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?) RBRACKET BANG
+  // LBRACKET Register COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?) RBRACKET BANG?
   public static boolean PreindexOffset(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PreindexOffset")) return false;
     if (!nextTokenIs(b, LBRACKET)) return false;
@@ -1540,7 +1611,8 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = r && Register(b, l + 1);
     r = r && consumeToken(b, COMMA);
     r = r && PreindexOffset_3(b, l + 1);
-    r = r && consumeTokens(b, 0, RBRACKET, BANG);
+    r = r && consumeToken(b, RBRACKET);
+    r = r && PreindexOffset_5(b, l + 1);
     exit_section_(b, m, PREINDEX_OFFSET, r);
     return r;
   }
@@ -1600,6 +1672,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = r && Shift(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // BANG?
+  private static boolean PreindexOffset_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PreindexOffset_5")) return false;
+    consumeToken(b, BANG);
+    return true;
   }
 
   /* ********************************************************** */

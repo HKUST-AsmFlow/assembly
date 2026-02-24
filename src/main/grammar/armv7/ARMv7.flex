@@ -143,6 +143,9 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "ldrexh"({CONDITION_CODES}?) { return LDREXH; }
   "ldrh"({CONDITION_CODES}?) { return LDRH; }
   "ldrht"({CONDITION_CODES}?) { return LDRHT; }
+  "ldrsb"({CONDITION_CODES}?) { return LDRSB; }
+  "ldrsbt"({CONDITION_CODES}?) { return LDRSBT; }
+  "ldrsh"({CONDITION_CODES}?) { return LDRSH; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

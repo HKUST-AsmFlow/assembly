@@ -146,7 +146,10 @@
         LDREXD = "ldrexd"
         LDREXH = "ldrexh"
         LDRH = "ldrh"
-        LDRHT = "ldrth"
+        LDRHT = "ldrht"
+        LDRSB = "ldrsb"
+        LDRSBT = "ldrsbt"
+        LDRSH = "ldrsh"
 
         // registers
         R0 = "r0"
@@ -235,7 +238,7 @@ private RegisterWithOffset ::= PostindexOffset
 
 NoOffset ::= LBRACKET Register RBRACKET
 PCWithImmediateOffset ::= LBRACKET PC COMMA Number RBRACKET
-PreindexOffset ::= LBRACKET Register COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?) RBRACKET BANG
+PreindexOffset ::= LBRACKET Register COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?) RBRACKET BANG?
 PostindexOffset ::= LBRACKET Register RBRACKET COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?)
 
 ShiftType ::= ASR | LSL | LSR | ROR | RRX
@@ -284,6 +287,9 @@ private ARMv7LoadInstructions ::= LdmInstruction
     | LdrexhInstruction
     | LdrhInstruction
     | LdrhtInstruction
+    | LdrsbInstruction
+    | LdrsbtInstruction
+    | LdrshInstruction
 
 private ARMv7LockInstructions ::= ClrexInstruction
 
@@ -348,6 +354,9 @@ LdrexdInstruction ::= LDREXD Registers COMMA LBRACKET Register RBRACKET
 LdrexhInstruction ::= LDREXH Register COMMA LBRACKET Register RBRACKET
 LdrhInstruction ::= LDRH Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
 LdrhtInstruction ::= LDRHT Register COMMA (RegisterWithOffset)
+LdrsbInstruction ::= LDRSB Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
+LdrsbtInstruction ::= LDRSBT Register COMMA RegisterWithOffset
+LdrshInstruction ::= LDRSH Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
 
 private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
 
