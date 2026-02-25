@@ -228,6 +228,14 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitIARMv7InstructionSuffix(o);
   }
 
+  public void visitLdrshtInstruction(@NotNull ARMv7LdrshtInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
+  public void visitLdrtInstruction(@NotNull ARMv7LdrtInstruction o) {
+    visitIARMv7InstructionSuffix(o);
+  }
+
   public void visitNoOffset(@NotNull ARMv7NoOffset o) {
     visitPsiElement(o);
   }

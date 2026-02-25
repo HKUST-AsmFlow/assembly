@@ -141,6 +141,8 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //     | LdrsbInstruction
   //     | LdrsbtInstruction
   //     | LdrshInstruction
+  //     | LdrshtInstruction
+  //     | LdrtInstruction
   static boolean ARMv7LoadInstructions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ARMv7LoadInstructions")) return false;
     boolean r;
@@ -166,6 +168,8 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = LdrsbInstruction(b, l + 1);
     if (!r) r = LdrsbtInstruction(b, l + 1);
     if (!r) r = LdrshInstruction(b, l + 1);
+    if (!r) r = LdrshtInstruction(b, l + 1);
+    if (!r) r = LdrtInstruction(b, l + 1);
     return r;
   }
 
@@ -1438,6 +1442,56 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = PCWithImmediateOffset(b, l + 1);
     if (!r) r = RegisterWithOffset(b, l + 1);
     if (!r) r = Id(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRSHT Register COMMA (RegisterWithOffset)
+  public static boolean LdrshtInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrshtInstruction")) return false;
+    if (!nextTokenIs(b, LDRSHT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRSHT);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrshtInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRSHT_INSTRUCTION, r);
+    return r;
+  }
+
+  // (RegisterWithOffset)
+  private static boolean LdrshtInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrshtInstruction_3")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RegisterWithOffset(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LDRT Register COMMA (RegisterWithOffset)
+  public static boolean LdrtInstruction(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrtInstruction")) return false;
+    if (!nextTokenIs(b, LDRT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LDRT);
+    r = r && Register(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    r = r && LdrtInstruction_3(b, l + 1);
+    exit_section_(b, m, LDRT_INSTRUCTION, r);
+    return r;
+  }
+
+  // (RegisterWithOffset)
+  private static boolean LdrtInstruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LdrtInstruction_3")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RegisterWithOffset(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
