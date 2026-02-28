@@ -7,8 +7,8 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.dsl.builder.panel
 import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfiguration
+import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour
 import javax.swing.JComponent
-import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour as AssemblyEmulatorFlavour
 
 class AssemblyRunConfigurationOptionsSettingsEditor(private val project: Project) :
     SettingsEditor<AssemblyRunConfiguration>() {
@@ -17,12 +17,12 @@ class AssemblyRunConfigurationOptionsSettingsEditor(private val project: Project
 
     override fun applyEditorTo(options: AssemblyRunConfiguration) {
         options.setScriptPath(scriptPathField.component.text)
-        options.setEmulatorFlavour(AssemblyEmulatorFlavour.valueOf(flavourCombobox.component.selectedItem as String))
+        options.setEmulatorFlavour(EmulatorFlavour.valueOf(flavourCombobox.component.selectedItem as String))
     }
 
     override fun createEditor(): JComponent = panel {
         row("Assembly Flavour: ") {
-            flavourCombobox = comboBox(AssemblyEmulatorFlavour.entries.map { it.name })
+            flavourCombobox = comboBox(EmulatorFlavour.entries.map { it.name })
         }
         row("Assembly File: ") {
             scriptPathField = textFieldWithBrowseButton(

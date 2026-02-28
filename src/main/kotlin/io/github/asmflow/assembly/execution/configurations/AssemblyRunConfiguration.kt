@@ -9,9 +9,9 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.JDOMExternalizerUtil
+import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour
 import io.github.asmflow.assembly.openapi.options.AssemblyRunConfigurationOptionsSettingsEditor
 import org.jdom.Element
-import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour as AssemblyEmulatorFlavour
 
 class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<AssemblyRunConfigurationOptions>(project, factory, name) {
@@ -27,7 +27,7 @@ class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, 
         super.readExternal(element)
 
         setEmulatorFlavour(
-            AssemblyEmulatorFlavour.valueOf(
+            EmulatorFlavour.valueOf(
                 JDOMExternalizerUtil.readField(
                     element,
                     "emulatorFlavour"
@@ -46,7 +46,7 @@ class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, 
 
     fun getEmulatorFlavour() = options.getEmulatorFlavour()
 
-    fun setEmulatorFlavour(newFlavour: AssemblyEmulatorFlavour) = options.setEmulatorFlavour(newFlavour)
+    fun setEmulatorFlavour(newFlavour: EmulatorFlavour) = options.setEmulatorFlavour(newFlavour)
 
     fun getScriptPath() = options.getScriptPath()
 
