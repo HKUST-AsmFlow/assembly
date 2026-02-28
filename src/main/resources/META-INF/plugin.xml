@@ -10,7 +10,7 @@
     <resource-bundle>messages.AssemblyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="ARMv7_ASM" implementationClass="io.github.asmflow.assembly.armv7.annotation.ARMv7MnemonicAnnotator"/>
+        <annotator language="ARMv7_ASM" implementationClass="io.github.asmflow.assembly.armv7.annotation.ARMv7SemanticHighlightingAnnotator"/>
         <colorSettingsPage implementation="io.github.asmflow.assembly.armv7.options.ARMv7ColorSettingsPage"/>
         <configurationType
                 implementation="io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationType"/>

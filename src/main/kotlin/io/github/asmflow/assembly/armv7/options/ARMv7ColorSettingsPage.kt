@@ -49,15 +49,26 @@ class ARMv7ColorSettingsPage : ColorSettingsPage {
 
     override fun getHighlighter(): SyntaxHighlighter = ARMv7SyntaxHighlighter()
 
-    override fun getDemoText(): @NonNls String = ".global main\n\n" +
-            "main:\n" +
-            "    adcsal r0, r1, r2, lsl #3  @ comment"
+    override fun getDemoText(): @NonNls String = """
+        |@ ARMv7 Assembly Example
+        |
+        |.<directive>global</directive> <label>main</label>
+        |
+        |<label>main</label>:
+        |   <instruction>adcsal</instruction> r0, r1, r2, <shift_type>lsl</shift_type> <number>#1</number>
+    """.trimMargin()
 
-    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String?, TextAttributesKey?> = emptyMap()
+    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey> = mapOf(
+        "directive" to ARMv7TextAttributes.ARMv7_DIRECTIVE,
+        "instruction" to ARMv7TextAttributes.ARMv7_INSTRUCTION,
+        "label" to ARMv7TextAttributes.ARMv7_LABEL,
+        "number" to ARMv7TextAttributes.ARMv7_NUMBER,
+        "shift_type" to ARMv7TextAttributes.ARMv7_SHIFT_TYPE
+    )
 
-    override fun getAttributeDescriptors(): Array<out AttributesDescriptor?> = descriptors
+    override fun getAttributeDescriptors(): Array<out AttributesDescriptor> = descriptors
 
-    override fun getColorDescriptors(): Array<out ColorDescriptor?> = emptyArray()
+    override fun getColorDescriptors(): Array<out ColorDescriptor> = emptyArray()
 
     override fun getDisplayName(): @NlsContexts.ConfigurableName String = ARMv7FileType.displayName
 

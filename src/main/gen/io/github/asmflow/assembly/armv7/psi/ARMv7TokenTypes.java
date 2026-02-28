@@ -10,6 +10,7 @@ import io.github.asmflow.assembly.armv7.psi.impl.*;
 public interface ARMv7TokenTypes {
 
   IElementType DIRECTIVE = new ARMv7ElementType("DIRECTIVE");
+  IElementType DIRECTIVE_NAME = new ARMv7ElementType("DIRECTIVE_NAME");
   IElementType DIRECTIVE_PARAMETER = new ARMv7ElementType("DIRECTIVE_PARAMETER");
   IElementType DIRECTIVE_PARAMETERS = new ARMv7ElementType("DIRECTIVE_PARAMETERS");
   IElementType INSTRUCTION = new ARMv7ElementType("INSTRUCTION");
@@ -68,6 +69,9 @@ public interface ARMv7TokenTypes {
       IElementType type = node.getElementType();
       if (type == DIRECTIVE) {
         return new ARMv7DirectiveImpl(node);
+      }
+      else if (type == DIRECTIVE_NAME) {
+        return new ARMv7DirectiveNameImpl(node);
       }
       else if (type == DIRECTIVE_PARAMETER) {
         return new ARMv7DirectiveParameterImpl(node);

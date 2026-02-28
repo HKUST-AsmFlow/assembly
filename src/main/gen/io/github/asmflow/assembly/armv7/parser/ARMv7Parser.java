@@ -104,13 +104,14 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DOT IDENTIFIER DirectiveParameters?
+  // DOT DirectiveName DirectiveParameters?
   public static boolean Directive(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Directive")) return false;
     if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOT, IDENTIFIER);
+    r = consumeToken(b, DOT);
+    r = r && DirectiveName(b, l + 1);
     r = r && Directive_2(b, l + 1);
     exit_section_(b, m, DIRECTIVE, r);
     return r;
@@ -121,6 +122,18 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "Directive_2")) return false;
     DirectiveParameters(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean DirectiveName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirectiveName")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, DIRECTIVE_NAME, r);
+    return r;
   }
 
   /* ********************************************************** */

@@ -6,12 +6,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Directive extends PsiElement {
-
-  @NotNull
-  ARMv7DirectiveName getDirectiveName();
-
-  @Nullable
-  ARMv7DirectiveParameters getDirectiveParameters();
+public interface ARMv7DirectiveName extends PsiElement {
 
 }

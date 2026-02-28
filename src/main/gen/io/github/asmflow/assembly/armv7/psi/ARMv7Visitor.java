@@ -12,6 +12,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDirectiveName(@NotNull ARMv7DirectiveName o) {
+    visitPsiElement(o);
+  }
+
   public void visitDirectiveParameter(@NotNull ARMv7DirectiveParameter o) {
     visitPsiElement(o);
   }
