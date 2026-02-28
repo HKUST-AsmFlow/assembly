@@ -10,8 +10,8 @@ import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.JDOMExternalizerUtil
 import io.github.asmflow.assembly.openapi.options.AssemblyRunConfigurationOptionsSettingsEditor
-import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour as AssemblyEmulatorFlavour
 import org.jdom.Element
+import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions.EmulatorFlavour as AssemblyEmulatorFlavour
 
 class AssemblyRunConfiguration(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<AssemblyRunConfigurationOptions>(project, factory, name) {
