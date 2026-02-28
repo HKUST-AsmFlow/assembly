@@ -8,7 +8,4 @@ import com.intellij.psi.PsiElement;
 
 public interface ARMv7Number extends PsiElement {
 
-  @NotNull
-  ARMv7Based getBased();
-
 }

@@ -6,95 +6,11 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*
 object ARMv7TokenSets {
     val COMMENTS = TokenSet.create(COMMENT)
 
-    val DIRECTIVES = TokenSet.create(
-        ALIGN,
-        ASCII,
-        ASCIZ,
-        BALIGN,
-        BALIGNL,
-        BALIGNW,
-        BYTE,
-        COMM,
-        DATA,
-        DEF,
-        DESC,
-        DIM,
-        DOUBLE,
-        EJECT,
-        ELSE,
-        ENDEF,
-        ENDIF,
-        EQU,
-        EQUIV,
-        ERR,
-        EXTERN,
-        FILE,
-        FILL,
-        FLOAT,
-        GLOBAL
-    )
+    val DIRECTIVES = TokenSet.create(DIRECTIVE)
 
-    val INSTRUCTIONS = TokenSet.create(
-        ADC,
-        ADD,
-        ADR,
-        AND,
-        ASR,
-        B,
-        BFC,
-        BFI,
-        BIC,
-        BKPT,
-        BL,
-        BX,
-        BXJ,
-        CBNZ,
-        CBZ,
-        CLREX,
-        CLZ,
-        CMN,
-        CMP,
-        CSDB,
-        DBG,
-        DMB,
-        DSB,
-        EOR,
-        ERET,
-        HVC,
-        ISB,
-        LDM,
-        LDMFD,
-        LDMIA,
-        LDMDA,
-        LDMFA,
-        LDMDB,
-        LDMEA,
-        LDMIB,
-        LDMED,
-        LDR,
-        LDRB,
-        LDRBT,
-        LDRD,
-        LDREX,
-        LDREXB,
-        LDREXD,
-        LDREXH,
-        LDRH,
-        LDRHT,
-        LDRSB,
-        LDRSBT,
-        LDRSH,
-        LDRSHT,
-        LDRT
-    )
+    val INSTRUCTIONS = TokenSet.create(MNEMONIC)
 
-    val NUMBERS = TokenSet.create(
-        POUND,
-        BINARY_NUMBER,
-        DECIMAL_NUMBER,
-        HEXADECIMAL_NUMBER,
-        OCTAL_NUMBER
-    )
+    val NUMBERS = TokenSet.create(NUMBER)
 
     val REGISTERS = TokenSet.create(
         R0,
@@ -117,13 +33,7 @@ object ARMv7TokenSets {
         SPSR
     )
 
-    val SHIFT_TYPES = TokenSet.create(
-        LSL,
-        LSR,
-        ASR,
-        ROR,
-        RRX
-    )
+    val SHIFT_TYPES = TokenSet.create(SHIFT_TYPE)
 
     val STRINGS = TokenSet.create(STRING)
 }

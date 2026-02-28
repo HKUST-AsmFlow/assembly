@@ -6,6 +6,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Register extends IARMv7RegisterSuffix {
+public interface ARMv7Register extends PsiElement {
 
 }

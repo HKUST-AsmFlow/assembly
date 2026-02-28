@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7LabelImpl extends ASTWrapperPsiElement implements ARMv7Label {
+public class ARMv7MnemonicImpl extends ASTWrapperPsiElement implements ARMv7Mnemonic {
 
-  public ARMv7LabelImpl(@NotNull ASTNode node) {
+  public ARMv7MnemonicImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitLabel(this);
+    visitor.visitMnemonic(this);
   }
 
   @Override
