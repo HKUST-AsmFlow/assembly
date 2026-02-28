@@ -6,6 +6,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Label extends PsiElement {
+public interface ARMv7RegisterWithShift extends PsiElement {
+
+  @Nullable
+  ARMv7Number getNumber();
+
+  @NotNull
+  ARMv7Register getRegister();
+
+  @Nullable
+  ARMv7ShiftType getShiftType();
 
 }

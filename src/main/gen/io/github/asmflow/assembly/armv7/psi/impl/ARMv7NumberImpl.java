@@ -28,10 +28,4 @@ public class ARMv7NumberImpl extends ASTWrapperPsiElement implements ARMv7Number
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public ARMv7Based getBased() {
-    return findNotNullChildByClass(ARMv7Based.class);
-  }
-
 }

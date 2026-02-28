@@ -28,131 +28,6 @@
         HEXADECIMAL_NUMBER = "hexadecimal number"
         OCTAL_NUMBER = "octal number"
 
-        // directives
-        ALIGN = "align"
-        ASCII = "ascii"
-        ASCIZ = "asciz"
-        BALIGN = "balign"
-        BALIGNL = "balignl"
-        BALIGNW = "balignw"
-        BYTE = "byte"
-        COMM = "comm"
-        DATA = "data"
-        DEF = "def"
-        DESC = "desc"
-        DIM = "dim"
-        DOUBLE = "double"
-        EJECT = "eject"
-        ELSE = "else"
-        ENDEF = "endef"
-        ENDIF = "endif"
-        EQU = "equ"
-        EQUIV = "equiv"
-        ERR = "err"
-        EXTERN = "extern"
-        FILE = "file"
-        FILL = "fill"
-        FLOAT = "float"
-        GLOBAL = "global"
-        HWORD = "hword"
-        IDENT = "ident"
-        IF = "if"
-        INCLUDE = "include"
-        INT = "int"
-        IRP = "irp"
-        IRPC = "irpc"
-        LCOMM = "lcomm"
-        LFLAGS = "lflags"
-        LINKONCE = "linkonce"
-        LN = "ln"
-        LIST = "list"
-        LONG = "long"
-        MACRO = "macro"
-        NOLIST = "nolist"
-        OCTA = "octa"
-        ORG = "org"
-        P2ALIGN = "p2align"
-        P2ALIGNL = "p2alignl"
-        P2ALIGNW = "p2alignw"
-        PSIZE = "psize"
-        QUAD = "quad"
-        REPT = "rept"
-        SBTTL = "sbttl"
-        SCL = "scl"
-        SECTION = "section"
-        SET = "set"
-        SHORT = "short"
-        SINGLE = "single"
-        SIZE = "size"
-        SLEB128 = "sleb128"
-        SKIP = "skip"
-        SPACE = "space"
-        STABD = "stabd"
-        STABN = "stabn"
-        STABS = "stabs"
-        STRING = "string"
-        SYMVER = "symver"
-        TAG = "tag"
-        TEXT = "text"
-        TITLE = "title"
-        TYPE = "type"
-        VAR = "var"
-        ULEB128 = "uleb128"
-        WORD = "word"
-
-        // instructions
-        ADC = "adc"
-        ADD = "add"
-        ADR = "adr"
-        AND = "and"
-        ASR = "asr"
-        B = "b"
-        BFC = "bfc"
-        BFI = "bfi"
-        BIC = "bic"
-        BKPT = "bkpt"
-        BL = "bl"
-        BX = "bx"
-        BXJ = "bxj"
-        CBNZ = "cbnz"
-        CBZ = "cbz"
-        CLREX = "clrex"
-        CLZ = "clz"
-        CMN = "cmn"
-        CMP = "cmp"
-        CSDB = "csdb"
-        DBG = "dbg"
-        DMB = "dmb"
-        DSB = "dsb"
-        EOR = "eor"
-        ERET = "eret"
-        HVC = "hvc"
-        ISB = "isb"
-        LDM = "ldm"
-        LDMIA = "ldmia"
-        LDMFD = "ldmfd"
-        LDMDA = "ldmda"
-        LDMFA = "ldmfa"
-        LDMDB = "ldmdb"
-        LDMEA = "ldmea"
-        LDMIB = "ldmib"
-        LDMED = "ldmeb"
-        LDR = "ldr"
-        LDRB = "ldrb"
-        LDRBT = "ldrbt"
-        LDRD = "ldrd"
-        LDREX = "ldrex"
-        LDREXB = "ldrexb"
-        LDREXD = "ldrexd"
-        LDREXH = "ldrexh"
-        LDRH = "ldrh"
-        LDRHT = "ldrht"
-        LDRSB = "ldrsb"
-        LDRSBT = "ldrsbt"
-        LDRSH = "ldrsh"
-        LDRSHT = "ldrsht"
-        LDRT = "ldrt"
-
         // registers
         R0 = "r0"
         R1 = "r1"
@@ -173,13 +48,6 @@
         CPSR = "CPSR"
         SPSR = "SPSR"
 
-        // shift type
-        LSL = "lsl"
-        LSR = "lsr"
-        ASR = "asr"
-        ROR = "ror"
-        RRX = "rrx"
-
         // symbols
         BANG = "!"
         COMMA = ","
@@ -191,186 +59,46 @@
         POUND = "#"
         RBRACKET = "]"
     ]
-
-    mixin(".+Instruction") = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7InstructionSuffixImpl"
-    implements(".+Instruction") = "io.github.asmflow.assembly.armv7.psi.IARMv7InstructionSuffix"
 }
 
 File ::= Item*
+private Item ::= LineFeed | (LabelWithColon | Directive | Instruction) LineFeed?
 
 private LineFeed ::= LINE_FEED+ {
     consumeTokenMethod = "consumeTokenFast"
 }
 
-private DirectiveOrInstructionOrLabel ::= AssemblerDirective | Instruction | Label
+Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9 | R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
 
-private AssemblerDirective ::= ARMv7Directives
-private Instruction ::= ARMv7ArithmeticInstructions
-    | ARMv7BranchInstructions
-    | ARMv7ComparisonInstructions
-    | ARMv7DebugInstructions
-    | ARMv7LoadInstructions
-    | ARMv7LockInstructions
-    | ARMv7SpeculativeInstructions
-    | ARmv7SystemInstructions
+Directive ::= DOT IDENTIFIER DirectiveParameters?
+DirectiveParameters ::= <<CommaSeparatedList DirectiveParameter>>
+DirectiveParameter ::= Label | STRING
 
-Id ::= IDENTIFIER
-Label ::= Id COLON {
-  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7LabelMixinImpl"
-  implements = [
-    "io.github.asmflow.assembly.armv7.psi.IARMv7LabelMixin"
-  ]
-}
+Instruction ::= Mnemonic Operands?
+Operands ::= <<CommaSeparatedList Operand>>
+Operand ::= RegisterOperand | Label | Number
 
-private Item ::= LineFeed | DirectiveOrInstructionOrLabel LineFeed?
+private RegisterOperand ::= RegisterWithShift
+  | Register
+  | Postindexed
+  | Offset
+  | OffsetVariant
+  | Preindexed
 
-Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
+RegisterWithShift ::= Register (COMMA ShiftType Number)?
+Offset ::= LBRACKET Register (COMMA Number)? RBRACKET
+OffsetVariant ::= LBRACKET Register COMMA RegisterWithShift RBRACKET BANG?
+Preindexed ::= LBRACKET Register COMMA Number RBRACKET BANG
+Postindexed ::= LBRACKET Register RBRACKET COMMA Number
+
+Mnemonic ::= IDENTIFIER
+
+ShiftType ::= IDENTIFIER
+
+LabelWithColon ::= Label COLON
+Label ::= IDENTIFIER
+
 Number ::= POUND (PLUS | MINUS)? Based
-Numbers ::= <<CommaSeparatedList Number>>
-
-Register ::= (R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9| R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR) BANG? {
-  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterSuffixImpl"
-  implements = "io.github.asmflow.assembly.armv7.psi.IARMv7RegisterSuffix"
-}
-Registers ::= <<CommaSeparatedList Register>>
-
-private RegisterWithOffset ::= PostindexOffset
-    | NoOffset
-    | PreindexOffset
-
-NoOffset ::= LBRACKET Register RBRACKET
-PCWithImmediateOffset ::= LBRACKET PC COMMA Number RBRACKET
-PreindexOffset ::= LBRACKET Register COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?) RBRACKET BANG?
-PostindexOffset ::= LBRACKET Register RBRACKET COMMA (Number | (PLUS | MINUS)? Register (COMMA Shift)?)
-
-ShiftType ::= ASR | LSL | LSR | ROR | RRX
-Shift ::= ShiftType (Number | Register)
-
-private ARMv7ArithmeticInstructions ::= AdcInstruction
-    | AddInstruction
-    | AdrInstruction
-    | AndInstruction
-    | AsrInstruction
-    | BfcInstruction
-    | BfiInstruction
-    | BicInstruction
-    | ClzInstruction
-    | EorInstruction
-
-private ARMv7BranchInstructions ::= BInstruction
-    | BlInstruction
-    | BxInstruction
-    | BxjInstruction
-    | CbnzInstruction
-    | CbzInstruction
-
-private ARMv7ComparisonInstructions ::= CmnInstruction
-    | CmpInstruction
-
-private ARMv7DebugInstructions ::= BkptInstruction
-    | DbgInstruction
-
-private ARMv7LoadInstructions ::= LdmInstruction
-    | LdmfdPseudoInstruction
-    | LdmiaPseudoInstruction
-    | LdmdaInstruction
-    | LdmfaPseudoInstruction
-    | LdmdbInstruction
-    | LdmeaPseudoInstruction
-    | LdmibInstruction
-    | LdmedPseudoInstruction
-    | LdrInstruction
-    | LdrbInstruction
-    | LdrbtInstruction
-    | LdrdInstruction
-    | LdrexInstruction
-    | LdrexbInstruction
-    | LdrexdInstruction
-    | LdrexhInstruction
-    | LdrhInstruction
-    | LdrhtInstruction
-    | LdrsbInstruction
-    | LdrsbtInstruction
-    | LdrshInstruction
-    | LdrshtInstruction
-    | LdrtInstruction
-
-private ARMv7LockInstructions ::= ClrexInstruction
-
-private ARMv7SpeculativeInstructions ::= CsdbInstruction
-    | DmbInstruction
-    | DsbInstruction
-    | IsbInstruction
-
-private ARmv7SystemInstructions ::= EretInstruction
-    | HvcInstruction
-
-AdcInstruction ::= ADC Registers (COMMA (Number | Shift))?
-AddInstruction ::= ADD Registers (COMMA (Number | Shift))?
-AdrInstruction ::= ADR Register COMMA Id
-AndInstruction ::= AND Registers (COMMA (Number | Shift))?
-AsrInstruction ::= ASR Registers (COMMA Number)?
-
-BInstruction ::= B Id
-BfcInstruction ::= BFC Register COMMA Numbers
-BfiInstruction ::= BFI Registers COMMA Numbers
-BicInstruction ::= BIC Registers (COMMA (Number | Shift))?
-BkptInstruction ::= BKPT Number
-BlInstruction ::= BL Id
-BxInstruction ::= BX Register
-BxjInstruction ::= BXJ Register
-
-CbnzInstruction ::= CBNZ Register COMMA Id
-CbzInstruction ::= CBZ Register COMMA Id
-ClrexInstruction ::= CLREX
-ClzInstruction ::= CLZ Register COMMA Register
-CmnInstruction ::= CMN Register COMMA (Number | Register (COMMA Shift)?)
-CmpInstruction ::= CMP Register COMMA (Number | Register (COMMA Shift)?)
-CsdbInstruction ::= CSDB
-
-DbgInstruction ::= DBG Number
-DmbInstruction ::= DMB Id
-DsbInstruction ::= DSB Id
-
-EorInstruction ::= EOR Registers (COMMA (Number | Shift))?
-EretInstruction ::= ERET
-
-HvcInstruction ::= HVC Number
-
-IsbInstruction ::= ISB Id
-
-LdmInstruction ::= LDM Register COMMA Registers
-LdmfdPseudoInstruction ::= LDMFD Register COMMA Registers
-LdmiaPseudoInstruction ::= LDMIA Register COMMA Registers
-LdmdaInstruction ::= LDMDA Register COMMA Registers
-LdmfaPseudoInstruction ::= LDMFA Register COMMA Registers
-LdmdbInstruction ::= LDMDB Register COMMA Registers
-LdmeaPseudoInstruction ::= LDMEA Register COMMA Registers
-LdmibInstruction ::= LDMIB Register COMMA Registers
-LdmedPseudoInstruction ::= LDMED Register COMMA Registers
-LdrInstruction ::= LDR Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
-LdrbInstruction ::= LDRB Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
-LdrbtInstruction ::= LDRBT Register COMMA PostindexOffset
-LdrdInstruction ::= LDRD Registers COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
-LdrexInstruction ::= LDREX Register COMMA LBRACKET Register (COMMA Number)? RBRACKET
-LdrexbInstruction ::= LDREXB Register COMMA LBRACKET Register RBRACKET
-LdrexdInstruction ::= LDREXD Registers COMMA LBRACKET Register RBRACKET
-LdrexhInstruction ::= LDREXH Register COMMA LBRACKET Register RBRACKET
-LdrhInstruction ::= LDRH Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
-LdrhtInstruction ::= LDRHT Register COMMA (RegisterWithOffset)
-LdrsbInstruction ::= LDRSB Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
-LdrsbtInstruction ::= LDRSBT Register COMMA RegisterWithOffset
-LdrshInstruction ::= LDRSH Register COMMA (PCWithImmediateOffset | RegisterWithOffset | Id)
-LdrshtInstruction ::= LDRSHT Register COMMA (RegisterWithOffset)
-LdrtInstruction ::= LDRT Register COMMA (RegisterWithOffset)
-
-private ARMv7Directives ::= AlignDirective | AsciiDirective | GlobalDirective
-
-AlignDirective ::= DOT ALIGN <<CommaSeparatedList Based>>
-AsciiDirective ::= DOT ASCII <<CommaSeparatedList STRING>>
-GlobalDirective ::= DOT GLOBAL Id {
-  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7GlobalDirectiveMixinImpl"
-  implements = "io.github.asmflow.assembly.armv7.psi.IARMv7GlobalDirectiveMixin"
-}
+private Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
 
 private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

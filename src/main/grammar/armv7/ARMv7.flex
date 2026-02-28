@@ -46,32 +46,6 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "#" { return POUND; }
   "]" { return RBRACKET; }
 
-  "align" { return ALIGN; }
-  "ascii" { return ASCII; }
-  "asciz" { return ASCIZ; }
-  "balign" { return BALIGN; }
-  "balignl" { return BALIGNL; }
-  "balignw" { return BALIGNW; }
-  "byte" { return BYTE; }
-  "comm" { return COMM; }
-  "data" { return DATA; }
-  "def" { return DEF; }
-  "desc" { return DESC; }
-  "dim" { return DIM; }
-  "double" { return DOUBLE; }
-  "eject" { return EJECT; }
-  "else" { return ELSE; }
-  "endef" { return ENDEF; }
-  "endif" { return ENDIF; }
-  "equ" { return EQU; }
-  "equiv" { return EQUIV; }
-  "err" { return ERR; }
-  "extern" { return EXTERN; }
-  "file" { return FILE; }
-  "fill" { return FILL; }
-  "float" { return FLOAT; }
-  "global" { return GLOBAL; }
-
   "r0" { return R0; }
   "r1" { return R1; }
   "r2" { return R2; }
@@ -90,64 +64,6 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "pc" { return PC; }
   "cpsr" { return CPSR; }
   "spsr" { return SPSR; }
-
-  "lsl" { return LSL; }
-  "lsr" { return LSR; }
-  "asr" { return ASR; }
-  "ror" { return ROR; }
-  "rrx" { return RRX; }
-
-  "adc"({S}?{CONDITION_CODES}?) { return ADC; }
-  "add"({S}?{CONDITION_CODES}?) { return ADD; }
-  "adr"({CONDITION_CODES}?) { return ADR; }
-  "and"({S}?{CONDITION_CODES}?) { return AND; }
-  "asr"({S}?{CONDITION_CODES}?) { return ASR; }
-  "b"({CONDITION_CODES}?) { return B; }
-  "bfc"({CONDITION_CODES}?) { return BFC; }
-  "bfi"({CONDITION_CODES}?) { return BFI; }
-  "bic"({S}?{CONDITION_CODES}?) { return BIC; }
-  "bkpt" { return BKPT; }
-  "bl"({CONDITION_CODES}?) { return BL; }
-  "bx"({CONDITION_CODES}?) { return BX; }
-  "bxj"({CONDITION_CODES}?) { return BXJ; }
-  "cbnz" { return CBNZ; }
-  "cbz" { return CBZ; }
-  "clrex" { return CLREX; }
-  "clz"({CONDITION_CODES}?) { return CLZ; }
-  "cmn"({CONDITION_CODES}?) { return CMN; }
-  "cmp"({CONDITION_CODES}?) { return CMP; }
-  "csdb"({CONDITION_CODES}?) { return CSDB; }
-  "dbg"({CONDITION_CODES}?) { return DBG; }
-  "dmb"({CONDITION_CODES}?) { return DMB; }
-  "dsb"({CONDITION_CODES}?) { return DSB; }
-  "eor"({S}?{CONDITION_CODES}?) { return EOR; }
-  "eret"({CONDITION_CODES}?) { return ERET; }
-  "hvc" { return HVC; }
-  "isb"({CONDITION_CODES}?) { return ISB; }
-  "ldm"({CONDITION_CODES}?) { return LDM; }
-  "ldmia"({CONDITION_CODES}?) { return LDMIA; }
-  "ldmfd"({CONDITION_CODES}?) { return LDMFD; }
-  "ldmda"({CONDITION_CODES}?) { return LDMDA; }
-  "ldmfa"({CONDITION_CODES}?) { return LDMFA; }
-  "ldmdb"({CONDITION_CODES}?) { return LDMDB; }
-  "ldmea"({CONDITION_CODES}?) { return LDMEA; }
-  "ldmib"({CONDITION_CODES}?) { return LDMIB; }
-  "ldmed"({CONDITION_CODES}?) { return LDMED; }
-  "ldr"({CONDITION_CODES}?) { return LDR; }
-  "ldrb"({CONDITION_CODES}?) { return LDRB; }
-  "ldrbt"({CONDITION_CODES}?) { return LDRBT; }
-  "ldrd"({CONDITION_CODES}?) { return LDRD; }
-  "ldrex"({CONDITION_CODES}?) { return LDREX; }
-  "ldrexb"({CONDITION_CODES}?) { return LDREXB; }
-  "ldrexd"({CONDITION_CODES}?) { return LDREXD; }
-  "ldrexh"({CONDITION_CODES}?) { return LDREXH; }
-  "ldrh"({CONDITION_CODES}?) { return LDRH; }
-  "ldrht"({CONDITION_CODES}?) { return LDRHT; }
-  "ldrsb"({CONDITION_CODES}?) { return LDRSB; }
-  "ldrsbt"({CONDITION_CODES}?) { return LDRSBT; }
-  "ldrsh"({CONDITION_CODES}?) { return LDRSH; }
-  "ldrsht"({CONDITION_CODES}?) { return LDRSHT; }
-  "ldrt"({CONDITION_CODES}?) { return LDRT; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

@@ -12,20 +12,26 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7LabelImpl extends ASTWrapperPsiElement implements ARMv7Label {
+public class ARMv7LabelWithColonImpl extends ASTWrapperPsiElement implements ARMv7LabelWithColon {
 
-  public ARMv7LabelImpl(@NotNull ASTNode node) {
+  public ARMv7LabelWithColonImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitLabel(this);
+    visitor.visitLabelWithColon(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ARMv7Visitor) accept((ARMv7Visitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public ARMv7Label getLabel() {
+    return findNotNullChildByClass(ARMv7Label.class);
   }
 
 }

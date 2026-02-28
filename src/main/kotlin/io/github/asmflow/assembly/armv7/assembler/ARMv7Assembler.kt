@@ -10,8 +10,8 @@ class ARMv7Assembler(var file: ARMv7File) {
         var instructionCounter = 0
         for (child in file.children) {
             if (child is ARMv7Label) {
-                val labelName = child.getLabelName()
-                symbols[labelName] = instructionCounter
+                // val labelName = child.getLabelName()
+                // symbols[labelName] = instructionCounter
             }
 
             if (child is IARMv7InstructionSuffix) {
