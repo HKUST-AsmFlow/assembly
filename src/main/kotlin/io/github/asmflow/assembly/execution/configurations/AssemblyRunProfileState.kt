@@ -24,15 +24,17 @@ class AssemblyRunProfileState(
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
         val path = config.getScriptPath()
         val scriptVirtualFile = VirtualFileManager.getInstance().findFileByNioPath(Paths.get(path!!))!!
-        val psiFile = PsiManager.getInstance(environment.project).findFile(scriptVirtualFile)
+        val psiFile = PsiManager.getInstance(environment.project).findFile(scriptVirtualFile) ?: throw RuntimeException(
+            "Cannot find PSI file"
+        )
 
         val console = consoleBuilder.console
         console.print("Assembling ${scriptVirtualFile.name}...", ConsoleViewContentType.NORMAL_OUTPUT)
 
         when (config.getEmulatorFlavour()) {
             AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
-                val assembler = ARMv7Assembler(psiFile as ARMv7File)
-                assembler.assemble()
+                val assembler = ARMv7Assembler()
+                assembler.assemble(listOf(psiFile))
             }
         }
 
