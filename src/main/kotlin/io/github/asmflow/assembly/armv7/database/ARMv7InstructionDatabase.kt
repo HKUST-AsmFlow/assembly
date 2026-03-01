@@ -24,6 +24,5 @@ object ARMv7InstructionDatabase :
         }
     }
 
-    operator fun get(instruction: ARMv7Instruction): Option<Instruction> =
-        data.entries.firstOrNull { instruction.mnemonic.textMatches(it.key) }?.value.toOption()
+    operator fun get(instruction: ARMv7Instruction): Option<Instruction> = data[instruction.baseMnemonic].toOption()
 }

@@ -2,7 +2,6 @@ package io.github.asmflow.assembly.armv7.assembler
 
 import io.github.asmflow.assembly.armv7.ARMv7File
 import io.github.asmflow.assembly.armv7.psi.ARMv7Label
-import io.github.asmflow.assembly.armv7.psi.IARMv7InstructionSuffix
 
 class ARMv7Assembler(var file: ARMv7File) {
     fun assemble() {
@@ -14,9 +13,9 @@ class ARMv7Assembler(var file: ARMv7File) {
                 // symbols[labelName] = instructionCounter
             }
 
-            if (child is IARMv7InstructionSuffix) {
-                instructionCounter += 4 // Each instruction is 4 bytes ignoring Thumb state
-            }
+//            if (child is IARMv7InstructionSuffix) {
+//                instructionCounter += 4 // Each instruction is 4 bytes ignoring Thumb state
+//            }
         }
     }
 }

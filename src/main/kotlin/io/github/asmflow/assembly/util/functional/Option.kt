@@ -8,13 +8,18 @@ sealed class Option<out T> {
         is None -> None
     }
 
+    fun unwrap(): T = when (this) {
+        is Some -> this.data
+        is None -> throw IllegalStateException("called .unwrap() on a None value")
+    }
+
     fun unwrapOr(default: @UnsafeVariance T): T = when (this) {
         is Some -> this.data
         is None -> default
     }
 }
 
-data class Some<T>(val data: T) : Option<T>()
+data class Some<T>(var data: T) : Option<T>()
 data object None : Option<Nothing>()
 
 fun <T> T?.toOption(): Option<T> = optionOf(this)
