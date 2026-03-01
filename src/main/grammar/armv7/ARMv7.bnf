@@ -83,13 +83,12 @@ Operands ::= <<CommaSeparatedList Operand>>
 Operand ::= RegisterOperand | Label | Number
 
 private RegisterOperand ::= RegisterWithShift
-  | Register
   | Postindexed
   | Offset
   | OffsetVariant
   | Preindexed
 
-RegisterWithShift ::= Register (COMMA ShiftType Number)?
+RegisterWithShift ::= Register (COMMA ShiftType (Number | Register))?
 Offset ::= LBRACKET Register (COMMA Number)? RBRACKET
 OffsetVariant ::= LBRACKET Register COMMA RegisterWithShift RBRACKET BANG?
 Preindexed ::= LBRACKET Register COMMA Number RBRACKET BANG

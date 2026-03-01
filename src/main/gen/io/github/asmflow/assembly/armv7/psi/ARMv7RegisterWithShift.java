@@ -12,7 +12,7 @@ public interface ARMv7RegisterWithShift extends PsiElement {
   ARMv7Number getNumber();
 
   @NotNull
-  ARMv7Register getRegister();
+  List<ARMv7Register> getRegisterList();
 
   @Nullable
   ARMv7ShiftType getShiftType();

@@ -36,8 +36,8 @@ public class ARMv7RegisterWithShiftImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
+  public List<ARMv7Register> getRegisterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
   }
 
   @Override

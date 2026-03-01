@@ -66,12 +66,6 @@ public class ARMv7OperandImpl extends ASTWrapperPsiElement implements ARMv7Opera
 
   @Override
   @Nullable
-  public ARMv7Register getRegister() {
-    return findChildByClass(ARMv7Register.class);
-  }
-
-  @Override
-  @Nullable
   public ARMv7RegisterWithShift getRegisterWithShift() {
     return findChildByClass(ARMv7RegisterWithShift.class);
   }

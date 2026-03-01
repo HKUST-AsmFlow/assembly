@@ -27,9 +27,6 @@ public interface ARMv7Operand extends PsiElement {
   ARMv7Preindexed getPreindexed();
 
   @Nullable
-  ARMv7Register getRegister();
-
-  @Nullable
   ARMv7RegisterWithShift getRegisterWithShift();
 
 }

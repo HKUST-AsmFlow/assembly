@@ -459,7 +459,6 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // RegisterWithShift
-  //   | Register
   //   | Postindexed
   //   | Offset
   //   | OffsetVariant
@@ -468,7 +467,6 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "RegisterOperand")) return false;
     boolean r;
     r = RegisterWithShift(b, l + 1);
-    if (!r) r = Register(b, l + 1);
     if (!r) r = Postindexed(b, l + 1);
     if (!r) r = Offset(b, l + 1);
     if (!r) r = OffsetVariant(b, l + 1);
@@ -477,7 +475,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Register (COMMA ShiftType Number)?
+  // Register (COMMA ShiftType (Number | Register))?
   public static boolean RegisterWithShift(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithShift")) return false;
     boolean r;
@@ -488,22 +486,31 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (COMMA ShiftType Number)?
+  // (COMMA ShiftType (Number | Register))?
   private static boolean RegisterWithShift_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithShift_1")) return false;
     RegisterWithShift_1_0(b, l + 1);
     return true;
   }
 
-  // COMMA ShiftType Number
+  // COMMA ShiftType (Number | Register)
   private static boolean RegisterWithShift_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithShift_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
     r = r && ShiftType(b, l + 1);
-    r = r && Number(b, l + 1);
+    r = r && RegisterWithShift_1_0_2(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Number | Register
+  private static boolean RegisterWithShift_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterWithShift_1_0_2")) return false;
+    boolean r;
+    r = Number(b, l + 1);
+    if (!r) r = Register(b, l + 1);
     return r;
   }
 
