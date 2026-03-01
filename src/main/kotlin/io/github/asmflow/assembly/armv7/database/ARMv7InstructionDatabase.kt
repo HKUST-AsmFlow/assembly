@@ -8,5 +8,15 @@ class ARMv7InstructionDatabase :
     BundledXmlDatabase<String, ARMv7InstructionDatabase.Instruction>("/armv7/InstructionDatabase.xml") {
     data class Instruction(val mnemonic: String)
 
-    override fun parseElement(root: Element): MultiMap<String, Instruction> = MultiMap.create()
+    override fun parseElement(root: Element): MultiMap<String, Instruction> {
+        require(root.name == "instructions")
+
+        val map = MultiMap.create<String, Instruction>()
+        root.getChildren("instruction").forEach {
+            val mnemonic = it.getAttribute("name").value
+            map.putValue(mnemonic, Instruction(mnemonic))
+        }
+
+        return map
+    }
 }
