@@ -75,7 +75,10 @@ DirectiveName ::= IDENTIFIER
 DirectiveParameters ::= <<CommaSeparatedList DirectiveParameter>>
 DirectiveParameter ::= Label | STRING
 
-Instruction ::= Mnemonic Operands?
+Instruction ::= Mnemonic Operands? {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7InstructionMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin"
+}
 Operands ::= <<CommaSeparatedList Operand>>
 Operand ::= RegisterOperand | Label | Number
 

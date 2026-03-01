@@ -8,15 +8,19 @@ import org.jdom.Document
 
 object ARMv7InstructionDatabase :
     BundledXmlDatabase<String, ARMv7InstructionDatabase.Instruction>("/armv7/InstructionDatabase.xml") {
-    data class Instruction(val mnemonic: String)
+    data class Instruction(val mnemonic: String, val supportsFlags: Boolean, val supportsConditionCodes: Boolean)
 
     override fun parseDocument(document: Document): Map<String, Instruction> {
         require(document.rootElement.name == "instructions")
 
         val root = document.rootElement
-        return root.getChildren("instruction").associate {
-            val mnemonic = it.getAttribute("name").value
-            mnemonic to Instruction(mnemonic)
+        return root.getChildren("instruction").associate { element ->
+            val mnemonic = element.getAttribute("name").value
+            val supportsFlags = element.getAttribute("flags").toOption().map { it.booleanValue }.unwrapOr(false)
+            val supportsConditionCodes =
+                element.getAttribute("conditioncodes").toOption().map { it.booleanValue }.unwrapOr(false)
+
+            mnemonic to Instruction(mnemonic, supportsFlags, supportsConditionCodes)
         }
     }
 

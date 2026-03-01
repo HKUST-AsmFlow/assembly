@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Instruction extends PsiElement {
+public interface ARMv7Instruction extends ARMv7InstructionMixin {
 
   @NotNull
   ARMv7Mnemonic getMnemonic();

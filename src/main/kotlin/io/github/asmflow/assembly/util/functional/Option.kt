@@ -2,6 +2,16 @@ package io.github.asmflow.assembly.util.functional
 
 sealed class Option<out T> {
     fun isSome(): Boolean = this is Some
+
+    fun <R> map(f: (T) -> R): Option<R> = when (this) {
+        is Some -> Some(f(this.data))
+        is None -> None
+    }
+
+    fun unwrapOr(default: @UnsafeVariance T): T = when (this) {
+        is Some -> this.data
+        is None -> default
+    }
 }
 
 data class Some<T>(val data: T) : Option<T>()

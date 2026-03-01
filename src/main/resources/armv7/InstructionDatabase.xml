@@ -1,4 +1,4 @@
 <instructions>
-    <instruction name="adc">
+    <instruction name="adc" flags="true" conditioncodes="true">
     </instruction>
 </instructions>
