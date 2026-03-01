@@ -7,6 +7,7 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.util.functional.None
 import io.github.asmflow.assembly.util.functional.Option
 import io.github.asmflow.assembly.util.functional.Some
+import io.github.asmflow.assembly.util.functional.flatten
 import io.github.asmflow.assembly.util.functional.resultOfException
 import kotlin.properties.Delegates
 
@@ -41,16 +42,7 @@ abstract class ARMv7InstructionMixinImpl(node: ASTNode) : ASTWrapperPsiElement(n
         else
             mnemonic.substring(0, mnemonic.length)
 
-        val conditionCodeEnum = when (conditionCode) {
-            is Some -> resultOfException {
-                ARMv7InstructionConditionCode.valueOf(
-                    conditionCode.unwrap().uppercase()
-                )
-            }.ok()
-
-            is None -> None
-        }
-
-        return Triple(base, setsFlags, conditionCodeEnum)
+        val conditionCodeEnum = conditionCode.map { resultOfException { ARMv7InstructionConditionCode.valueOf(it) } }
+        return Triple(base, setsFlags, conditionCodeEnum.flatten())
     }
 }

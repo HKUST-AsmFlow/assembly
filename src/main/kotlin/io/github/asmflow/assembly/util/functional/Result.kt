@@ -15,4 +15,3 @@ fun <T> resultOfException(f: () -> T): Result<T, Exception> = try {
 } catch (e: Exception) {
     Err(e)
 }
-
