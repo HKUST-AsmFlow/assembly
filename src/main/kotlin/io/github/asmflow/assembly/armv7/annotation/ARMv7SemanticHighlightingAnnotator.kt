@@ -17,13 +17,13 @@ class ARMv7SemanticHighlightingAnnotator : Annotator {
                 .textAttributes(ARMv7TextAttributes.ARMv7_DIRECTIVE)
                 .create()
 
-            is ARMv7Instruction -> if (ARMv7InstructionDatabase.any(element)) {
+            is ARMv7Instruction -> if (ARMv7InstructionDatabase[element].isSome()) {
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(element.mnemonic)
                     .textAttributes(ARMv7TextAttributes.ARMv7_INSTRUCTION)
                     .create()
             } else {
-                holder.newAnnotation(HighlightSeverity.ERROR, "Unknown instruction ${element.mnemonic}")
+                holder.newAnnotation(HighlightSeverity.ERROR, "Unknown instruction ${element.mnemonic.text}")
                     .range(element)
                     .highlightType(ProblemHighlightType.ERROR)
                     .create()
