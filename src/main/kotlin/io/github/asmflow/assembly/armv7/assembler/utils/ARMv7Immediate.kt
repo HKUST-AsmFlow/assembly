@@ -2,7 +2,7 @@ package io.github.asmflow.assembly.armv7.assembler.utils
 
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
-object Armv7Immediate {
+object ARMv7Immediate {
     fun encode12bitImmediate(input: String): Int {
         if (input.isEmpty() || input[0] != '#') throw AssemblySyntaxException("Immediate is not preceded by # in $input")
         val trimmed = input.substring(1)
