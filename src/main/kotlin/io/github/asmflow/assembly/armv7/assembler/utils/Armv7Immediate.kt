@@ -14,16 +14,19 @@ object Armv7Immediate {
                 radix = 16
                 numberString = trimmed.substring(2)
             }
+
             trimmed.startsWith("0b", ignoreCase = true) -> {
                 radix = 2
                 numberString = trimmed.substring(2)
             }
+
             else -> {
                 radix = 10
                 numberString = trimmed
             }
         }
-        val value = numberString.toUIntOrNull(radix) ?: throw AssemblySyntaxException("Invalid immediate format or characters in $input")
+        val value = numberString.toUIntOrNull(radix)
+            ?: throw AssemblySyntaxException("Invalid immediate format or characters in $input")
 
         // The formula is: value == imm8 ROR (rot * 2)
         // To solve for imm8, we reverse it: imm8 == value ROL (rot * 2)

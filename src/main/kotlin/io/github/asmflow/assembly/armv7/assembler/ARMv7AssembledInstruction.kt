@@ -2,7 +2,7 @@ package io.github.asmflow.assembly.armv7.assembler
 
 import io.github.asmflow.assembly.assembler.AssembledInstruction
 
-class Armv7AssembledInstruction(
+class ARMv7AssembledInstruction(
     override val address: UInt,
     override val text: String,
     override val lineNumber: UInt,

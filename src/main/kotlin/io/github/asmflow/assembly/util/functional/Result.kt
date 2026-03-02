@@ -1,9 +1,16 @@
 package io.github.asmflow.assembly.util.functional
 
 sealed class Result<out T, out E> {
-    fun ok(): Option<T> = when (this) {
-        is Ok -> Some(value)
-        is Err -> None
+    fun isErr(): Boolean = this is Err
+
+    fun <E2> mapErr(f: (E) -> E2): Result<T, E2> = when (this) {
+        is Ok -> this
+        is Err -> Err(f(error))
+    }
+
+    fun unwrapErr(): E = when (this) {
+        is Ok -> throw IllegalStateException("called .unwrapErr() on an Ok value")
+        is Err -> error
     }
 }
 

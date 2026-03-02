@@ -5,6 +5,6 @@ interface AssembledInstruction {
     val text: String
     val lineNumber: UInt
     val machineCode: ByteArray
-    val machineCodeHex: String get() = machineCode.joinToString("") {"%02X".format(it) }
+    val machineCodeHex: String get() = machineCode.joinToString("") { "%02X".format(it) }
 
 }

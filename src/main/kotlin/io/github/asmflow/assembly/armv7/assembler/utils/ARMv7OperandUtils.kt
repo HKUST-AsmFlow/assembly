@@ -15,5 +15,4 @@ object ARMv7OperandUtils {
         number ?: return false
         return true
     }
-
 }
