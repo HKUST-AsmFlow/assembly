@@ -30,12 +30,6 @@ public class ARMv7OffsetVariantImpl extends ASTWrapperPsiElement implements ARMv
 
   @Override
   @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
-  }
-
-  @Override
-  @NotNull
   public ARMv7RegisterWithShift getRegisterWithShift() {
     return findNotNullChildByClass(ARMv7RegisterWithShift.class);
   }

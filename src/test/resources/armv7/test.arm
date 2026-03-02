@@ -1,0 +1,8 @@
+.global main
+
+main:
+  adcsal r0, r1, r2, lsl #1
+  lsl r1, r2
+  dbg
+
+xiexieni:

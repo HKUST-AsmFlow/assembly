@@ -24,7 +24,6 @@ public interface ARMv7TokenTypes {
   IElementType OPERANDS = new ARMv7ElementType("OPERANDS");
   IElementType POSTINDEXED = new ARMv7ElementType("POSTINDEXED");
   IElementType PREINDEXED = new ARMv7ElementType("PREINDEXED");
-  IElementType REGISTER = new ARMv7ElementType("REGISTER");
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
 
@@ -33,35 +32,18 @@ public interface ARMv7TokenTypes {
   IElementType COLON = new ARMv7TokenType(":");
   IElementType COMMA = new ARMv7TokenType(",");
   IElementType COMMENT = new ARMv7TokenType("comment");
-  IElementType CPSR = new ARMv7TokenType("CPSR");
   IElementType DECIMAL_NUMBER = new ARMv7TokenType("decimal number");
   IElementType DOT = new ARMv7TokenType(".");
   IElementType HEXADECIMAL_NUMBER = new ARMv7TokenType("hexadecimal number");
   IElementType IDENTIFIER = new ARMv7TokenType("identifier");
   IElementType LBRACKET = new ARMv7TokenType("[");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
-  IElementType LR = new ARMv7TokenType("lr");
   IElementType MINUS = new ARMv7TokenType("-");
   IElementType OCTAL_NUMBER = new ARMv7TokenType("octal number");
-  IElementType PC = new ARMv7TokenType("PC");
   IElementType PLUS = new ARMv7TokenType("+");
   IElementType POUND = new ARMv7TokenType("#");
-  IElementType R0 = new ARMv7TokenType("r0");
-  IElementType R1 = new ARMv7TokenType("r1");
-  IElementType R10 = new ARMv7TokenType("r10");
-  IElementType R11 = new ARMv7TokenType("r11");
-  IElementType R12 = new ARMv7TokenType("r12");
-  IElementType R2 = new ARMv7TokenType("r2");
-  IElementType R3 = new ARMv7TokenType("r3");
-  IElementType R4 = new ARMv7TokenType("r4");
-  IElementType R5 = new ARMv7TokenType("r5");
-  IElementType R6 = new ARMv7TokenType("r6");
-  IElementType R7 = new ARMv7TokenType("r7");
-  IElementType R8 = new ARMv7TokenType("r8");
-  IElementType R9 = new ARMv7TokenType("r9");
   IElementType RBRACKET = new ARMv7TokenType("]");
-  IElementType SP = new ARMv7TokenType("sp");
-  IElementType SPSR = new ARMv7TokenType("SPSR");
+  IElementType REGISTER = new ARMv7TokenType("register");
   IElementType STRING = new ARMv7TokenType("string");
 
   class Factory {
@@ -111,9 +93,6 @@ public interface ARMv7TokenTypes {
       }
       else if (type == PREINDEXED) {
         return new ARMv7PreindexedImpl(node);
-      }
-      else if (type == REGISTER) {
-        return new ARMv7RegisterImpl(node);
       }
       else if (type == REGISTER_WITH_SHIFT) {
         return new ARMv7RegisterWithShiftImpl(node);

@@ -29,24 +29,7 @@
         OCTAL_NUMBER = "octal number"
 
         // registers
-        R0 = "r0"
-        R1 = "r1"
-        R2 = "r2"
-        R3 = "r3"
-        R4 = "r4"
-        R5 = "r5"
-        R6 = "r6"
-        R7 = "r7"
-        R8 = "r8"
-        R9 = "r9"
-        R10 = "r10"
-        R11 = "r11"
-        R12 = "r12"
-        SP = "sp"
-        LR = "lr"
-        PC = "PC"
-        CPSR = "CPSR"
-        SPSR = "SPSR"
+        REGISTER = "register"
 
         // symbols
         BANG = "!"
@@ -62,24 +45,23 @@
 }
 
 File ::= Item*
-private Item ::= LineFeed | (LabelWithColon | Directive | Instruction) LineFeed?
+private Item ::= (LabelWithColon | Instruction | Directive) LINE_FEED | LINE_FEED
 
-private LineFeed ::= LINE_FEED+ {
-    consumeTokenMethod = "consumeTokenFast"
+private Register ::= REGISTER
+
+Directive ::= DOT DirectiveName DirectiveParameters? {
+  pin = 2
 }
-
-Register ::= R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9 | R10 | R11 | R12 | SP | LR | PC | CPSR | SPSR
-
-Directive ::= DOT DirectiveName DirectiveParameters?
 DirectiveName ::= IDENTIFIER
-DirectiveParameters ::= <<CommaSeparatedList DirectiveParameter>>
+DirectiveParameters ::= DirectiveParameter (COMMA DirectiveParameter)*
 DirectiveParameter ::= Label | STRING
 
 Instruction ::= Mnemonic Operands? {
+  pin = 1
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7InstructionMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin"
 }
-Operands ::= <<CommaSeparatedList Operand>>
+Operands ::= Operand (COMMA Operand)*
 Operand ::= RegisterOperand | Label | Number
 
 private RegisterOperand ::= RegisterWithShift
@@ -103,5 +85,3 @@ Label ::= IDENTIFIER
 
 Number ::= POUND (PLUS | MINUS)? Based
 private Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
-
-private meta CommaSeparatedList ::= <<T>> (COMMA <<T>>)*

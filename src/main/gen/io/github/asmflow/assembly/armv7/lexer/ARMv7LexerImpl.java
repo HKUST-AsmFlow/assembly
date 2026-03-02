@@ -38,13 +38,13 @@ public class ARMv7LexerImpl implements FlexLexer {
 
   private static final String ZZ_CMAP_TOP_PACKED_0 =
     "\1\0\5\u0100\1\u0200\1\u0300\1\u0100\5\u0400\1\u0500\1\u0600"+
-    "\1\u0700\5\u0100\1\u0800\1\u0900\1\u0a00\1\u0b00\1\u0c00\1\u0d00"+
-    "\1\u0e00\3\u0100\1\u0f00\17\u0100\1\u1000\165\u0100\1\u0600\1\u0100"+
-    "\1\u1100\1\u1200\1\u1300\1\u1400\54\u0100\10\u1500\37\u0100\1\u0a00"+
-    "\4\u0100\1\u1600\10\u0100\1\u1700\2\u0100\1\u1800\1\u1900\1\u1400"+
-    "\1\u0100\1\u0500\1\u0100\1\u1a00\1\u1700\1\u0900\3\u0100\1\u1300"+
-    "\1\u1b00\114\u0100\1\u1c00\1\u1300\153\u0100\1\u1d00\11\u0100\1\u1e00"+
-    "\1\u1400\6\u0100\1\u1300\u0f16\u0100";
+    "\1\u0700\6\u0100\1\u0800\1\u0900\1\u0a00\1\u0b00\1\u0c00\1\u0d00"+
+    "\3\u0100\1\u0e00\205\u0100\1\u0600\1\u0100\1\u0f00\1\u1000\1\u1100"+
+    "\1\u1200\54\u0100\10\u1300\37\u0100\1\u0900\4\u0100\1\u1400\10\u0100"+
+    "\1\u1500\2\u0100\1\u1600\1\u1700\1\u1200\1\u0100\1\u0500\1\u0100"+
+    "\1\u1800\1\u1500\1\u0800\3\u0100\1\u1100\1\u1900\114\u0100\1\u1a00"+
+    "\1\u1100\153\u0100\1\u1b00\11\u0100\1\u1c00\1\u1200\6\u0100\1\u1100"+
+    "\u0f16\u0100";
 
   private static int [] zzUnpackcmap_top() {
     int [] result = new int[4352];
@@ -74,26 +74,24 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\11\0\1\1\1\2\2\3\1\4\22\0\1\1\1\5"+
     "\1\6\1\7\7\0\1\10\1\11\1\12\1\13\1\0"+
-    "\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23"+
-    "\1\24\1\25\1\26\5\0\1\27\6\30\24\31\1\32"+
-    "\1\33\1\34\1\0\1\31\1\0\1\30\1\35\1\36"+
-    "\3\30\5\31\1\37\2\31\1\40\1\41\1\31\1\42"+
-    "\1\43\4\31\1\44\2\31\1\0\1\45\10\0\1\3"+
-    "\32\0\1\1\u01bf\0\12\46\206\0\12\46\306\0\12\46"+
-    "\234\0\12\46\166\0\12\46\140\0\12\46\166\0\12\46"+
-    "\106\0\12\46\u0116\0\12\46\106\0\12\46\346\0\1\1"+
-    "\u015f\0\12\46\46\0\12\46\u012c\0\12\46\200\0\12\46"+
-    "\246\0\12\46\6\0\12\46\266\0\12\46\126\0\12\46"+
-    "\206\0\12\46\6\0\12\46\246\0\13\1\35\0\2\3"+
-    "\5\0\1\1\57\0\1\1\240\0\1\1\u01cf\0\12\46"+
-    "\46\0\12\46\306\0\12\46\26\0\12\46\126\0\12\46"+
-    "\u0196\0\12\46\6\0\u0100\47\240\0\12\46\206\0\12\46"+
-    "\u012c\0\12\46\200\0\12\46\74\0\12\46\220\0\12\46"+
-    "\166\0\12\46\146\0\12\46\206\0\12\46\106\0\12\46"+
-    "\266\0\12\46\u0164\0\62\46\100\0\12\46\266\0";
+    "\1\14\1\15\1\16\5\17\2\20\1\21\5\0\1\22"+
+    "\6\23\24\24\1\25\1\26\1\27\1\0\1\24\1\0"+
+    "\1\23\1\30\1\31\3\23\5\24\1\32\2\24\1\33"+
+    "\1\34\1\24\1\35\1\36\4\24\1\37\2\24\1\0"+
+    "\1\40\10\0\1\3\u01da\0\12\41\206\0\12\41\306\0"+
+    "\12\41\234\0\12\41\166\0\12\41\140\0\12\41\166\0"+
+    "\12\41\106\0\12\41\u0116\0\12\41\106\0\12\41\u0146\0"+
+    "\12\41\46\0\12\41\u012c\0\12\41\200\0\12\41\246\0"+
+    "\12\41\6\0\12\41\266\0\12\41\126\0\12\41\206\0"+
+    "\12\41\6\0\12\41\316\0\2\3\u01a6\0\12\41\46\0"+
+    "\12\41\306\0\12\41\26\0\12\41\126\0\12\41\u0196\0"+
+    "\12\41\6\0\u0100\42\240\0\12\41\206\0\12\41\u012c\0"+
+    "\12\41\200\0\12\41\74\0\12\41\220\0\12\41\166\0"+
+    "\12\41\146\0\12\41\206\0\12\41\106\0\12\41\266\0"+
+    "\12\41\u0164\0\62\41\100\0\12\41\266\0";
 
   private static int [] zzUnpackcmap_blocks() {
-    int [] result = new int[7936];
+    int [] result = new int[7424];
     int offset = 0;
     offset = zzUnpackcmap_blocks(ZZ_CMAP_BLOCKS_PACKED_0, offset, result);
     return result;
@@ -120,12 +118,10 @@ public class ARMv7LexerImpl implements FlexLexer {
     "\1\0\1\1\1\2\2\3\1\4\1\5\1\6\1\7"+
     "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
     "\1\20\10\16\1\5\1\0\1\21\1\16\1\22\1\23"+
-    "\1\24\1\25\1\26\1\27\1\30\1\31\1\32\1\33"+
-    "\1\34\1\35\1\36\1\37\2\40\1\16\1\41\1\42"+
-    "\1\43\1\16\1\44\1\45";
+    "\3\22\2\24";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[53];
+    int [] result = new int[37];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -150,16 +146,14 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\50\0\120\0\120\0\170\0\50\0\240\0\50"+
-    "\0\50\0\50\0\50\0\50\0\310\0\50\0\360\0\u0118"+
-    "\0\50\0\50\0\u0140\0\u0168\0\u0190\0\u01b8\0\u01e0\0\u0208"+
-    "\0\u0230\0\u0258\0\50\0\u0280\0\u02a8\0\u02d0\0\u0118\0\u02f8"+
-    "\0\u0118\0\50\0\u0320\0\50\0\50\0\50\0\50\0\50"+
-    "\0\50\0\50\0\50\0\u0348\0\u0370\0\u0258\0\u0398\0\50"+
-    "\0\50\0\50\0\u03c0\0\u0118\0\u0118";
+    "\0\0\0\43\0\106\0\43\0\151\0\43\0\214\0\43"+
+    "\0\43\0\43\0\43\0\43\0\257\0\43\0\322\0\365"+
+    "\0\43\0\43\0\u0118\0\u013b\0\u015e\0\u0181\0\u01a4\0\u01c7"+
+    "\0\u01ea\0\u020d\0\43\0\u0230\0\u0253\0\u0276\0\365\0\u0299"+
+    "\0\43\0\u02bc\0\u0276\0\u02df\0\u020d";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[53];
+    int [] result = new int[37];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -182,30 +176,26 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\1\3\1\4\1\3\1\5\1\6\1\7\1\10"+
-    "\1\11\1\12\1\13\1\14\12\15\1\16\1\17\2\20"+
-    "\1\21\1\2\1\22\1\23\1\24\1\25\1\26\1\27"+
-    "\1\30\1\31\1\32\1\2\1\15\1\2\51\0\4\3"+
-    "\44\0\1\3\1\4\2\3\43\0\2\7\1\0\1\7"+
-    "\1\0\1\7\1\33\24\7\1\34\14\7\14\0\12\15"+
-    "\20\0\1\15\1\0\2\17\3\0\42\17\31\0\2\20"+
-    "\3\0\10\20\17\0\2\35\12\0\2\20\3\0\10\20"+
-    "\1\35\32\0\2\20\3\0\4\20\1\36\3\20\33\0"+
-    "\2\20\3\0\5\20\1\37\2\20\17\0\10\40\4\0"+
-    "\2\20\3\0\10\20\33\0\2\20\3\0\1\20\1\41"+
-    "\6\20\17\0\1\42\1\43\1\44\1\45\1\46\1\47"+
-    "\1\50\1\51\1\52\1\53\2\0\2\20\3\0\10\20"+
-    "\33\0\2\20\3\0\4\20\1\54\3\20\17\0\12\55"+
-    "\2\0\1\56\1\20\3\0\2\56\6\20\3\0\2\7"+
-    "\1\0\1\7\1\0\43\7\14\0\2\35\27\0\1\35"+
-    "\32\0\2\20\3\0\6\20\1\57\1\20\17\0\10\40"+
-    "\40\0\1\60\1\61\1\62\61\0\2\20\3\0\6\20"+
-    "\1\63\1\20\17\0\12\55\2\0\1\55\4\0\2\55"+
-    "\41\0\2\20\3\0\5\20\1\64\2\20\33\0\2\20"+
-    "\3\0\5\20\1\65\2\20\3\0";
+    "\1\2\1\3\2\4\1\5\1\6\1\7\1\10\1\11"+
+    "\1\12\1\13\1\14\5\15\1\16\1\17\2\20\1\21"+
+    "\1\2\1\22\1\23\1\24\1\25\1\26\1\27\1\30"+
+    "\1\31\1\32\1\2\1\15\1\2\44\0\1\3\43\0"+
+    "\1\4\40\0\2\7\1\0\1\7\1\0\1\7\1\33"+
+    "\17\7\1\34\14\7\14\0\5\15\20\0\1\15\1\0"+
+    "\2\17\3\0\35\17\24\0\2\20\3\0\10\20\17\0"+
+    "\2\35\5\0\2\20\3\0\10\20\1\35\25\0\2\20"+
+    "\3\0\4\20\1\36\3\20\26\0\2\20\3\0\5\20"+
+    "\1\37\2\20\17\0\4\40\3\0\2\20\3\0\10\20"+
+    "\26\0\2\20\3\0\1\20\1\37\6\20\17\0\1\41"+
+    "\1\42\3\41\2\0\2\20\3\0\10\20\26\0\2\20"+
+    "\3\0\4\20\1\43\3\20\17\0\5\44\2\0\1\45"+
+    "\1\20\3\0\2\45\6\20\3\0\2\7\1\0\1\7"+
+    "\1\0\36\7\14\0\2\35\22\0\1\35\25\0\2\20"+
+    "\3\0\6\20\1\25\1\20\17\0\4\40\37\0\3\41"+
+    "\40\0\5\44\2\0\1\44\4\0\2\44\11\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[1000];
+    int [] result = new int[770];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -243,12 +233,12 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\3\1\1\11\1\1\5\11\1\1\1\11"+
-    "\2\1\2\11\10\1\1\11\1\0\5\1\1\11\1\1"+
-    "\10\11\4\1\3\11\3\1";
+    "\1\0\1\11\1\1\1\11\1\1\1\11\1\1\5\11"+
+    "\1\1\1\11\2\1\2\11\10\1\1\11\1\0\4\1"+
+    "\1\11\4\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[53];
+    int [] result = new int[37];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -561,187 +551,102 @@ public class ARMv7LexerImpl implements FlexLexer {
             { return BAD_CHARACTER;
             }
           // fall through
-          case 38: break;
+          case 21: break;
           case 2:
             { return WHITE_SPACE;
             }
           // fall through
-          case 39: break;
+          case 22: break;
           case 3:
             { return LINE_FEED;
             }
           // fall through
-          case 40: break;
+          case 23: break;
           case 4:
             { return BANG;
             }
           // fall through
-          case 41: break;
+          case 24: break;
           case 5:
             { return STRING;
             }
           // fall through
-          case 42: break;
+          case 25: break;
           case 6:
             { return POUND;
             }
           // fall through
-          case 43: break;
+          case 26: break;
           case 7:
             { return PLUS;
             }
           // fall through
-          case 44: break;
+          case 27: break;
           case 8:
             { return COMMA;
             }
           // fall through
-          case 45: break;
+          case 28: break;
           case 9:
             { return MINUS;
             }
           // fall through
-          case 46: break;
+          case 29: break;
           case 10:
             { return DOT;
             }
           // fall through
-          case 47: break;
+          case 30: break;
           case 11:
             { return DECIMAL_NUMBER;
             }
           // fall through
-          case 48: break;
+          case 31: break;
           case 12:
             { return COLON;
             }
           // fall through
-          case 49: break;
+          case 32: break;
           case 13:
             { return COMMENT;
             }
           // fall through
-          case 50: break;
+          case 33: break;
           case 14:
             { return IDENTIFIER;
             }
           // fall through
-          case 51: break;
+          case 34: break;
           case 15:
             { return LBRACKET;
             }
           // fall through
-          case 52: break;
+          case 35: break;
           case 16:
             { return RBRACKET;
             }
           // fall through
-          case 53: break;
+          case 36: break;
           case 17:
             { return BINARY_NUMBER;
             }
           // fall through
-          case 54: break;
+          case 37: break;
           case 18:
-            { return LR;
+            { return REGISTER;
             }
           // fall through
-          case 55: break;
+          case 38: break;
           case 19:
             { return OCTAL_NUMBER;
             }
           // fall through
-          case 56: break;
+          case 39: break;
           case 20:
-            { return PC;
-            }
-          // fall through
-          case 57: break;
-          case 21:
-            { return R0;
-            }
-          // fall through
-          case 58: break;
-          case 22:
-            { return R1;
-            }
-          // fall through
-          case 59: break;
-          case 23:
-            { return R2;
-            }
-          // fall through
-          case 60: break;
-          case 24:
-            { return R3;
-            }
-          // fall through
-          case 61: break;
-          case 25:
-            { return R4;
-            }
-          // fall through
-          case 62: break;
-          case 26:
-            { return R5;
-            }
-          // fall through
-          case 63: break;
-          case 27:
-            { return R6;
-            }
-          // fall through
-          case 64: break;
-          case 28:
-            { return R7;
-            }
-          // fall through
-          case 65: break;
-          case 29:
-            { return R8;
-            }
-          // fall through
-          case 66: break;
-          case 30:
-            { return R9;
-            }
-          // fall through
-          case 67: break;
-          case 31:
-            { return SP;
-            }
-          // fall through
-          case 68: break;
-          case 32:
             { return HEXADECIMAL_NUMBER;
             }
           // fall through
-          case 69: break;
-          case 33:
-            { return R10;
-            }
-          // fall through
-          case 70: break;
-          case 34:
-            { return R11;
-            }
-          // fall through
-          case 71: break;
-          case 35:
-            { return R12;
-            }
-          // fall through
-          case 72: break;
-          case 36:
-            { return CPSR;
-            }
-          // fall through
-          case 73: break;
-          case 37:
-            { return SPSR;
-            }
-          // fall through
-          case 74: break;
+          case 40: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

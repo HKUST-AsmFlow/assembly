@@ -11,7 +11,4 @@ public interface ARMv7Postindexed extends PsiElement {
   @NotNull
   ARMv7Number getNumber();
 
-  @NotNull
-  ARMv7Register getRegister();
-
 }

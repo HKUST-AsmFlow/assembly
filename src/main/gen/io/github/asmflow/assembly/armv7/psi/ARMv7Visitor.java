@@ -68,10 +68,6 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitRegister(@NotNull ARMv7Register o) {
-    visitPsiElement(o);
-  }
-
   public void visitRegisterWithShift(@NotNull ARMv7RegisterWithShift o) {
     visitPsiElement(o);
   }

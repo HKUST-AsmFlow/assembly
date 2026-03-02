@@ -34,10 +34,4 @@ public class ARMv7PostindexedImpl extends ASTWrapperPsiElement implements ARMv7P
     return findNotNullChildByClass(ARMv7Number.class);
   }
 
-  @Override
-  @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
-  }
-
 }

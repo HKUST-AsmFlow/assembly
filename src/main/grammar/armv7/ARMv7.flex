@@ -14,8 +14,8 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 %function advance
 %type IElementType
 
-CRLF = \r | \n | \r\n
-WHITE_SPACE = [\s]+
+CRLF = \R
+WHITE_SPACE = [ \t]+
 
 COMMENT = @.*
 DIRECTIVE = [.]{IDENTIFIER}
@@ -26,15 +26,14 @@ DECIMAL_NUMBER = [\d]+
 HEXADECIMAL_NUMBER = x[0-9a-fA-F]+
 OCTAL_NUMBER = o[0-7]+
 
-S = "s"
-CONDITION_CODES = "eq"|"ne"|"cs"|"hs"|"cc"|"lo"|"mi"|"pl"|"vs"|"vc"|"hi"|"ls"|"ge"|"lt"|"gt"|"le"|"al"
-
 STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
 
 %%
 
 <YYINITIAL> {
   {CRLF} { return LINE_FEED; }
+  {WHITE_SPACE}+ { return WHITE_SPACE; }
+  {COMMENT} { return COMMENT; }
 
   "!" { return BANG; }
   ":" { return COLON; }
@@ -46,24 +45,24 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "#" { return POUND; }
   "]" { return RBRACKET; }
 
-  "r0" { return R0; }
-  "r1" { return R1; }
-  "r2" { return R2; }
-  "r3" { return R3; }
-  "r4" { return R4; }
-  "r5" { return R5; }
-  "r6" { return R6; }
-  "r7" { return R7; }
-  "r8" { return R8; }
-  "r9" { return R9; }
-  "r10" { return R10; }
-  "r11" { return R11; }
-  "r12" { return R12; }
-  "sp" { return SP; }
-  "lr" { return LR; }
-  "pc" { return PC; }
-  "cpsr" { return CPSR; }
-  "spsr" { return SPSR; }
+  "r0" { return REGISTER; }
+  "r1" { return REGISTER; }
+  "r2" { return REGISTER; }
+  "r3" { return REGISTER; }
+  "r4" { return REGISTER; }
+  "r5" { return REGISTER; }
+  "r6" { return REGISTER; }
+  "r7" { return REGISTER; }
+  "r8" { return REGISTER; }
+  "r9" { return REGISTER; }
+  "r10" { return REGISTER; }
+  "r11" { return REGISTER; }
+  "r12" { return REGISTER; }
+  "sp" { return REGISTER; }
+  "lr" { return REGISTER; }
+  "pc" { return REGISTER; }
+  "cpsr" { return REGISTER; }
+  "spsr" { return REGISTER; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }
@@ -71,10 +70,7 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   {OCTAL_NUMBER} { return OCTAL_NUMBER; }
 
   {IDENTIFIER} { return IDENTIFIER; }
-
-  {COMMENT} { return COMMENT; }
   {STRING} { return STRING; }
-  {WHITE_SPACE}+ { return WHITE_SPACE; }
 }
 
 [^] { return BAD_CHARACTER; }

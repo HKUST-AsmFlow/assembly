@@ -33,7 +33,7 @@ abstract class ARMv7InstructionMixinImpl(node: ASTNode) : ASTWrapperPsiElement(n
             None
 
         val setsFlags = mnemonic.endsWith('s')
-        val base: String = if (setsFlags)
+        val base = if (setsFlags)
             mnemonic.substring(0, mnemonic.length - 1)
         else
             mnemonic.substring(0, mnemonic.length)

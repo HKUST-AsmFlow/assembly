@@ -9,9 +9,6 @@ import com.intellij.psi.PsiElement;
 public interface ARMv7OffsetVariant extends PsiElement {
 
   @NotNull
-  ARMv7Register getRegister();
-
-  @NotNull
   ARMv7RegisterWithShift getRegisterWithShift();
 
 }
