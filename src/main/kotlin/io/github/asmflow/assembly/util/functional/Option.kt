@@ -1,15 +1,20 @@
 package io.github.asmflow.assembly.util.functional
 
 sealed class Option<out T> {
+    fun alsoIfSome(f: (T) -> Unit) = when (this) {
+        is Some -> f(data)
+        is None -> Unit
+    }
+
     fun isSome(): Boolean = this is Some
 
     fun <R> map(f: (T) -> R): Option<R> = when (this) {
-        is Some -> Some(f(this.data))
+        is Some -> Some(f(data))
         is None -> None
     }
 
     fun unwrapOr(default: @UnsafeVariance T): T = when (this) {
-        is Some -> this.data
+        is Some -> data
         is None -> default
     }
 }
