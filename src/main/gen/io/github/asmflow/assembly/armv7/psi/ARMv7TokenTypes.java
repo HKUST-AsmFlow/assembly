@@ -25,6 +25,7 @@ public interface ARMv7TokenTypes {
   IElementType POSTINDEXED = new ARMv7ElementType("POSTINDEXED");
   IElementType PREINDEXED = new ARMv7ElementType("PREINDEXED");
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
+  IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
 
   IElementType BANG = new ARMv7TokenType("!");
@@ -96,6 +97,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == REGISTER_WITH_SHIFT) {
         return new ARMv7RegisterWithShiftImpl(node);
+      }
+      else if (type == SHIFT) {
+        return new ARMv7ShiftImpl(node);
       }
       else if (type == SHIFT_TYPE) {
         return new ARMv7ShiftTypeImpl(node);

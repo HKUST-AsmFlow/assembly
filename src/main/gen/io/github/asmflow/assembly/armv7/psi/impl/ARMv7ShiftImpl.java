@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7RegisterWithShiftImpl extends ASTWrapperPsiElement implements ARMv7RegisterWithShift {
+public class ARMv7ShiftImpl extends ASTWrapperPsiElement implements ARMv7Shift {
 
-  public ARMv7RegisterWithShiftImpl(@NotNull ASTNode node) {
+  public ARMv7ShiftImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitRegisterWithShift(this);
+    visitor.visitShift(this);
   }
 
   @Override
@@ -30,8 +30,14 @@ public class ARMv7RegisterWithShiftImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @Nullable
-  public ARMv7Shift getShift() {
-    return findChildByClass(ARMv7Shift.class);
+  public ARMv7Number getNumber() {
+    return findChildByClass(ARMv7Number.class);
+  }
+
+  @Override
+  @NotNull
+  public ARMv7ShiftType getShiftType() {
+    return findNotNullChildByClass(ARMv7ShiftType.class);
   }
 
 }

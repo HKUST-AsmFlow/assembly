@@ -53,7 +53,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitOperand(@NotNull ARMv7Operand o) {
-    visitPsiElement(o);
+    visitInstructionOperandMixin(o);
   }
 
   public void visitOperands(@NotNull ARMv7Operands o) {
@@ -72,11 +72,19 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitShift(@NotNull ARMv7Shift o) {
+    visitPsiElement(o);
+  }
+
   public void visitShiftType(@NotNull ARMv7ShiftType o) {
     visitPsiElement(o);
   }
 
   public void visitInstructionMixin(@NotNull ARMv7InstructionMixin o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInstructionOperandMixin(@NotNull ARMv7InstructionOperandMixin o) {
     visitPsiElement(o);
   }
 

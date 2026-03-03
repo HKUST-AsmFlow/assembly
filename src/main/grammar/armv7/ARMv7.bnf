@@ -62,7 +62,10 @@ Instruction ::= Mnemonic Operands? {
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin"
 }
 Operands ::= Operand (COMMA Operand)*
-Operand ::= RegisterOperand | Label | Number
+Operand ::= RegisterOperand | Label | Number {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7InstructionOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionOperandMixin"
+}
 
 private RegisterOperand ::= RegisterWithShift
   | Postindexed
@@ -70,7 +73,9 @@ private RegisterOperand ::= RegisterWithShift
   | OffsetVariant
   | Preindexed
 
-RegisterWithShift ::= Register (COMMA ShiftType (Number | Register))?
+RegisterWithShift ::= Register (COMMA Shift)?
+Shift ::= ShiftType (Number | Register)
+
 Offset ::= LBRACKET Register (COMMA Number)? RBRACKET
 OffsetVariant ::= LBRACKET Register COMMA RegisterWithShift RBRACKET BANG?
 Preindexed ::= LBRACKET Register COMMA Number RBRACKET BANG

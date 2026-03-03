@@ -6,9 +6,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7RegisterWithShift extends PsiElement {
+public interface ARMv7Shift extends PsiElement {
 
   @Nullable
-  ARMv7Shift getShift();
+  ARMv7Number getNumber();
+
+  @NotNull
+  ARMv7ShiftType getShiftType();
 
 }

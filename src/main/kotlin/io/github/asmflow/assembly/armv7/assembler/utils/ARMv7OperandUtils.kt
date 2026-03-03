@@ -6,7 +6,7 @@ object ARMv7OperandUtils {
     fun ARMv7Operand?.isShiftlessRegister(): Boolean {
         this ?: return false
         registerWithShift ?: return false
-        registerWithShift?.shiftType ?: return true
+        registerWithShift?.shift ?: return true
         return false
     }
 
