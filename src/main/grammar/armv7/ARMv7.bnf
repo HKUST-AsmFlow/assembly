@@ -88,5 +88,6 @@ ShiftType ::= IDENTIFIER
 LabelWithColon ::= Label COLON
 Label ::= IDENTIFIER
 
-Number ::= POUND (PLUS | MINUS)? Based
+Sign ::= (PLUS | MINUS)
+Number ::= POUND Sign? Based
 private Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)

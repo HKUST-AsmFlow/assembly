@@ -12,26 +12,20 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7NumberImpl extends ASTWrapperPsiElement implements ARMv7Number {
+public class ARMv7SignImpl extends ASTWrapperPsiElement implements ARMv7Sign {
 
-  public ARMv7NumberImpl(@NotNull ASTNode node) {
+  public ARMv7SignImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitNumber(this);
+    visitor.visitSign(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ARMv7Visitor) accept((ARMv7Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7Sign getSign() {
-    return findChildByClass(ARMv7Sign.class);
   }
 
 }

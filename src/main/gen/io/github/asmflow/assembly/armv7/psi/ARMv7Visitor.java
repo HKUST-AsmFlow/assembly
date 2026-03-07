@@ -80,6 +80,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitSign(@NotNull ARMv7Sign o) {
+    visitPsiElement(o);
+  }
+
   public void visitInstructionMixin(@NotNull ARMv7InstructionMixin o) {
     visitPsiElement(o);
   }

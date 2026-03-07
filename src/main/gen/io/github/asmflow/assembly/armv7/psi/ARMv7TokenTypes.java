@@ -27,6 +27,7 @@ public interface ARMv7TokenTypes {
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
+  IElementType SIGN = new ARMv7ElementType("SIGN");
 
   IElementType BANG = new ARMv7TokenType("!");
   IElementType BINARY_NUMBER = new ARMv7TokenType("binary number");
@@ -103,6 +104,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == SHIFT_TYPE) {
         return new ARMv7ShiftTypeImpl(node);
+      }
+      else if (type == SIGN) {
+        return new ARMv7SignImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

@@ -255,7 +255,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // POUND (PLUS | MINUS)? Based
+  // POUND Sign? Based
   public static boolean Number(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Number")) return false;
     if (!nextTokenIs(b, POUND)) return false;
@@ -268,20 +268,11 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (PLUS | MINUS)?
+  // Sign?
   private static boolean Number_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Number_1")) return false;
-    Number_1_0(b, l + 1);
+    Sign(b, l + 1);
     return true;
-  }
-
-  // PLUS | MINUS
-  private static boolean Number_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Number_1_0")) return false;
-    boolean r;
-    r = consumeToken(b, PLUS);
-    if (!r) r = consumeToken(b, MINUS);
-    return r;
   }
 
   /* ********************************************************** */
@@ -505,6 +496,19 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, SHIFT_TYPE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PLUS | MINUS
+  public static boolean Sign(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Sign")) return false;
+    if (!nextTokenIs(b, "<sign>", MINUS, PLUS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SIGN, "<sign>");
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
