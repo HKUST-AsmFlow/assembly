@@ -20,7 +20,8 @@ object ARMv7InstructionDatabase :
 
                 val mnemonic = element.getAttribute("name")
                 val supportsFlags = element.getAttribute("supportsFlags").toBooleanStrictOrNull() ?: false
-                val supportsConditionCodes = element.getAttribute("supportsConditionCodes").toBooleanStrictOrNull() ?: false
+                val supportsConditionCodes =
+                    element.getAttribute("supportsConditionCodes").toBooleanStrictOrNull() ?: false
 
                 put(mnemonic, Instruction(mnemonic, supportsFlags, supportsConditionCodes))
             }
