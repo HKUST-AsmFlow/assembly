@@ -5,3 +5,7 @@ labels:
   - "bug"
 type: bug
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for using AsmFlow and taking the time to fill out this bug report!
