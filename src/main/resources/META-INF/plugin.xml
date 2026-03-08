@@ -24,5 +24,6 @@
                                implementationClass="io.github.asmflow.assembly.armv7.ARMv7ParserDefinition"/>
         <lang.syntaxHighlighterFactory language="ARMv7_ASM"
                                        implementationClass="io.github.asmflow.assembly.armv7.editor.colors.ARMv7SyntaxHighlighterFactory"/>
+        <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler" fileType="ARMv7 Assembly"/>
     </extensions>
 </idea-plugin>
