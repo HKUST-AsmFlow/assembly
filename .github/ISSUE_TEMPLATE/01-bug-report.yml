@@ -9,3 +9,12 @@ body:
     attributes:
       value: |
         Thanks for using AsmFlow and taking the time to fill out this bug report!
+  - type: dropdown
+    attributes:
+      label: Version
+      description: What version of AsmFlow are you using?
+      options:
+        - 2026.1 (EAP)
+      default: 0
+    validations:
+      required: true
