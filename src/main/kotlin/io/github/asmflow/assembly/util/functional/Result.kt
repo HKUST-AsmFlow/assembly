@@ -12,6 +12,11 @@ sealed class Result<out T, out E> {
         is Ok -> throw IllegalStateException("called .unwrapErr() on an Ok value")
         is Err -> error
     }
+
+    fun unwrapResult(): T = when(this) {
+        is Err -> throw IllegalStateException("called .unwrapResult() on an Err value")
+        is Ok -> value
+    }
 }
 
 data class Ok<T>(val value: T) : Result<T, Nothing>()
