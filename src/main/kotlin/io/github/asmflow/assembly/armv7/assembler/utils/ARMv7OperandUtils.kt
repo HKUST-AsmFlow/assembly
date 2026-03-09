@@ -10,6 +10,11 @@ object ARMv7OperandUtils {
         return false
     }
 
+    fun ARMv7Operand?.isRegister(): Boolean {
+        this ?: return false
+        registerWithShift ?: return false
+        return true
+    }
     fun ARMv7Operand?.isNumber(): Boolean {
         this ?: return false
         number ?: return false

@@ -1,11 +1,13 @@
 package io.github.asmflow.assembly.armv7.assembler.utils
 
+import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
+import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
 object ARMv7Immediate {
-    fun encode12bitImmediate(input: String): Int {
-        if (input.isEmpty() || input[0] != '#') throw AssemblySyntaxException("Immediate is not preceded by # in $input")
-        val trimmed = input.substring(1)
+    fun preProcessImmediate(input: String): UInt {
+        if (input.isEmpty()) throw AssemblySyntaxException("Immediate is empty in $input")
+        val trimmed = if (input.startsWith("#")) input.substring(1) else input
         val radix: Int
         val numberString: String
 
@@ -27,6 +29,11 @@ object ARMv7Immediate {
         }
         val value = numberString.toUIntOrNull(radix)
             ?: throw AssemblySyntaxException("Invalid immediate format or characters in $input")
+        return value
+
+    }
+    fun encode12bitImmediate(input: String): Int {
+        val value = preProcessImmediate(input)
 
         // The formula is: value == imm8 ROR (rot * 2)
         // To solve for imm8, we reverse it: imm8 == value ROL (rot * 2)
@@ -60,5 +67,16 @@ object ARMv7Immediate {
             "Value $value (0x${value.toString(16).uppercase()}) cannot be encoded. " +
                     "Its active bits exceed the 8-bit window or cannot be aligned via an even-numbered rotation."
         )
+    }
+
+    fun encode5bitImmediate(input: String, type: ARMv7ShiftType): Int {
+        if (type == ARMv7ShiftType.RRX) return 0
+        // For bit shifts with immediates
+        val value = preProcessImmediate(input)
+        if (type == ARMv7ShiftType.LSL)
+        if (value == 32u) return 0
+        if (value !in 1u..32u) throw AssemblySyntaxException("Shift value $value out of range.")
+        return value.toInt()
+
     }
 }
