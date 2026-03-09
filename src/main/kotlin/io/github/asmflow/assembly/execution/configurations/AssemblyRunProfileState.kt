@@ -32,7 +32,7 @@ class AssemblyRunProfileState(
 
         when (config.getEmulatorFlavour()) {
             AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
-                val assembler = ARMv7Assembler()
+                val assembler = ARMv7Assembler(console)
                 assembler.assemble(listOf(psiFile))
             }
         }

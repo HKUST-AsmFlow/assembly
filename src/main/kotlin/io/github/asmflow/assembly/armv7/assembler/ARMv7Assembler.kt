@@ -1,12 +1,13 @@
 package io.github.asmflow.assembly.armv7.assembler
 
+import com.intellij.execution.ui.ConsoleView
 import com.intellij.psi.PsiFile
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.assembler.*
 import io.github.asmflow.assembly.util.functional.Err
 import io.github.asmflow.assembly.util.functional.resultOfException
 
-class ARMv7Assembler : Assembler {
+class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
     fun encodeInstruction(instruction: ARMv7Instruction): AssemblerResult<Int, AssemblerError> {
         // TODO: make sure the instruction actually takes operands before returning an error
         val operands =
@@ -35,6 +36,8 @@ class ARMv7Assembler : Assembler {
                 val result = encodeInstruction(child)
                 if (result.isErr())
                     errors.add(result.unwrapErr())
+                else
+                    debug("Original: ${child.text}, Encoded: ${result.unwrapResult().toUInt().toString(16)}")
             }
         }
 
