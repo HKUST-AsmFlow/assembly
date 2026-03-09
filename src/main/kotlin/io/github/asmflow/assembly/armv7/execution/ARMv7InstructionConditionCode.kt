@@ -21,8 +21,6 @@ enum class ARMv7InstructionConditionCode(val code: Int, val description: String,
     LE(0b1101, "Signed less than or equal", { it.Z || (it.N != it.V) }),
     AL(0b1110, "Always (Unconditional)", { true });
 
-    val shifted = code shl 28
-
     companion object {
         fun fromCode(code: Int): ARMv7InstructionConditionCode? {
             return entries.firstOrNull{it.code == code}

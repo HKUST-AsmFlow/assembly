@@ -1,17 +1,12 @@
 package io.github.asmflow.assembly.armv7.assembler
 
 import com.intellij.rml.dfa.utils.toInt
-import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7ConditionCodes
 import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7Immediate
-import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7OperandUtils.isNumber
-import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7OperandUtils.isRegister
-import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7OperandUtils.isShiftlessRegister
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.execution.ARMv7Register
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
-import io.github.asmflow.assembly.armv7.psi.ARMv7Number
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
@@ -40,7 +35,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>
     ): Int {
-        val cond = instruction.conditionCode
+        //val cond = instruction.conditionCode
 
         // For now, make the following assumptions:
         // 1. All data processing instructions have [27:26] = 00 (by definition)
@@ -55,7 +50,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         // c) Register shifted register: Bottom 12 bits specify a register, which is shifted by the amount specified in another register, according to a certain type.
 
         if (operands.size !in 1..3) throw AssemblySyntaxException("Too few or too little operands in instruction ${instruction.text}") // Register with shift is encoded as one operand
-        if (!operands[0].isShiftlessRegister()) throw AssemblySyntaxException("First operand ${operands[0].text} in instruction ${instruction.text} must be a register without shift")
+        // TODO: perform some common checks on operands,
+        // for this type of instructions
         // Check for register variant
         if (operands.size == 3){
             val (rd, rn, rm) = operands.map { it.operand }

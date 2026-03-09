@@ -1,7 +1,6 @@
 package io.github.asmflow.assembly.armv7.assembler.utils
 
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
-import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
 object ARMv7Immediate {
