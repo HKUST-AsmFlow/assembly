@@ -9,18 +9,18 @@ enum class ARMv7ShiftType(val code: Int, val description: String) {
     ROR(0b11, "Rotate right"),
     RRX(0b11, "Rotate right extended");
 
-    companion object  {
+    companion object {
         fun fromCodeAndImmediate(code: Int, immediate: Int): ARMv7ShiftType? {
             if (code == 0b11 && immediate == 0b00) return RRX
             if (code == 0b11) return ROR
-            return entries.firstOrNull{it.code == code}
+            return entries.firstOrNull { it.code == code }
         }
+
         fun fromString(value: String): ARMv7ShiftType {
             try {
                 val shift = ARMv7ShiftType.valueOf(value.uppercase())
                 return shift
-            }
-            catch (_: IllegalArgumentException){
+            } catch (_: IllegalArgumentException) {
                 throw AssemblySyntaxException("Invalid shift type: $value")
             }
         }

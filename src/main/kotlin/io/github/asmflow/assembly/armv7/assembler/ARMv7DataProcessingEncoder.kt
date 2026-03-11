@@ -13,20 +13,73 @@ import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.util.functional.Option
 
 object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
-    fun encodeRegisterVariant(condition: ARMv7InstructionConditionCode, opcode: Int, S: Boolean, Rn: ARMv7Register, Rd: ARMv7Register, Rm: ARMv7Register, shift: Option<ARMv7Shift>): Int{
-        val shiftType = if (shift.isSome()) ARMv7ShiftType.fromString(shift.unwrap().shiftType.text) else ARMv7ShiftType.LSL
-        val shiftImmediate = if (shift.isSome()) ARMv7Immediate.encode5bitImmediate(shift.unwrap().number?.text ?: throw AssemblySyntaxException("No number provided for $shiftType shift."), shiftType) else 0
-        val instruction = ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16)
-        or (Rd.getIDSafe() shl 12) or (shiftImmediate shl 7) or (shiftType.code shl 5) or (0b0 shl 4) or (Rm.getIDSafe()))
+    fun encodeRegisterVariant(
+        condition: ARMv7InstructionConditionCode,
+        opcode: Int,
+        S: Boolean,
+        Rn: ARMv7Register,
+        Rd: ARMv7Register,
+        Rm: ARMv7Register,
+        shift: Option<ARMv7Shift>
+    ): Int {
+        val shiftType =
+            if (shift.isSome()) ARMv7ShiftType.fromString(shift.unwrap().shiftType.text) else ARMv7ShiftType.LSL
+        val shiftImmediate = if (shift.isSome()) ARMv7Immediate.encode5bitImmediate(
+            shift.unwrap().number?.text ?: throw AssemblySyntaxException("No number provided for $shiftType shift."),
+            shiftType
+        ) else 0
+        val instruction =
+            ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16)
+                    or (Rd.getIDSafe() shl 12) or (shiftImmediate shl 7) or (shiftType.code shl 5) or (0b0 shl 4) or (Rm.getIDSafe()))
         return instruction
     }
 
-    fun processRegisterVariant(instruction: ARMv7InstructionMixin, Rn: ARMv7InstructionOperand.Register, Rd: ARMv7InstructionOperand.Register, Rm: ARMv7InstructionOperand.Register) =
-        when (instruction.baseMnemonic){
-            "adc" -> encodeRegisterVariant(instruction.conditionCode, 0b0101, instruction.setsFlags, Rn.register, Rd.register, Rm.register, Rm.shift)
-            "add" -> encodeRegisterVariant(instruction.conditionCode, 0b0100, instruction.setsFlags, Rn.register, Rd.register, Rm.register, Rm.shift)
-            "and" -> encodeRegisterVariant(instruction.conditionCode, 0b0000, instruction.setsFlags, Rn.register, Rd.register, Rm.register, Rm.shift)
-            "asr" -> encodeRegisterVariant(instruction.conditionCode, 0b0000, instruction.setsFlags, Rn.register, Rd.register, Rm.register, Rm.shift)
+    fun processRegisterVariant(
+        instruction: ARMv7InstructionMixin,
+        Rn: ARMv7InstructionOperand.Register,
+        Rd: ARMv7InstructionOperand.Register,
+        Rm: ARMv7InstructionOperand.Register
+    ) =
+        when (instruction.baseMnemonic) {
+            "adc" -> encodeRegisterVariant(
+                instruction.conditionCode,
+                0b0101,
+                instruction.setsFlags,
+                Rn.register,
+                Rd.register,
+                Rm.register,
+                Rm.shift
+            )
+
+            "add" -> encodeRegisterVariant(
+                instruction.conditionCode,
+                0b0100,
+                instruction.setsFlags,
+                Rn.register,
+                Rd.register,
+                Rm.register,
+                Rm.shift
+            )
+
+            "and" -> encodeRegisterVariant(
+                instruction.conditionCode,
+                0b0000,
+                instruction.setsFlags,
+                Rn.register,
+                Rd.register,
+                Rm.register,
+                Rm.shift
+            )
+
+            "asr" -> encodeRegisterVariant(
+                instruction.conditionCode,
+                0b0000,
+                instruction.setsFlags,
+                Rn.register,
+                Rd.register,
+                Rm.register,
+                Rm.shift
+            )
 
             else -> throw AssemblySyntaxException("Invalid mnemonic for register DP format: $instruction.baseMnemonic")
         }
@@ -53,10 +106,10 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         // TODO: perform some common checks on operands,
         // for this type of instructions
         // Check for register variant
-        if (operands.size == 3){
+        if (operands.size == 3) {
             val (rd, rn, rm) = operands.map { it.operand }
-            if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register){
-                if (!rd.shift.isSome() && !rn.shift.isSome())  return processRegisterVariant(instruction, rn, rd, rm)
+            if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register) {
+                if (!rd.shift.isSome() && !rn.shift.isSome()) return processRegisterVariant(instruction, rn, rd, rm)
             }
         }
         /*
@@ -79,7 +132,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         operands[1].registerWithShift.shift.shiftType
         return 0
         */
-         return 0
+        return 0
 
     }
 }

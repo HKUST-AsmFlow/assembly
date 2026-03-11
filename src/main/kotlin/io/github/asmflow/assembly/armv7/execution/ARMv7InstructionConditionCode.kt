@@ -2,7 +2,11 @@ package io.github.asmflow.assembly.armv7.execution
 
 import io.github.asmflow.assembly.armv7.emulator.ARMv7CPSR
 
-enum class ARMv7InstructionConditionCode(val code: Int, val description: String, val checkCondition: (ARMv7CPSR) ->  Boolean) {
+enum class ARMv7InstructionConditionCode(
+    val code: Int,
+    val description: String,
+    val checkCondition: (ARMv7CPSR) -> Boolean
+) {
     EQ(0b0000, "Equal", { it.Z }),
     NE(0b0001, "Not equal", { !it.Z }),
     CS(0b0010, "Carry set", { it.C }),

@@ -8,7 +8,7 @@ sealed class Result<out T, out E> {
         is Err -> Err(f(error))
     }
 
-    fun unwrap(): T = when(this) {
+    fun unwrap(): T = when (this) {
         is Ok -> value
         is Err -> throw IllegalStateException("called .unwrapResult() on an Err value")
     }

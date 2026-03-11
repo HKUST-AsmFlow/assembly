@@ -10,20 +10,22 @@
     <resource-bundle>messages.AssemblyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="ARMv7_ASM" implementationClass="io.github.asmflow.assembly.armv7.annotation.ARMv7SemanticHighlightingAnnotator"/>
-        <colorSettingsPage implementation="io.github.asmflow.assembly.armv7.options.ARMv7ColorSettingsPage"/>
+        <annotator language="ARMv7_ASM"
+            implementationClass="io.github.asmflow.assembly.armv7.annotation.ARMv7SemanticHighlightingAnnotator" />
+        <colorSettingsPage implementation="io.github.asmflow.assembly.armv7.options.ARMv7ColorSettingsPage" />
+        <completion.contributor language="ARMv7_ASM"
+            implementationClass="io.github.asmflow.assembly.armv7.editorActions.ARMv7CompletionContributor" />
         <configurationType
-                implementation="io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationType"/>
-        <errorHandler implementation="io.github.asmflow.assembly.openapi.diagnostic.AssemblyErrorReportSubmitter"/>
-        <fileType name="ARMv7 Assembly"
-                  language="ARMv7_ASM"
-                  implementationClass="io.github.asmflow.assembly.armv7.ARMv7FileType"
-                  extensions="arm"
-                  fieldName="INSTANCE"/>
+            implementation="io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationType" />
+        <errorHandler implementation="io.github.asmflow.assembly.openapi.diagnostic.AssemblyErrorReportSubmitter" />
+        <fileType name="ARMv7 Assembly" language="ARMv7_ASM"
+            implementationClass="io.github.asmflow.assembly.armv7.ARMv7FileType" extensions="arm"
+            fieldName="INSTANCE" />
         <lang.parserDefinition language="ARMv7_ASM"
-                               implementationClass="io.github.asmflow.assembly.armv7.ARMv7ParserDefinition"/>
+            implementationClass="io.github.asmflow.assembly.armv7.ARMv7ParserDefinition" />
         <lang.syntaxHighlighterFactory language="ARMv7_ASM"
-                                       implementationClass="io.github.asmflow.assembly.armv7.editor.colors.ARMv7SyntaxHighlighterFactory"/>
-        <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler" fileType="ARMv7 Assembly"/>
+            implementationClass="io.github.asmflow.assembly.armv7.editor.colors.ARMv7SyntaxHighlighterFactory" />
+        <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler"
+            fileType="ARMv7 Assembly" />
     </extensions>
 </idea-plugin>

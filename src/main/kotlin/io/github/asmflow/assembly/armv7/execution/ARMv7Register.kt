@@ -19,7 +19,7 @@ enum class ARMv7Register(val id: Int?) {
     PC(15),
     CPSR(null);
 
-    fun getIDSafe(): Int{
-        return requireNotNull(this.id){"Register cannot be CPSR."}
+    fun getIDSafe(): Int {
+        return requireNotNull(this.id) { "Register cannot be CPSR." }
     }
 }

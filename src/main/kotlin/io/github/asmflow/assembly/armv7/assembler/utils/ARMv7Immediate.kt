@@ -31,6 +31,7 @@ object ARMv7Immediate {
         return value
 
     }
+
     fun encode12bitImmediate(input: String): Int {
         val value = preProcessImmediate(input)
 
@@ -73,7 +74,7 @@ object ARMv7Immediate {
         // For bit shifts with immediates
         val value = preProcessImmediate(input)
         if (type == ARMv7ShiftType.LSL)
-        if (value == 32u) return 0
+            if (value == 32u) return 0
         if (value !in 1u..32u) throw AssemblySyntaxException("Shift value $value out of range.")
         return value.toInt()
 

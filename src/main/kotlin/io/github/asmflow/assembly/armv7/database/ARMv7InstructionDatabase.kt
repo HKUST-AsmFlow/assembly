@@ -28,5 +28,7 @@ object ARMv7InstructionDatabase :
         }
     }
 
+    fun allInstructions(): List<Instruction> = data.values.toList()
+
     operator fun get(instruction: ARMv7Instruction): Option<Instruction> = data[instruction.baseMnemonic].toOption()
 }
