@@ -19,8 +19,21 @@ class ARMv7ContextAwareCompletionProvider : CompletionProvider<CompletionParamet
         if (context.inInstruction) {
             resultSet.addAllElements(ARMv7InstructionDatabase.allInstructions()
                 .map {
-                    LookupElementBuilder.create(it.mnemonic)
+                    var builder = LookupElementBuilder.create(it.mnemonic)
                         .withIcon(AllIcons.Nodes.Mnemonic)
+
+                    val instructionSuffixes = buildString {
+                        if (it.supportsFlags)
+                            append("{s}")
+
+                        if (it.supportsConditionCodes)
+                            append("<c>")
+                    }
+
+                    if (instructionSuffixes.isNotEmpty())
+                        builder = builder.withTailText(instructionSuffixes, true)
+
+                    builder
                 })
         }
     }
