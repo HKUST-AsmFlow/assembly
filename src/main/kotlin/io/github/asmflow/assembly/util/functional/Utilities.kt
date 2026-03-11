@@ -1,9 +1,9 @@
 package io.github.asmflow.assembly.util.functional
 
-fun <T, E> Option<Result<T, E>>.flatten(): Option<T> = when (this) {
+fun <T> Option<Option<T>>.flatten(): Option<T> = when (this) {
     is Some -> when (data) {
-        is Ok -> Some(data.value)
-        is Err -> None
+        is Some -> Some(data.data)
+        is None -> None
     }
 
     is None -> None

@@ -21,9 +21,50 @@ enum class ARMv7InstructionConditionCode(val code: Int, val description: String,
     LE(0b1101, "Signed less than or equal", { it.Z || (it.N != it.V) }),
     AL(0b1110, "Always (Unconditional)", { true });
 
+    fun display() = when (this) {
+        EQ -> "eq"
+        NE -> "ne"
+        CS -> "cs"
+        HS -> "hs"
+        CC -> "cc"
+        LO -> "lo"
+        MI -> "mi"
+        PL -> "pl"
+        VS -> "vs"
+        VC -> "vc"
+        HI -> "hi"
+        LS -> "ls"
+        GE -> "ge"
+        LT -> "lt"
+        GT -> "gt"
+        LE -> "le"
+        AL -> "al"
+    }
+
     companion object {
         fun fromCode(code: Int): ARMv7InstructionConditionCode? {
-            return entries.firstOrNull{it.code == code}
+            return entries.firstOrNull { it.code == code }
+        }
+
+        fun fromString(code: String): ARMv7InstructionConditionCode? = when (code) {
+            "eq" -> EQ
+            "ne" -> NE
+            "cs" -> CS
+            "hs" -> HS
+            "cc" -> CC
+            "lo" -> LO
+            "mi" -> MI
+            "pl" -> PL
+            "vs" -> VS
+            "vc" -> VC
+            "hi" -> HI
+            "ls" -> LS
+            "ge" -> GE
+            "lt" -> LT
+            "gt" -> GT
+            "le" -> LE
+            "al" -> AL
+            else -> null
         }
     }
 }

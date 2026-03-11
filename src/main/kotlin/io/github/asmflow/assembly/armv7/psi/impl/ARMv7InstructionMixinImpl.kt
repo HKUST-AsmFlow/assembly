@@ -22,7 +22,7 @@ abstract class ARMv7InstructionMixinImpl(node: ASTNode) : ASTWrapperPsiElement(n
 
     private fun partitionMnemonic(): Triple<String, Boolean, Option<ARMv7InstructionConditionCode>> {
         var mnemonic = mnemonic.text
-        val conditionCodes = ARMv7InstructionConditionCode.entries.map { it.toString().lowercase() }
+        val conditionCodes = ARMv7InstructionConditionCode.entries.map { it.display() }
 
         val conditionCode = if (conditionCodes.any { mnemonic.endsWith(it) }) {
             val value = Some(mnemonic.substring(mnemonic.length - 2))
@@ -38,7 +38,7 @@ abstract class ARMv7InstructionMixinImpl(node: ASTNode) : ASTWrapperPsiElement(n
         else
             mnemonic.substring(0, mnemonic.length)
 
-        val conditionCodeEnum = conditionCode.map { resultOfException { ARMv7InstructionConditionCode.valueOf(it) } }
+        val conditionCodeEnum = conditionCode.map { ARMv7InstructionConditionCode.fromString(it).toOption() }
         return Triple(base, setsFlags, conditionCodeEnum.flatten())
     }
 }

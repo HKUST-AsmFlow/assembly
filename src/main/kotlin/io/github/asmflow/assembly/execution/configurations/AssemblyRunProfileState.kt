@@ -28,7 +28,7 @@ class AssemblyRunProfileState(
         )
 
         val console = consoleBuilder.console
-        console.print("Assembling ${scriptVirtualFile.name}...", ConsoleViewContentType.NORMAL_OUTPUT)
+        console.print("Assembling ${scriptVirtualFile.name}...\n", ConsoleViewContentType.NORMAL_OUTPUT)
 
         when (config.getEmulatorFlavour()) {
             AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {

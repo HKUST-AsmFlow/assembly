@@ -37,7 +37,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                 if (result.isErr())
                     errors.add(result.unwrapErr())
                 else
-                    debug("Original: ${child.text}, Encoded: ${result.unwrapResult().toUInt().toString(16)}")
+                    debug("Original: ${child.text}, Encoded: ${result.unwrap().toUInt().toString(16)}\n")
             }
         }
 
