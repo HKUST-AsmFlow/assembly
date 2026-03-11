@@ -21,6 +21,7 @@ class ARMv7ContextAwareCompletionProvider : CompletionProvider<CompletionParamet
                 .map {
                     var builder = LookupElementBuilder.create(it.mnemonic)
                         .withIcon(AllIcons.Nodes.Mnemonic)
+                        .withTypeText(it.details.shortDescription, true)
 
                     val instructionSuffixes = buildString {
                         if (it.supportsFlags)
@@ -33,7 +34,7 @@ class ARMv7ContextAwareCompletionProvider : CompletionProvider<CompletionParamet
                     if (instructionSuffixes.isNotEmpty())
                         builder = builder.withTailText(instructionSuffixes, true)
 
-                    builder
+                    builder.bold()
                 })
         }
     }

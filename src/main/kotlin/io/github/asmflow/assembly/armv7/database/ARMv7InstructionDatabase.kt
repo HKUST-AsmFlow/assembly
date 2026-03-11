@@ -9,7 +9,19 @@ import org.w3c.dom.Element
 
 object ARMv7InstructionDatabase :
     BundledXmlDatabase<String, ARMv7InstructionDatabase.Instruction>("/armv7/InstructionDatabase.xml") {
-    data class Instruction(val mnemonic: String, val supportsFlags: Boolean, val supportsConditionCodes: Boolean)
+    data class Instruction(
+        val mnemonic: String,
+        val supportsFlags: Boolean,
+        val supportsConditionCodes: Boolean,
+        val details: InstructionDetails
+    )
+
+    data class InstructionDetails(
+        val shortDescription: String,
+        val variantList: List<InstructionVariant>
+    )
+
+    data object InstructionVariant
 
     override fun parseDocument(document: Document): Map<String, Instruction> {
         val instructions = document.getElementsByTagName("instruction")
@@ -23,7 +35,19 @@ object ARMv7InstructionDatabase :
                 val supportsConditionCodes =
                     element.getAttribute("supportsConditionCodes").toBooleanStrictOrNull() ?: false
 
-                put(mnemonic, Instruction(mnemonic, supportsFlags, supportsConditionCodes))
+                val elements = element.getElementsByTagName("shortDescription")
+                val shortDescriptionElement = elements.item(0) as? Element
+                val shortDescription = shortDescriptionElement?.textContent ?: ""
+
+                put(
+                    mnemonic,
+                    Instruction(
+                        mnemonic,
+                        supportsFlags,
+                        supportsConditionCodes,
+                        InstructionDetails(shortDescription, emptyList())
+                    )
+                )
             }
         }
     }

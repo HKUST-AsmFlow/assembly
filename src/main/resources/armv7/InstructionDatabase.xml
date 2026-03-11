@@ -1,22 +1,58 @@
 <instructions>
-    <instruction name="adc" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="add" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="adr" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="and" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="asr" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="b" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="bfc" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="bfi" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="bic" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="bkpt" supportsFlags="false" supportsConditionCodes="false"/>
-    <instruction name="bl" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="blx" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="bx" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="bxj" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="cbnz" supportsFlags="false" supportsConditionCodes="false"/>
-    <instruction name="cbz" supportsFlags="false" supportsConditionCodes="false"/>
-    <instruction name="clrex" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="clz" supportsFlags="false" supportsConditionCodes="true"/>
+    <instruction name="adc" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Add with Carry</shortDescription>
+    </instruction>
+    <instruction name="add" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Add</shortDescription>
+    </instruction>
+    <instruction name="adr" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Compute PC-relative Address</shortDescription>
+    </instruction>
+    <instruction name="and" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Bitwise AND</shortDescription>
+    </instruction>
+    <instruction name="asr" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Arithmetic Shift Right</shortDescription>
+    </instruction>
+    <instruction name="b" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Branch</shortDescription>
+    </instruction>
+    <instruction name="bfc" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Bit Field Clear</shortDescription>
+    </instruction>
+    <instruction name="bfi" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Bit Field Insert</shortDescription>
+    </instruction>
+    <instruction name="bic" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Bitwise Bit Clear</shortDescription>
+    </instruction>
+    <instruction name="bkpt" supportsFlags="false" supportsConditionCodes="false">
+        <shortDescription>Breakpoint</shortDescription>
+    </instruction>
+    <instruction name="bl" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Branch with Link</shortDescription>
+    </instruction>
+    <instruction name="blx" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Branch with Link and Exchange</shortDescription>
+    </instruction>
+    <instruction name="bx" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Branch and Exchange</shortDescription>
+    </instruction>
+    <instruction name="bxj" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Branch and Exchange Jazelle</shortDescription>
+    </instruction>
+    <instruction name="cbnz" supportsFlags="false" supportsConditionCodes="false">
+        <shortDescription>Compare and Branch on Nonzero</shortDescription>
+    </instruction>
+    <instruction name="cbz" supportsFlags="false" supportsConditionCodes="false">
+        <shortDescription>Compare and Branch on Zero</shortDescription>
+    </instruction>
+    <instruction name="clrex" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Clear Exclusive</shortDescription>
+    </instruction>
+    <instruction name="clz" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Count Leading Zeros</shortDescription>
+    </instruction>
     <instruction name="cmn" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="cmp" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="csdb" supportsFlags="false" supportsConditionCodes="true"/>
