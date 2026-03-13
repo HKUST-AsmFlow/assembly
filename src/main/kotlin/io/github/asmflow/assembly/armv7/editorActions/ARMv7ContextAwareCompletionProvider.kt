@@ -17,25 +17,26 @@ class ARMv7ContextAwareCompletionProvider : CompletionProvider<CompletionParamet
         val context = ARMv7CompletionContextDetector.detectContext(parameters.position)
 
         if (context.inInstruction) {
-            resultSet.addAllElements(ARMv7InstructionDatabase.allInstructions()
-                .map {
-                    var builder = LookupElementBuilder.create(it.mnemonic)
-                        .withIcon(AllIcons.Nodes.Mnemonic)
-                        .withTypeText(it.details.shortDescription, true)
+            resultSet.addAllElements(
+                ARMv7InstructionDatabase.allInstructions()
+                    .map {
+                        var builder = LookupElementBuilder.create(it.mnemonic)
+                            .withIcon(AllIcons.Nodes.Mnemonic)
+                            .withTypeText(it.details.shortDescription, true)
 
-                    val instructionSuffixes = buildString {
-                        if (it.supportsFlags)
-                            append("{s}")
+                        val instructionSuffixes = buildString {
+                            if (it.supportsFlags)
+                                append("{s}")
 
-                        if (it.supportsConditionCodes)
-                            append("<c>")
-                    }
+                            if (it.supportsConditionCodes)
+                                append("<c>")
+                        }
 
-                    if (instructionSuffixes.isNotEmpty())
-                        builder = builder.withTailText(instructionSuffixes, true)
+                        if (instructionSuffixes.isNotEmpty())
+                            builder = builder.withTailText(instructionSuffixes, true)
 
-                    builder.bold()
-                })
+                        builder.bold()
+                    })
         }
     }
 }

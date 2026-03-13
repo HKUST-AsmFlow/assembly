@@ -5,9 +5,16 @@ import com.intellij.openapi.wm.ToolWindow
 import io.github.asmflow.assembly.openapi.wm.AssemblyToolWindowFactory
 import io.github.asmflow.assembly.openapi.wm.AssemblyToolWindowFactoryCompanion
 
-class ARMv7DocumentationToolWindowFactory : AssemblyToolWindowFactory {
+class ARMv7MnemonicDocumentationToolWindowFactory : AssemblyToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        toolWindow.stripeTitle = "ARMv7 Docs"
+        toolWindow.setStripeShortTitleProvider { "ARMv7 Mnemonics" }
+
+        val content = toolWindow.contentManager.factory.createContent(
+            ARMv7DocumentationToolWindow(),
+            null,
+            false
+        )
+        toolWindow.contentManager.addContent(content)
     }
 
     object Companion : AssemblyToolWindowFactoryCompanion {
