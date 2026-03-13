@@ -27,5 +27,9 @@
             implementationClass="io.github.asmflow.assembly.armv7.editor.colors.ARMv7SyntaxHighlighterFactory" />
         <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler"
             fileType="ARMv7 Assembly" />
+        <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7DocumentationToolWindowFactory"
+            icon="AllIcons.Toolwindows.Documentation"
+            anchor="right"
+            id="ARMv7 Documentation"/>
     </extensions>
 </idea-plugin>
