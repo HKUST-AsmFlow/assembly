@@ -1,6 +1,13 @@
 package io.github.asmflow.assembly.util.functional
 
 sealed class Option<out T> {
+    fun isSomeThen(f: (T) -> Unit) = when (this) {
+        is Some -> f(data)
+        is None -> {}
+    }
+
+    fun isNone(): Boolean = this is None
+
     fun isSome(): Boolean = this is Some
 
     fun <R> map(f: (T) -> R): Option<R> = when (this) {

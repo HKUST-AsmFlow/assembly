@@ -9,6 +9,13 @@
 
     <resource-bundle>messages.AssemblyBundle</resource-bundle>
 
+    <actions>
+        <action class="io.github.asmflow.assembly.armv7.actionSystem.editor.EditorShowMnemonicDocumentationAction"
+            text="Show Mnemonic Documentation" icon="AllIcons.Toolwindows.Documentation">
+            <add-to-group group-id="EditorPopupMenu" anchor="first" />
+        </action>
+    </actions>
+
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="ARMv7_ASM"
             implementationClass="io.github.asmflow.assembly.armv7.annotation.ARMv7SemanticHighlightingAnnotator" />
@@ -28,8 +35,6 @@
         <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler"
             fileType="ARMv7 Assembly" />
         <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7DocumentationToolWindowFactory"
-            icon="AllIcons.Toolwindows.Documentation"
-            anchor="right"
-            id="ARMv7 Documentation"/>
+            icon="AllIcons.Toolwindows.Documentation" anchor="right" id="ARMv7 Documentation" />
     </extensions>
 </idea-plugin>
