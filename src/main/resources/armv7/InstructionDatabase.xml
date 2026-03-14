@@ -53,46 +53,123 @@
     <instruction name="clz" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Count Leading Zeros</shortDescription>
     </instruction>
-    <instruction name="cmn" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="cmp" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="csdb" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="dbg" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="dmb" supportsFlags="false" supportsConditionCodes="false"/>
-    <instruction name="dsb" supportsFlags="false" supportsConditionCodes="false"/>
-    <instruction name="eor" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="isb" supportsFlags="false" supportsConditionCodes="false"/>
-    <instruction name="ldm" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldmda" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldmdb" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldmib" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldr" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrb" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrbt" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrd" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrex" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrexb" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrexd" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrexh" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrh" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrht" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrsb" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrsbt" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrsh" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrsht" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="ldrt" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="lsl" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="lsr" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="mla" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="mls" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="mov" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="movt" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="movw" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="mrs" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="msr" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="mul" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="mvn" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="neg" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="nop" supportsFlags="false" supportsConditionCodes="true"/>
+    <instruction name="cmn" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Compare Negative</shortDescription>
+    </instruction>
+    <instruction name="cmp" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Compare</shortDescription>
+    </instruction>
+    <instruction name="csdb" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Consume Speculative Data Barrier</shortDescription>
+    </instruction>
+    <instruction name="dbg" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Debug Hint</shortDescription>
+    </instruction>
+    <instruction name="dmb" supportsFlags="false" supportsConditionCodes="false">
+        <shortDescription>Data Memory Barrier</shortDescription>
+    </instruction>
+    <instruction name="dsb" supportsFlags="false" supportsConditionCodes="false">
+        <shortDescription>Data Synchronization Barrier</shortDescription>
+    </instruction>
+    <instruction name="eor" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Bitwise XOR</shortDescription>
+    </instruction>
+    <instruction name="isb" supportsFlags="false" supportsConditionCodes="false">
+        <shortDescription>Instruction Synchronization Barrier</shortDescription>
+    </instruction>
+    <instruction name="ldm" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Multiple</shortDescription>
+    </instruction>
+    <instruction name="ldmda" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Multiple Decrement After</shortDescription>
+    </instruction>
+    <instruction name="ldmdb" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Multiple Decrement Before</shortDescription>
+    </instruction>
+    <instruction name="ldmib" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Multiple Increment Before</shortDescription>
+    </instruction>
+    <instruction name="ldr" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register</shortDescription>
+    </instruction>
+    <instruction name="ldrb" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Byte</shortDescription>
+    </instruction>
+    <instruction name="ldrbt" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Byte Unprivileged</shortDescription>
+    </instruction>
+    <instruction name="ldrd" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Dual</shortDescription>
+    </instruction>
+    <instruction name="ldrex" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Exclusive</shortDescription>
+    </instruction>
+    <instruction name="ldrexb" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Exclusive Byte</shortDescription>
+    </instruction>
+    <instruction name="ldrexd" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Exclusive Dual</shortDescription>
+    </instruction>
+    <instruction name="ldrexh" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Exclusive Halfword</shortDescription>
+    </instruction>
+    <instruction name="ldrh" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Halfword</shortDescription>
+    </instruction>
+    <instruction name="ldrht" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Halfword Unprivileged</shortDescription>
+    </instruction>
+    <instruction name="ldrsb" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Signed Byte</shortDescription>
+    </instruction>
+    <instruction name="ldrsbt" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Signed Byte Unprivileged</shortDescription>
+    </instruction>
+    <instruction name="ldrsh" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Signed Halfword</shortDescription>
+    </instruction>
+    <instruction name="ldrsht" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Signed Halfword Unprivileged</shortDescription>
+    </instruction>
+    <instruction name="ldrt" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Load Register Unprivileged</shortDescription>
+    </instruction>
+    <instruction name="lsl" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Logical Shift Left</shortDescription>
+    </instruction>
+    <instruction name="lsr" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Logical Shift Right</shortDescription>
+    </instruction>
+    <instruction name="mla" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Multiply Accumulate</shortDescription>
+    </instruction>
+    <instruction name="mls" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Multiply and Subtract</shortDescription>
+    </instruction>
+    <instruction name="mov" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Move</shortDescription>
+    </instruction>
+    <instruction name="movt" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Move Top</shortDescription>
+    </instruction>
+    <instruction name="movw" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Move</shortDescription>
+    </instruction>
+    <instruction name="mrs" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Move from Special Register</shortDescription>
+    </instruction>
+    <instruction name="msr" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>Move to Special Register</shortDescription>
+    </instruction>
+    <instruction name="mul" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Multiply</shortDescription>
+    </instruction>
+    <instruction name="mvn" supportsFlags="true" supportsConditionCodes="true">
+        <shortDescription>Bitwise NOT</shortDescription>
+    </instruction>
+    <instruction name="nop" supportsFlags="false" supportsConditionCodes="true">
+        <shortDescription>No Operation</shortDescription>
+    </instruction>
     <instruction name="orn" supportsFlags="true" supportsConditionCodes="true"/>
     <instruction name="orr" supportsFlags="true" supportsConditionCodes="true"/>
     <instruction name="pkhbt" supportsFlags="false" supportsConditionCodes="true"/>
