@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.database
 
-import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.openapi.BundledXmlDatabase
 import io.github.asmflow.assembly.util.functional.Option
 import io.github.asmflow.assembly.util.functional.toOption
@@ -54,5 +53,5 @@ object ARMv7InstructionDatabase :
 
     fun allInstructions(): List<Instruction> = data.values.toList()
 
-    operator fun get(instruction: ARMv7Instruction): Option<Instruction> = data[instruction.baseMnemonic].toOption()
+    fun get(mnemonic: String): Option<Instruction> = data[mnemonic].toOption()
 }
