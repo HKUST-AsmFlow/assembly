@@ -18,6 +18,6 @@ class ARMv7MnemonicDocumentationToolWindowFactory : AssemblyToolWindowFactory {
     }
 
     object Companion : AssemblyToolWindowFactoryCompanion {
-        override val toolWindowId = "ARMv7 Documentation"
+        override val toolWindowId = "ARMv7 Mnemonics Documentation"
     }
 }

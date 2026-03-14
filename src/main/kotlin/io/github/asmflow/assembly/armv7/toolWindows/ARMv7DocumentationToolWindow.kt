@@ -1,5 +1,6 @@
 package io.github.asmflow.assembly.armv7.toolWindows
 
-import com.intellij.openapi.ui.SimpleToolWindowPanel
+import java.awt.BorderLayout
+import javax.swing.JPanel
 
-class ARMv7DocumentationToolWindow : SimpleToolWindowPanel(true, true)
+class ARMv7DocumentationToolWindow : JPanel(BorderLayout())
