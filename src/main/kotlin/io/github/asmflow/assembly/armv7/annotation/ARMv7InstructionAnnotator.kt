@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.annotation
 
-import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity

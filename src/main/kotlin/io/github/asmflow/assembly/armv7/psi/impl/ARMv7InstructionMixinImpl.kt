@@ -5,20 +5,11 @@ import com.intellij.lang.ASTNode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.util.functional.*
-import kotlin.properties.Delegates
 
 abstract class ARMv7InstructionMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Instruction {
-    override lateinit var baseMnemonic: String
-    override var setsFlags by Delegates.notNull<Boolean>()
-    override lateinit var conditionCode: ARMv7InstructionConditionCode
-
-    init {
-        val parts = partitionMnemonic()
-
-        baseMnemonic = parts.first
-        setsFlags = parts.second
-        conditionCode = parts.third.unwrapOr(ARMv7InstructionConditionCode.AL)
-    }
+    override val baseMnemonic = partitionMnemonic().first
+    override val setsFlags = partitionMnemonic().second
+    override val conditionCode = partitionMnemonic().third.unwrapOr(ARMv7InstructionConditionCode.AL)
 
     private fun partitionMnemonic(): Triple<String, Boolean, Option<ARMv7InstructionConditionCode>> {
         var mnemonic = mnemonic.text
