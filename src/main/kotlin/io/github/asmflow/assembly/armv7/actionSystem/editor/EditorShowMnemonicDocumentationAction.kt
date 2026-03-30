@@ -6,6 +6,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.util.PsiTreeUtil
+import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
+import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase.Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7Mnemonic
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory
 import io.github.asmflow.assembly.util.functional.toOption
@@ -43,7 +45,13 @@ class EditorShowMnemonicDocumentationAction : AnAction() {
             return
         }
 
-        val element = PsiTreeUtil.getParentOfType(elementAtCaret.unwrap(), ARMv7Mnemonic::class.java).toOption()
-        event.presentation.isEnabledAndVisible = element.isSome()
+        val mnemonicElement = PsiTreeUtil.getParentOfType(elementAtCaret.unwrap(), ARMv7Mnemonic::class.java).toOption()
+        event.presentation.isEnabledAndVisible = mnemonicElement.isSome()
+
+        mnemonicElement.isSomeThen {
+            val inst = ARMv7InstructionDatabase.get(it.text)
+            if (inst.isNone())
+                return@isSomeThen
+        }
     }
 }
