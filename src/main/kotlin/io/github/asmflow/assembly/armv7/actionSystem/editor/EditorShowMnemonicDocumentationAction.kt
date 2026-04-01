@@ -7,7 +7,6 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
-import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase.Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7Mnemonic
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory
 import io.github.asmflow.assembly.util.functional.toOption
