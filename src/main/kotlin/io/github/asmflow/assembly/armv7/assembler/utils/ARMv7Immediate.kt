@@ -31,9 +31,13 @@ object ARMv7Immediate {
         return value
 
     }
-
     fun encode12bitImmediate(input: String): Int {
         val value = preProcessImmediate(input)
+        return encode12bitImmediate(value)
+    }
+
+    fun encode12bitImmediate(input: UInt): Int {
+        val value = input
 
         // The formula is: value == imm8 ROR (rot * 2)
         // To solve for imm8, we reverse it: imm8 == value ROL (rot * 2)

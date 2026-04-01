@@ -34,6 +34,37 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         return instruction
     }
 
+    fun encodeImmediateVariant(
+        condition: ARMv7InstructionConditionCode,
+        opcode: Int,
+        S: Boolean,
+        Rn: ARMv7Register,
+        Rd: ARMv7Register,
+        imm12: Int
+    ): Int {
+        val instruction =
+            ((condition.code shl 28) or (0b001 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16)
+                    or (Rd.getIDSafe() shl 12) or imm12)
+        return instruction
+    }
+
+    fun encodeRSRVariant(
+        condition: ARMv7InstructionConditionCode,
+        opcode: Int,
+        S: Boolean,
+        Rn: ARMv7Register,
+        Rd: ARMv7Register,
+        Rs: ARMv7Register,
+        Rm: ARMv7Register,
+        shift: ARMv7Shift,
+     ): Int {
+        val shiftType = ARMv7ShiftType.fromString(shift.shiftType.text)
+        val instruction =
+            ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16) or
+                    (Rd.getIDSafe() shl 12) or (Rs.getIDSafe() shl 8) or (0b0 shl 7) or (shiftType.code shl 5) or (0b1 shl 4) or (Rm.getIDSafe()))
+        return instruction
+    }
+
     fun processRegisterVariant(
         instruction: ARMv7InstructionMixin,
         Rn: ARMv7InstructionOperand.Register,
@@ -73,7 +104,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
 
             "asr" -> encodeRegisterVariant(
                 instruction.conditionCode,
-                0b0000,
+                0b1101,
                 instruction.setsFlags,
                 Rn.register,
                 Rd.register,
@@ -84,6 +115,23 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             else -> throw AssemblySyntaxException("Invalid mnemonic for register DP format: $instruction.baseMnemonic")
         }
 
+    fun processImmediateVariant(
+        instruction: ARMv7InstructionMixin,
+        Rn: ARMv7InstructionOperand.Register,
+        Rd: ARMv7InstructionOperand.Register,
+        immediateNumber: Int
+    ) = when(instruction.baseMnemonic) {
+        // TODO support negative values
+        "and"  -> encodeImmediateVariant(
+            instruction.conditionCode,
+            0b0000,
+            instruction.setsFlags,
+            Rn.register,
+            Rd.register,
+            ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt()),
+            )
+        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate DP format: $instruction.baseMnemonic")
+    }
     override fun encode(
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>
@@ -111,6 +159,19 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register) {
                 if (!rd.shift.isSome() && !rn.shift.isSome()) return processRegisterVariant(instruction, rn, rd, rm)
             }
+        }
+
+        // Check for immediate variant
+        if (operands.size == 3){
+            val (rd, rn, imm) = operands.map { it.operand }
+            if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
+                imm.value
+                //if ()
+            }
+        }
+
+        if (operands.size == 3){
+
         }
         /*
         if (operands.size == 3 && operands[0].operand is ARMv7InstructionOperand.Register && operands[1].operand is ARMv7InstructionOperand.Register && operands[2].operand is ARMv7InstructionOperand.Register) {
