@@ -412,8 +412,14 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // REGISTER
-  static boolean Register(PsiBuilder b, int l) {
-    return consumeToken(b, REGISTER);
+  public static boolean Register(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Register")) return false;
+    if (!nextTokenIs(b, REGISTER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, REGISTER);
+    exit_section_(b, m, REGISTER, r);
+    return r;
   }
 
   /* ********************************************************** */

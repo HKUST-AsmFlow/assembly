@@ -11,4 +11,7 @@ public interface ARMv7Offset extends PsiElement {
   @Nullable
   ARMv7Number getNumber();
 
+  @NotNull
+  ARMv7Register getRegister();
+
 }

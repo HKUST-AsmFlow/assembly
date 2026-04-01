@@ -6,12 +6,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Preindexed extends PsiElement {
-
-  @NotNull
-  ARMv7Number getNumber();
-
-  @NotNull
-  ARMv7Register getRegister();
+public interface ARMv7Register extends PsiElement {
 
 }

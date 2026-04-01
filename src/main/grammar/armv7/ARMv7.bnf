@@ -47,7 +47,7 @@
 File ::= Item*
 private Item ::= (LabelWithColon | Instruction | Directive) LINE_FEED | LINE_FEED
 
-private Register ::= REGISTER
+Register ::= REGISTER
 
 Directive ::= DOT DirectiveName DirectiveParameters? {
   pin = 2

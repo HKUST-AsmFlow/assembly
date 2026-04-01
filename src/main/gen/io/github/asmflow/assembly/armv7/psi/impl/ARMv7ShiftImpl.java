@@ -35,6 +35,12 @@ public class ARMv7ShiftImpl extends ASTWrapperPsiElement implements ARMv7Shift {
   }
 
   @Override
+  @Nullable
+  public ARMv7Register getRegister() {
+    return findChildByClass(ARMv7Register.class);
+  }
+
+  @Override
   @NotNull
   public ARMv7ShiftType getShiftType() {
     return findNotNullChildByClass(ARMv7ShiftType.class);

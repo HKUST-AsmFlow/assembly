@@ -34,4 +34,10 @@ public class ARMv7OffsetImpl extends ASTWrapperPsiElement implements ARMv7Offset
     return findChildByClass(ARMv7Number.class);
   }
 
+  @Override
+  @NotNull
+  public ARMv7Register getRegister() {
+    return findNotNullChildByClass(ARMv7Register.class);
+  }
+
 }

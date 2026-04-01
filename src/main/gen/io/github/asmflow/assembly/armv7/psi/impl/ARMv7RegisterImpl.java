@@ -12,32 +12,20 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7PostindexedImpl extends ASTWrapperPsiElement implements ARMv7Postindexed {
+public class ARMv7RegisterImpl extends ASTWrapperPsiElement implements ARMv7Register {
 
-  public ARMv7PostindexedImpl(@NotNull ASTNode node) {
+  public ARMv7RegisterImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitPostindexed(this);
+    visitor.visitRegister(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ARMv7Visitor) accept((ARMv7Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public ARMv7Number getNumber() {
-    return findNotNullChildByClass(ARMv7Number.class);
-  }
-
-  @Override
-  @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
   }
 
 }

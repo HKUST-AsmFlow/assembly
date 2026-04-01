@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 
 public interface ARMv7RegisterWithShift extends PsiElement {
 
+  @NotNull
+  ARMv7Register getRegister();
+
   @Nullable
   ARMv7Shift getShift();
 

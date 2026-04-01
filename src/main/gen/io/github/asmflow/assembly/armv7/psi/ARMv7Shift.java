@@ -11,6 +11,9 @@ public interface ARMv7Shift extends PsiElement {
   @Nullable
   ARMv7Number getNumber();
 
+  @Nullable
+  ARMv7Register getRegister();
+
   @NotNull
   ARMv7ShiftType getShiftType();
 
