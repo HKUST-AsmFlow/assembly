@@ -633,7 +633,7 @@ public class ARMv7LexerImpl implements FlexLexer {
           // fall through
           case 37: break;
           case 18:
-            { return REG;
+            { return REGISTER;
             }
           // fall through
           case 38: break;

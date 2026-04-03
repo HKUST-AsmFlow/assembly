@@ -45,24 +45,24 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   "#" { return POUND; }
   "]" { return RBRACKET; }
 
-  "r0" { return REGISTER; }
-  "r1" { return REGISTER; }
-  "r2" { return REGISTER; }
-  "r3" { return REGISTER; }
-  "r4" { return REGISTER; }
-  "r5" { return REGISTER; }
-  "r6" { return REGISTER; }
-  "r7" { return REGISTER; }
-  "r8" { return REGISTER; }
-  "r9" { return REGISTER; }
-  "r10" { return REGISTER; }
-  "r11" { return REGISTER; }
-  "r12" { return REGISTER; }
-  "sp" { return REGISTER; }
-  "lr" { return REGISTER; }
-  "pc" { return REGISTER; }
-  "cpsr" { return REGISTER; }
-  "spsr" { return REGISTER; }
+  "r0" { return REG; }
+  "r1" { return REG; }
+  "r2" { return REG; }
+  "r3" { return REG; }
+  "r4" { return REG; }
+  "r5" { return REG; }
+  "r6" { return REG; }
+  "r7" { return REG; }
+  "r8" { return REG; }
+  "r9" { return REG; }
+  "r10" { return REG; }
+  "r11" { return REG; }
+  "r12" { return REG; }
+  "sp" { return REG; }
+  "lr" { return REG; }
+  "pc" { return REG; }
+  "cpsr" { return REG; }
+  "spsr" { return REG; }
 
   {BINARY_NUMBER} { return BINARY_NUMBER; }
   {DECIMAL_NUMBER} { return DECIMAL_NUMBER; }

@@ -36,5 +36,7 @@
             fileType="ARMv7 Assembly" />
         <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory"
             icon="AllIcons.Toolwindows.Documentation" anchor="right" id="ARMv7 Mnemonics Documentation" />
+        <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory"
+            icon="AllIcons.Toolwindows.ToolWindowComponents" anchor="right" id="ARMv7 Register View"/>
     </extensions>
 </idea-plugin>

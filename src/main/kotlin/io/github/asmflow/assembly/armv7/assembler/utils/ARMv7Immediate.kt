@@ -31,6 +31,7 @@ object ARMv7Immediate {
         return value
 
     }
+
     fun encode12bitImmediate(input: String): Int {
         val value = preProcessImmediate(input)
         return encode12bitImmediate(value)

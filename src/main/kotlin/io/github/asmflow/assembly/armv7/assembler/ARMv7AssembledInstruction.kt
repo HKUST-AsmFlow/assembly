@@ -15,5 +15,4 @@ class ARMv7AssembledInstruction(
         (rawBytes ushr 16 and 0xFF).toByte(),
         (rawBytes ushr 24 and 0xFF).toByte(),
     )
-
 }

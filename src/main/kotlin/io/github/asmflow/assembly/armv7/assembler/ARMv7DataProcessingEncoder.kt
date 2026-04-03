@@ -57,7 +57,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rs: ARMv7Register,
         Rm: ARMv7Register,
         shift: ARMv7Shift,
-     ): Int {
+    ): Int {
         val shiftType = ARMv7ShiftType.fromString(shift.shiftType.text)
         val instruction =
             ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16) or
@@ -120,18 +120,20 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rn: ARMv7InstructionOperand.Register,
         Rd: ARMv7InstructionOperand.Register,
         immediateNumber: Int
-    ) = when(instruction.baseMnemonic) {
+    ) = when (instruction.baseMnemonic) {
         // TODO support negative values
-        "and"  -> encodeImmediateVariant(
+        "and" -> encodeImmediateVariant(
             instruction.conditionCode,
             0b0000,
             instruction.setsFlags,
             Rn.register,
             Rd.register,
             ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt()),
-            )
+        )
+
         else -> throw AssemblySyntaxException("Invalid mnemonic for immediate DP format: $instruction.baseMnemonic")
     }
+
     override fun encode(
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>
@@ -162,7 +164,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         }
 
         // Check for immediate variant
-        if (operands.size == 3){
+        if (operands.size == 3) {
             val (rd, rn, imm) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
                 imm.value
@@ -170,7 +172,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             }
         }
 
-        if (operands.size == 3){
+        if (operands.size == 3) {
 
         }
         /*

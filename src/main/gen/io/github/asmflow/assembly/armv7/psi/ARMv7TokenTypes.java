@@ -46,7 +46,7 @@ public interface ARMv7TokenTypes {
   IElementType PLUS = new ARMv7TokenType("+");
   IElementType POUND = new ARMv7TokenType("#");
   IElementType RBRACKET = new ARMv7TokenType("]");
-  IElementType REGISTER = new ARMv7TokenType("register");
+  IElementType REG = new ARMv7TokenType("register");
   IElementType STRING = new ARMv7TokenType("string");
 
   class Factory {

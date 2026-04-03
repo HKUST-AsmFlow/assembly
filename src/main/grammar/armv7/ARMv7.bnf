@@ -29,7 +29,7 @@
         OCTAL_NUMBER = "octal number"
 
         // registers
-        REGISTER = "register"
+        REG = "register"
 
         // symbols
         BANG = "!"
@@ -47,7 +47,7 @@
 File ::= Item*
 private Item ::= (LabelWithColon | Instruction | Directive) LINE_FEED | LINE_FEED
 
-Register ::= REGISTER
+Register ::= REG
 
 Directive ::= DOT DirectiveName DirectiveParameters? {
   pin = 2

@@ -411,13 +411,13 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // REGISTER
+  // REG
   public static boolean Register(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Register")) return false;
-    if (!nextTokenIs(b, REGISTER)) return false;
+    if (!nextTokenIs(b, REG)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, REGISTER);
+    r = consumeToken(b, REG);
     exit_section_(b, m, REGISTER, r);
     return r;
   }
@@ -430,7 +430,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //   | Preindexed
   static boolean RegisterOperand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterOperand")) return false;
-    if (!nextTokenIs(b, "", LBRACKET, REGISTER)) return false;
+    if (!nextTokenIs(b, "", LBRACKET, REG)) return false;
     boolean r;
     r = RegisterWithShift(b, l + 1);
     if (!r) r = Postindexed(b, l + 1);
@@ -444,7 +444,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   // Register (COMMA Shift)?
   public static boolean RegisterWithShift(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithShift")) return false;
-    if (!nextTokenIs(b, REGISTER)) return false;
+    if (!nextTokenIs(b, REG)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Register(b, l + 1);
