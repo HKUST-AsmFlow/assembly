@@ -2,6 +2,8 @@ package io.github.asmflow.assembly.armv7.assembler
 
 import com.intellij.execution.ui.ConsoleView
 import com.intellij.psi.PsiFile
+import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
+import io.github.asmflow.assembly.armv7.database.InstructionFormat
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.assembler.*
 import io.github.asmflow.assembly.util.functional.Err
@@ -18,11 +20,17 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                 )
             )
 
+        if (ARMv7InstructionDatabase.get(instruction.mnemonic.text).isNone())
+            return Err(AssemblerError("Instruction ${instruction.text} is not supported by AsmFlow.", instruction))
+
         return try {
-            resultOfException { ARMv7DataProcessingEncoder.encode(instruction, operands.operandList.requireNoNulls()) }
+            resultOfException { when(ARMv7InstructionDatabase.get(instruction.mnemonic.text).unwrap().format){
+                InstructionFormat.DATA_PROCESSING -> ARMv7DataProcessingEncoder.encode(instruction, operands.operandList.requireNoNulls())
+                else -> throw AssemblySyntaxException("Mnemonic for ${instruction.text} is invalid in the database.")
+            } }
                 .mapErr { AssemblerError(it.message.orEmpty(), instruction) }
         } catch (_: IllegalArgumentException) {
-            throw AssemblySyntaxException("This should not happen")
+            throw Exception("This should not happen")
         }
     }
 

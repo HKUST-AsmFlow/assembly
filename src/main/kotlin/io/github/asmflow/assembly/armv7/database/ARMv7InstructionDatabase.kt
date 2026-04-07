@@ -1,10 +1,23 @@
 package io.github.asmflow.assembly.armv7.database
 
+import io.github.asmflow.assembly.armv7.database.InstructionFormat.Companion.toInstructionFormat
 import io.github.asmflow.assembly.openapi.BundledXmlDatabase
 import io.github.asmflow.assembly.util.functional.Option
 import io.github.asmflow.assembly.util.functional.toOption
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+
+enum class InstructionFormat(val instructionClass: Int?, val humanReadble: String) {
+    DATA_PROCESSING(0b00, "DataProcessing"),
+    MULTIPLY(0b00, "Multiply"),
+    MEMORY_ACCESS(0b01, "MemoryAccess"),
+    BRANCH(0b10, "Branch"),
+    PSUEDO(null, "Psuedo");
+
+    companion object {
+        fun String.toInstructionFormat() = entries.find {it.humanReadble == this}
+    }
+}
 
 object ARMv7InstructionDatabase :
     BundledXmlDatabase<String, ARMv7InstructionDatabase.Instruction>("/armv7/InstructionDatabase.xml") {
@@ -12,7 +25,10 @@ object ARMv7InstructionDatabase :
         val mnemonic: String,
         val supportsFlags: Boolean,
         val supportsConditionCodes: Boolean,
-        val details: InstructionDetails
+        val details: InstructionDetails,
+        val format: InstructionFormat,
+        val opcode: UInt?
+
     )
 
     data class InstructionDetails(
@@ -33,6 +49,8 @@ object ARMv7InstructionDatabase :
                 val supportsFlags = element.getAttribute("supportsFlags").toBooleanStrictOrNull() ?: false
                 val supportsConditionCodes =
                     element.getAttribute("supportsConditionCodes").toBooleanStrictOrNull() ?: false
+                val instructionFormat = element.getAttribute("instructionFormat").toInstructionFormat() ?: InstructionFormat.PSUEDO
+                val opcode = element.getAttribute("opcode").toUInt()
 
                 val elements = element.getElementsByTagName("shortDescription")
                 val shortDescriptionElement = elements.item(0) as? Element
@@ -44,7 +62,9 @@ object ARMv7InstructionDatabase :
                         mnemonic,
                         supportsFlags,
                         supportsConditionCodes,
-                        InstructionDetails(shortDescription, emptyList())
+                        InstructionDetails(shortDescription, emptyList()),
+                        instructionFormat,
+                        opcode
                     )
                 )
             }
@@ -54,4 +74,8 @@ object ARMv7InstructionDatabase :
     fun allInstructions(): List<Instruction> = data.values.toList()
 
     fun get(mnemonic: String): Option<Instruction> = data[mnemonic].toOption()
+
+    fun getOpcode(mnemonic: String): Int {
+        return data[mnemonic]?.opcode?.toInt() ?: throw Exception("Database incomplete for mnemonic $mnemonic")
+    }
 }

@@ -2,6 +2,8 @@ package io.github.asmflow.assembly.armv7.assembler
 
 import com.intellij.rml.dfa.utils.toInt
 import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7Immediate
+import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
+import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase.getOpcode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.execution.ARMv7Register
@@ -56,9 +58,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rd: ARMv7Register,
         Rs: ARMv7Register,
         Rm: ARMv7Register,
-        shift: ARMv7Shift,
+        shiftType: ARMv7ShiftType,
     ): Int {
-        val shiftType = ARMv7ShiftType.fromString(shift.shiftType.text)
         val instruction =
             ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16) or
                     (Rd.getIDSafe() shl 12) or (Rs.getIDSafe() shl 8) or (0b0 shl 7) or (shiftType.code shl 5) or (0b1 shl 4) or (Rm.getIDSafe()))
@@ -72,46 +73,15 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7InstructionOperand.Register
     ) =
         when (instruction.baseMnemonic) {
-            "adc" -> encodeRegisterVariant(
+            "adc", "add", "and" -> encodeRegisterVariant(
                 instruction.conditionCode,
-                0b0101,
+                getOpcode(instruction.baseMnemonic),
                 instruction.setsFlags,
                 Rn.register,
                 Rd.register,
                 Rm.register,
                 Rm.shift
             )
-
-            "add" -> encodeRegisterVariant(
-                instruction.conditionCode,
-                0b0100,
-                instruction.setsFlags,
-                Rn.register,
-                Rd.register,
-                Rm.register,
-                Rm.shift
-            )
-
-            "and" -> encodeRegisterVariant(
-                instruction.conditionCode,
-                0b0000,
-                instruction.setsFlags,
-                Rn.register,
-                Rd.register,
-                Rm.register,
-                Rm.shift
-            )
-
-            "asr" -> encodeRegisterVariant(
-                instruction.conditionCode,
-                0b1101,
-                instruction.setsFlags,
-                Rn.register,
-                Rd.register,
-                Rm.register,
-                Rm.shift
-            )
-
             else -> throw AssemblySyntaxException("Invalid mnemonic for register DP format: $instruction.baseMnemonic")
         }
 
@@ -121,17 +91,40 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rd: ARMv7InstructionOperand.Register,
         immediateNumber: Int
     ) = when (instruction.baseMnemonic) {
-        // TODO support negative values
-        "and" -> encodeImmediateVariant(
+        // No need to support certain weird psuedos with negative immediates since
+        // these are not required to be supported by ARM standards
+        "adc", "add", "and" -> encodeImmediateVariant(
             instruction.conditionCode,
-            0b0000,
+            getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
             Rn.register,
             Rd.register,
-            ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt()),
+            ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
         )
 
         else -> throw AssemblySyntaxException("Invalid mnemonic for immediate DP format: $instruction.baseMnemonic")
+    }
+
+    fun processRSRVariant(
+        instruction: ARMv7InstructionMixin,
+        Rn: ARMv7InstructionOperand.Register,
+        Rd: ARMv7InstructionOperand.Register,
+        Rm: ARMv7Register,
+        Rs: ARMv7Register,
+        shiftType: ARMv7ShiftType
+    ) = when(instruction.baseMnemonic){
+        "adc", "add", "and" -> encodeRSRVariant(
+            instruction.conditionCode,
+            getOpcode(instruction.baseMnemonic),
+            instruction.setsFlags,
+            Rn.register,
+            Rd.register,
+            Rs,
+            Rm,
+            shiftType
+        )
+        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate RSR format: $instruction.baseMnemonic")
+
     }
 
     override fun encode(
@@ -167,35 +160,22 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         if (operands.size == 3) {
             val (rd, rn, imm) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
-                imm.value
-                //if ()
+                if (!rd.shift.isSome() && !rn.shift.isSome()) return processImmediateVariant(instruction, rn, rd, imm.value)
             }
         }
 
         if (operands.size == 3) {
-
-        }
-        /*
-        if (operands.size == 3 && operands[0].operand is ARMv7InstructionOperand.Register && operands[1].operand is ARMv7InstructionOperand.Register && operands[2].operand is ARMv7InstructionOperand.Register) {
-            // First two register need to be without shift, second one may have a shift
-            when (instruction.baseMnemonic){
-                //"and" -> encodeRegisterVariant(instruction.conditionCode, 0b0000, instruction.setsFlags, operands[1].registerWithShift, operands[0], operands[2], operands[2].registerWithShift)
+            val (rd, rn, rsr) = operands.map {it.operand}
+            if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rsr is ARMv7InstructionOperand.Register
+                && rsr.shift.isSome() && rsr.shift.unwrap().register != null) {
+                // TODO fix compilation error here
+                return processRSRVariant(instruction, rn, rd, rsr.register, rsr.shift.unwrap().register, rsr.shift.unwrap().shiftType)
             }
+
         }
 
-        operands[0].isShiftlessRegister()
-        // Check for case a: Instruction typically written as MNEMONIC{S}{<c>} {<Rd>,} <Rn>, #<const>
-        if (operands.size == 3 && operands[1].isShiftlessRegister() && operands[2].isNumber()) {
-            //throw Exception("Case 1")
-        }
-        if (operands.size == 2 && operands[1].isNumber()) {
-            //throw Exception("Case 2")
-        }
-        //throw Exception("Case 3")
-        operands[1].registerWithShift.shift.shiftType
-        return 0
-        */
-        return 0
+        throw AssemblySyntaxException("Invalid or unsupported format for this mnemonic.")
+
 
     }
 }

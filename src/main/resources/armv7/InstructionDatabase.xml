@@ -1,17 +1,17 @@
 <instructions>
-    <instruction name="adc" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="adc" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0101">
         <shortDescription>Add with Carry</shortDescription>
     </instruction>
-    <instruction name="add" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="add" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0100">
         <shortDescription>Add</shortDescription>
     </instruction>
-    <instruction name="adr" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="adr" supportsFlags="false" supportsConditionCodes="true" format="Psuedo" opcode="none" >
         <shortDescription>Compute PC-relative Address</shortDescription>
     </instruction>
-    <instruction name="and" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="and" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0000">
         <shortDescription>Bitwise AND</shortDescription>
     </instruction>
-    <instruction name="asr" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="asr" supportsFlags="true" supportsConditionCodes="true" format="Psuedo" opcode="none">
         <shortDescription>Arithmetic Shift Right</shortDescription>
     </instruction>
     <instruction name="b" supportsFlags="false" supportsConditionCodes="true">
