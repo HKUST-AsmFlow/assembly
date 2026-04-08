@@ -131,7 +131,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
     override fun encode(
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>
-    ): Int {
+    ): List<Int> {
         //val cond = instruction.conditionCode
 
         // For now, make the following assumptions:
@@ -153,7 +153,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         if (operands.size == 3) {
             val (rd, rn, rm) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register) {
-                if (!rd.shift.isSome() && !rn.shift.isSome()) return processRegisterVariant(instruction, rn, rd, rm)
+                if (!rd.shift.isSome() && !rn.shift.isSome()) return listOf(processRegisterVariant(instruction, rn, rd, rm))
             }
         }
 
@@ -161,7 +161,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         if (operands.size == 3) {
             val (rd, rn, imm) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
-                if (!rd.shift.isSome() && !rn.shift.isSome()) return processImmediateVariant(instruction, rn, rd, imm.value)
+                if (!rd.shift.isSome() && !rn.shift.isSome()) return listOf(processImmediateVariant(instruction, rn, rd, imm.value))
             }
         }
 
@@ -169,7 +169,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             val (rd, rn, rsr) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rsr is ARMv7InstructionOperand.Register
                 && rsr.shift.isSome() && rsr.shift.unwrap().shiftBy is ARMv7InstructionOperand.Register) {
-                return processRSRVariant(instruction, rn, rd, rsr.register, (rsr.shift.unwrap().shiftBy as ARMv7InstructionOperand.Register).register, rsr.shift.unwrap().shiftType)
+                return listOf(processRSRVariant(instruction, rn, rd, rsr.register, (rsr.shift.unwrap().shiftBy as ARMv7InstructionOperand.Register).register, rsr.shift.unwrap().shiftType))
             }
         }
 

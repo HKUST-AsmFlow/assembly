@@ -4,5 +4,5 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 
 interface ARMv7InstructionEncoder {
-    fun encode(instruction: ARMv7InstructionMixin, operands: List<ARMv7Operand>): Int
+    fun encode(instruction: ARMv7InstructionMixin, operands: List<ARMv7Operand>): List<Int>
 }
