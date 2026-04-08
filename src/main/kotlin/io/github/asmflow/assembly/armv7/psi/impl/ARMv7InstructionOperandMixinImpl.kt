@@ -4,6 +4,7 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.execution.ARMv7Register
+import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes
 import io.github.asmflow.assembly.util.functional.toOption
@@ -56,10 +57,15 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                     registerWithShift!!.node.findChildByType(ARMv7TokenTypes.REGISTER).toOption().unwrap().psi
                 val register =
                     ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }.toOption().unwrap()
+                val pair = registerWithShift!!.shift.toOption().map { psi ->
+                    val shiftType = ARMv7ShiftType.entries.find { psi.shiftType.textMatches(it.name.lowercase()) }.toOption().unwrap()
+                    // todo: register from psi to armv7register enum
+                    Pair(shiftType, TODO())
+                }
 
                 ARMv7InstructionOperand.Register(
                     register = register,
-                    shift = registerWithShift!!.shift.toOption()
+                    shift = pair.map { ARMv7InstructionOperand.Register.Shift(it.first, it.second) }
                 )
             }
 
