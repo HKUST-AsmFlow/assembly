@@ -23,11 +23,13 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         shift: Option<ARMv7InstructionOperand.Register.Shift>
     ): Int {
         val shiftType = shift.map { it.shiftType }.unwrapOr(ARMv7ShiftType.LSL)
-        val shiftImmediate = if (shift.isSome()) ARMv7Immediate.encode5bitImmediate(
-            // todo: fix this
-            shift.unwrap().number?.text ?: throw AssemblySyntaxException("No number provided for $shiftType shift."),
-            shiftType
-        ) else 0
+        val shiftImmediate = if (shift.isSome()) {
+            val number = shift.unwrap().shiftBy as? ARMv7InstructionOperand.Number ?: throw AssemblySyntaxException("No number provided for $shiftType shift.")
+            ARMv7Immediate.encode5bitImmediate(
+                number.value.toString(),
+                shiftType
+            )
+        } else 0
 
         val instruction =
             ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16)
