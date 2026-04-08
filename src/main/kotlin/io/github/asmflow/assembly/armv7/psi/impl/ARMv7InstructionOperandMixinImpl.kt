@@ -59,7 +59,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
 
                 ARMv7InstructionOperand.Register(
                     register = register,
-                    shift = registerWithShift!!.shift.toOption()  // ← assuming element is registerWithShift?
+                    shift = registerWithShift!!.shift.toOption()
                 )
             }
 

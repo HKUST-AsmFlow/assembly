@@ -2,7 +2,6 @@ package io.github.asmflow.assembly.armv7.assembler
 
 import com.intellij.rml.dfa.utils.toInt
 import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7Immediate
-import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase.getOpcode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
@@ -10,7 +9,6 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7Register
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
-import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.util.functional.Option
 
@@ -22,14 +20,15 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rn: ARMv7Register,
         Rd: ARMv7Register,
         Rm: ARMv7Register,
-        shift: Option<ARMv7Shift>
+        shift: Option<ARMv7InstructionOperand.Register.Shift>
     ): Int {
-        val shiftType =
-            if (shift.isSome()) ARMv7ShiftType.fromString(shift.unwrap().shiftType.text) else ARMv7ShiftType.LSL
+        val shiftType = shift.map { it.shiftType }.unwrapOr(ARMv7ShiftType.LSL)
         val shiftImmediate = if (shift.isSome()) ARMv7Immediate.encode5bitImmediate(
+            // todo: fix this
             shift.unwrap().number?.text ?: throw AssemblySyntaxException("No number provided for $shiftType shift."),
             shiftType
         ) else 0
+
         val instruction =
             ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16)
                     or (Rd.getIDSafe() shl 12) or (shiftImmediate shl 7) or (shiftType.code shl 5) or (0b0 shl 4) or (Rm.getIDSafe()))
@@ -165,17 +164,13 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         }
 
         if (operands.size == 3) {
-            val (rd, rn, rsr) = operands.map {it.operand}
+            val (rd, rn, rsr) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rsr is ARMv7InstructionOperand.Register
-                && rsr.shift.isSome() && rsr.shift.unwrap().register != null) {
-                // TODO fix compilation error here
-                return processRSRVariant(instruction, rn, rd, rsr.register, rsr.shift.unwrap().register, rsr.shift.unwrap().shiftType)
+                && rsr.shift.isSome() && rsr.shift.unwrap().shiftBy is ARMv7InstructionOperand.Register) {
+                return processRSRVariant(instruction, rn, rd, rsr.register, (rsr.shift.unwrap().shiftBy as ARMv7InstructionOperand.Register).register, rsr.shift.unwrap().shiftType)
             }
-
         }
 
         throw AssemblySyntaxException("Invalid or unsupported format for this mnemonic.")
-
-
     }
 }
