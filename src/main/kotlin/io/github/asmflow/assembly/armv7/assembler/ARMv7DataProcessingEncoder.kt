@@ -130,7 +130,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
 
     override fun encode(
         instruction: ARMv7InstructionMixin,
-        operands: List<ARMv7Operand>
+        operands: List<ARMv7Operand>,
+        addrCounter: Int
     ): List<Int> {
         //val cond = instruction.conditionCode
 
