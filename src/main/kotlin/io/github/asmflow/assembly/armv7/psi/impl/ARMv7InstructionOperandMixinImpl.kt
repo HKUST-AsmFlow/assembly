@@ -11,6 +11,18 @@ import io.github.asmflow.assembly.util.functional.toOption
 import io.github.asmflow.assembly.util.unreachable
 
 abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Operand {
+    fun stripRadixPrefix(raw: String): String {
+        val s = raw.trim()
+        return when {
+            s.startsWith("0x", ignoreCase = true) -> s.drop(2)
+            s.startsWith("0b", ignoreCase = true) -> s.drop(2)
+            s.startsWith("0o", ignoreCase = true) -> s.drop(2)
+            s.startsWith("x", ignoreCase = true) -> s.drop(1)
+            s.startsWith("b", ignoreCase = true) -> s.drop(1)
+            s.startsWith("o", ignoreCase = true) -> s.drop(1)
+            else -> s
+        }
+    }
     override val operand: ARMv7InstructionOperand by lazy {
         when {
             label != null -> {
@@ -33,7 +45,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                     else -> unreachable()
                 }
 
-                ARMv7InstructionOperand.Number(value = numberPsi.text.toInt(radix))
+                ARMv7InstructionOperand.Number(value = stripRadixPrefix(numberPsi.text).toInt(radix))
             }
 
             offset != null -> {
@@ -62,6 +74,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                     // todo: register from psi to armv7register enum
                     Pair(shiftType, TODO())
                 }
+                // todo fix error here
 
                 ARMv7InstructionOperand.Register(
                     register = register,

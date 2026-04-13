@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.assembler
 
-import com.intellij.rml.dfa.utils.toInt
 import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7Immediate
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase.getOpcode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
@@ -13,6 +12,7 @@ import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.util.functional.Option
 
 object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
+    fun Boolean.toInt() = if (this) 1 else 0
     fun encodeRegisterVariant(
         condition: ARMv7InstructionConditionCode,
         opcode: Int,

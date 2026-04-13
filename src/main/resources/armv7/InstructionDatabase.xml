@@ -14,7 +14,7 @@
     <instruction name="asr" supportsFlags="true" supportsConditionCodes="true" format="Psuedo" opcode="none">
         <shortDescription>Arithmetic Shift Right</shortDescription>
     </instruction>
-    <instruction name="b" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="b" supportsFlags="false" supportsConditionCodes="true" format="Branch" opcode="1010">
         <shortDescription>Branch</shortDescription>
     </instruction>
     <instruction name="bfc" supportsFlags="false" supportsConditionCodes="true">
@@ -29,7 +29,7 @@
     <instruction name="bkpt" supportsFlags="false" supportsConditionCodes="false">
         <shortDescription>Breakpoint</shortDescription>
     </instruction>
-    <instruction name="bl" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="bl" supportsFlags="false" supportsConditionCodes="true" format="Branch" opcode="1011">
         <shortDescription>Branch with Link</shortDescription>
     </instruction>
     <instruction name="blx" supportsFlags="false" supportsConditionCodes="true">

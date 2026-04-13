@@ -14,10 +14,10 @@ import io.github.asmflow.assembly.util.functional.resultOfException
 
 class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
     fun getEncoderFromInstruction(instruction: ARMv7Instruction, symbols: HashMap<String, Int>): ARMv7InstructionEncoder {
-        return when(ARMv7InstructionDatabase.get(instruction.mnemonic.text).unwrap().format){
+        return when(ARMv7InstructionDatabase.get(instruction.baseMnemonic).unwrap().format){
             InstructionFormat.DATA_PROCESSING -> ARMv7DataProcessingEncoder
             InstructionFormat.BRANCH -> ARMv7BranchEncoder(symbols)
-            InstructionFormat.PSUEDO -> PsuedoEncoderFactory.getEncoder(instruction.mnemonic.text)
+            InstructionFormat.PSUEDO -> PsuedoEncoderFactory.getEncoder(instruction.baseMnemonic)
             else -> throw AssemblySyntaxException("Mnemonic for ${instruction.text} is invalid in the database.")
         }
     }
@@ -31,7 +31,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                 )
             )
 
-        if (ARMv7InstructionDatabase.get(instruction.mnemonic.text).isNone())
+        if (ARMv7InstructionDatabase.get(instruction.baseMnemonic).isNone())
             return Err(AssemblerError("Instruction ${instruction.text} is not supported by AsmFlow.", instruction))
 
         return try {
@@ -75,18 +75,20 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         for (child in file.children) {
             if (child is ARMv7Instruction) {
                 val encoder = getEncoderFromInstruction(child, symbols)
+                val result = encodeInstruction(child, symbols, addrCounter)
+                if (result.isErr()){
+                    errors.add(result.unwrapErr())
+                    debug("Error: ${result.unwrapErr().message} \n")
+                }
+                else
+                    debug("Original: ${child.text}, Encoded: ${
+                        result.unwrap().joinToString(separator = "\n") { x -> x.toUInt().toString(16) }
+                    }\n")
                 addrCounter += if (encoder is ARMv7PsuedoEncoder){
                     encoder.expandsTo
                 } else {
                     1
                 }
-                val result = encodeInstruction(child, symbols, addrCounter)
-                if (result.isErr())
-                    errors.add(result.unwrapErr())
-                else
-                    debug("Original: ${child.text}, Encoded: ${
-                        result.unwrap().joinToString(separator = "\n") { x -> x.toUInt().toString(16) }
-                    }\n")
             }
         }
 

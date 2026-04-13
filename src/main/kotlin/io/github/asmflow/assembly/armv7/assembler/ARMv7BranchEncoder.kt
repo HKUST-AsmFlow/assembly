@@ -1,6 +1,7 @@
 package io.github.asmflow.assembly.armv7.assembler
 
 import com.intellij.rml.dfa.utils.toInt
+import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
@@ -20,8 +21,7 @@ class ARMv7BranchEncoder(val symbols: HashMap<String, Int>) : ARMv7InstructionEn
             // of instructions, not bytes
 
             // TODO detect if location is too far and throw an error, right now it just silently fails
-
-            return listOf((instruction.conditionCode.code shl 28) or (0b101 shl 25) or ((instruction.baseMnemonic == "bl").toInt() shl 24) or imm24)
+            return listOf((instruction.conditionCode.code shl 28) or (ARMv7InstructionDatabase.getOpcode(instruction.baseMnemonic) shl 24) or imm24)
 
         }
         throw AssemblySyntaxException("Invalid mnemonic ${instruction.baseMnemonic} for branch type instruction.")

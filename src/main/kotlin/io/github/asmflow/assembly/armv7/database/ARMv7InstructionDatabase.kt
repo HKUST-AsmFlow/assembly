@@ -49,8 +49,8 @@ object ARMv7InstructionDatabase :
                 val supportsFlags = element.getAttribute("supportsFlags").toBooleanStrictOrNull() ?: false
                 val supportsConditionCodes =
                     element.getAttribute("supportsConditionCodes").toBooleanStrictOrNull() ?: false
-                val instructionFormat = element.getAttribute("instructionFormat").toInstructionFormat() ?: InstructionFormat.PSUEDO
-                val opcode = element.getAttribute("opcode").toUInt()
+                val instructionFormat = element.getAttribute("format").toInstructionFormat() ?: InstructionFormat.PSUEDO
+                val opcode = element.getAttribute("opcode").toUIntOrNull(2)
 
                 val elements = element.getElementsByTagName("shortDescription")
                 val shortDescriptionElement = elements.item(0) as? Element
