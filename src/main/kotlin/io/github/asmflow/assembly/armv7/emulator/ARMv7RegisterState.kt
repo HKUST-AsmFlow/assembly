@@ -26,6 +26,8 @@ class ARMv7RegisterState(){
     fun setPC(value: Int) = set(15, value)
     fun incrementPC() = setPC(getPC() + 4)
 
+    fun getCPSR(): ARMv7CPSR = CPSR
+
 
 
 }

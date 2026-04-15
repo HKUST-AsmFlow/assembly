@@ -24,6 +24,11 @@ sealed class Option<out T> {
         is Some -> data
         is None -> default
     }
+
+    fun unwrapOrThrow(exception: () -> Throwable): T = when (this) {
+        is Some -> data
+        is None -> throw exception()
+    }
 }
 
 data class Some<T>(val data: T) : Option<T>()

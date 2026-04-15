@@ -78,4 +78,37 @@ object ARMv7InstructionDatabase :
     fun getOpcode(mnemonic: String): Int {
         return data[mnemonic]?.opcode?.toInt() ?: throw Exception("Database incomplete for mnemonic $mnemonic")
     }
+
+    fun findByOpcode(
+        opcode: Int,
+        format: InstructionFormat? = null,
+        supportsFlags: Boolean? = null,
+        supportsConditionCodes: Boolean? = null,
+        additionalFilter: (Instruction) -> Boolean = { true }
+    ): List<Instruction> {
+        val opcodeUInt = opcode.toUInt()
+        return data.values.filter { instruction ->
+            instruction.opcode == opcodeUInt &&
+                    (format == null || instruction.format == format) &&
+                    (supportsFlags == null || instruction.supportsFlags == supportsFlags) &&
+                    (supportsConditionCodes == null || instruction.supportsConditionCodes == supportsConditionCodes) &&
+                    additionalFilter(instruction)
+        }
+    }
+
+    fun getByOpcode(
+        opcode: Int,
+        format: InstructionFormat? = null,
+        supportsFlags: Boolean? = null,
+        supportsConditionCodes: Boolean? = null,
+        additionalFilter: (Instruction) -> Boolean = { true }
+    ): Option<Instruction> {
+        return findByOpcode(
+            opcode = opcode,
+            format = format,
+            supportsFlags = supportsFlags,
+            supportsConditionCodes = supportsConditionCodes,
+            additionalFilter = additionalFilter
+        ).firstOrNull().toOption()
+    }
 }
