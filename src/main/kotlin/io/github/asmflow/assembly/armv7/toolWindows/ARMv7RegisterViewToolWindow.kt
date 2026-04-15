@@ -1,6 +1,11 @@
 package io.github.asmflow.assembly.armv7.toolWindows
 
-import java.awt.BorderLayout
+import com.intellij.ui.dsl.builder.panel
 import javax.swing.JPanel
 
-class ARMv7RegisterViewToolWindow : JPanel(BorderLayout())
+object ARMv7RegisterViewToolWindow {
+    fun makeContent(): JPanel = panel {
+        row {
+        }
+    }
+}

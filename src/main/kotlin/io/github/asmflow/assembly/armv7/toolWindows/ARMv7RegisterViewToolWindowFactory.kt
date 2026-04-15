@@ -10,7 +10,7 @@ class ARMv7RegisterViewToolWindowFactory : AssemblyToolWindowFactory {
         toolWindow.setStripeShortTitleProvider { "ARMv7 Registers" }
 
         val content = toolWindow.contentManager.factory.createContent(
-            ARMv7RegisterViewToolWindow(),
+            ARMv7RegisterViewToolWindow.makeContent(),
             null,
             false
         )

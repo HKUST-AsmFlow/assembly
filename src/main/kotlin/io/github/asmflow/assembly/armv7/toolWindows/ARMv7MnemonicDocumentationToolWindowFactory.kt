@@ -10,7 +10,7 @@ class ARMv7MnemonicDocumentationToolWindowFactory : AssemblyToolWindowFactory {
         toolWindow.setStripeShortTitleProvider { "ARMv7 Mnemonics" }
 
         val content = toolWindow.contentManager.factory.createContent(
-            ARMv7DocumentationToolWindow(),
+            ARMv7DocumentationToolWindow.makeContent(),
             null,
             false
         )
