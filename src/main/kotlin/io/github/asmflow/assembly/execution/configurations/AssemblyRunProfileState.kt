@@ -11,6 +11,7 @@ import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.PsiManager
 import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
+import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
 import io.github.asmflow.assembly.execution.AssemblyExecutionResult
 import java.nio.file.Paths
 
@@ -33,7 +34,11 @@ class AssemblyRunProfileState(
         when (config.getEmulatorFlavour()) {
             AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
                 val assembler = ARMv7Assembler(console)
-                assembler.assemble(listOf(psiFile))
+                val result = assembler.assemble(listOf(psiFile))
+
+                if (!result.isErr()) {
+                    val emulator = ARMv7Emulator(result.unwrap())
+                }
             }
         }
 

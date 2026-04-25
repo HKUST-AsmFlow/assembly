@@ -26,7 +26,7 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             when (decoded.instruction.mnemonic) {
                 "add" -> execAdd(decoded, withCarry = false)
                 "adc" -> execAdd(decoded, withCarry = true)
-               "and" -> execAnd(decoded)
+                "and" -> execAnd(decoded)
             }
         }
         private fun execAdd(inst: DecodedDataProcessingInstruction, withCarry: Boolean) {

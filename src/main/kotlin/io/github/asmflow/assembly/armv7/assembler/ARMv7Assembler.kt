@@ -10,6 +10,7 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7LabelWithColon
 import io.github.asmflow.assembly.assembler.*
 import io.github.asmflow.assembly.util.functional.Err
+import io.github.asmflow.assembly.util.functional.Ok
 import io.github.asmflow.assembly.util.functional.resultOfException
 
 class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
@@ -46,7 +47,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         }
     }
 
-    override fun assemble(files: List<PsiFile>): AssemblerResult<List<AssembledInstruction>, List<AssemblerError>> {
+    override fun assemble(files: List<PsiFile>): AssemblerResult<List<Int>, List<AssemblerError>> {
         val file = files[0] // For now support one file
         val errors = mutableListOf<AssemblerError>()
         val symbols = HashMap<String, Int>()
@@ -72,6 +73,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
 
         // ROUND 2: Convert all the instructions into bytecode
         addrCounter = 0 // Assuming text section starts at 0x00000000
+        val instructions = mutableListOf<Int>()
         for (child in file.children) {
             if (child is ARMv7Instruction) {
                 val encoder = getEncoderFromInstruction(child, symbols)
@@ -81,10 +83,9 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                     debug("Error: ${result.unwrapErr().message} \n")
                 }
                 else
-                    debug("Original: ${child.text}, Encoded: ${
-                        result.unwrap().joinToString(separator = "\n") { x -> x.toUInt().toString(16) }
-                    }\n")
-                addrCounter += if (encoder is ARMv7PsuedoEncoder){
+                    instructions.addAll(result.unwrap())
+
+                addrCounter += if (encoder is ARMv7PsuedoEncoder) {
                     encoder.expandsTo
                 } else {
                     1
@@ -92,7 +93,10 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
             }
         }
 
-        return Err(errors)
-        // TODO: return the successfully compiled version
+        if (errors.isNotEmpty()) {
+            return Err(errors)
+        }
+
+        return Ok(instructions)
     }
 }

@@ -9,5 +9,5 @@ abstract class Assembler(val console: ConsoleView) {
         console.print(message, ConsoleViewContentType.LOG_DEBUG_OUTPUT)
     }
 
-    abstract fun assemble(files: List<PsiFile>): AssemblerResult<List<AssembledInstruction>, List<AssemblerError>>
+    abstract fun assemble(files: List<PsiFile>): AssemblerResult<List<Int>, List<AssemblerError>>
 }
