@@ -74,6 +74,14 @@ object ARMv7Immediate {
         )
     }
 
+    fun decode12bitImmediate(imm12: Int): Int {
+        val shiftAmount = (imm12 ushr 8) and 0xF // bits [11:8]
+        val rotateAmount = shiftAmount * 2 // ROR amount
+        val raw = imm12 and 0xFF // bits [7:0]
+        val immediate = Integer.rotateRight(raw, rotateAmount)
+        return immediate
+    }
+
     fun encode5bitImmediate(input: String, type: ARMv7ShiftType): Int {
         if (type == ARMv7ShiftType.RRX) return 0
         // For bit shifts with immediates
