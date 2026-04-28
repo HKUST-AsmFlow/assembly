@@ -16,7 +16,7 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
         currentIdx = currentPC / 4
 
         if (currentIdx >= text.size || currentIdx < 0){
-            throw EmulationException("Index ${currentIdx} with PC ${registers.getPC()} out of bounds of .text region of ${text.size} words.")
+            throw EmulationException("Index $currentIdx with PC ${registers.getPC()} out of bounds of .text region of ${text.size} words.")
         }
 
         val instruction = text[currentIdx]
@@ -27,7 +27,7 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
 
             // Execute
             when((instruction ushr 26) and 0b11){
-                0b00-> ARMv7DataProcessingExecutor(registers).execute(instruction)
+                0b00 -> ARMv7DataProcessingExecutor(registers).execute(instruction)
                 0b10 -> ARMv7BranchExecutor(registers).execute(instruction)
             }
 
@@ -49,7 +49,6 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
             // Increment PC as usual
             registers.setPC(currentPC + 4)
         }
-
     }
 
     override fun backward() {
@@ -59,8 +58,5 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
     override fun inBounds(): Boolean {
         currentIdx = registers.getPC() / 4
         return currentIdx < text.size && currentIdx >= 0
-
     }
-
-
 }

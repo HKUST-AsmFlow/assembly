@@ -38,6 +38,9 @@ class AssemblyRunProfileState(
 
                 if (!result.isErr()) {
                     val emulator = ARMv7Emulator(result.unwrap())
+                    while (emulator.inBounds()) {
+                        emulator.forward()
+                    }
                 }
             }
         }
