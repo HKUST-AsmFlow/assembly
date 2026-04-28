@@ -6,4 +6,6 @@ interface Emulator {
 
     fun forward()
     fun backward()
+
+    fun inBounds(): Boolean
 }

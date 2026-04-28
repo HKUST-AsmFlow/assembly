@@ -11,7 +11,6 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
     override val name = "armv7"
     override var currentIdx = registers.getPC() / 4 // just 0x000.. (start of .text)
     override fun forward() {
-        // TODO implement proper memory,
         // for now, directly access the text[i] for the ith instruction
         val currentPC = registers.getPC()
         currentIdx = currentPC / 4
@@ -55,6 +54,12 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
 
     override fun backward() {
         TODO("Not yet implemented")
+    }
+
+    override fun inBounds(): Boolean {
+        currentIdx = registers.getPC() / 4
+        return currentIdx < text.size && currentIdx >= 0
+
     }
 
 
