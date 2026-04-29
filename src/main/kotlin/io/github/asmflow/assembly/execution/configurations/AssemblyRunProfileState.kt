@@ -9,10 +9,15 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiManager
 import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindow
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory
 import io.github.asmflow.assembly.execution.AssemblyExecutionResult
+import io.github.asmflow.assembly.util.functional.toOption
 import java.nio.file.Paths
 
 class AssemblyRunProfileState(
@@ -27,6 +32,13 @@ class AssemblyRunProfileState(
         val psiFile = PsiManager.getInstance(environment.project).findFile(scriptVirtualFile) ?: throw RuntimeException(
             "Cannot find PSI file"
         )
+
+        val toolWindow = ToolWindowManager.getInstance(environment.project).getToolWindow(
+            ARMv7RegisterViewToolWindowFactory.Companion.toolWindowId
+        ).toOption()
+        toolWindow.isSomeThen {
+            it.show()
+        }
 
         val console = consoleBuilder.console
         console.print("Assembling ${scriptVirtualFile.name}...\n", ConsoleViewContentType.NORMAL_OUTPUT)
