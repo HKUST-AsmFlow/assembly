@@ -1,12 +1,16 @@
 package io.github.asmflow.assembly.armv7.emulator
 
+import com.intellij.openapi.project.Project
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7ConditionCodeDecoder
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
 import io.github.asmflow.assembly.emulator.EmulationException
 import io.github.asmflow.assembly.emulator.Emulator
+import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
 
-class ARMv7Emulator(val text: List<Int>) : Emulator {
+class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
+    val publisher = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
+
     val registers = ARMv7RegisterState()
     override val name = "armv7"
     override var currentIdx = registers.getPC() / 4 // just 0x000.. (start of .text)
@@ -49,6 +53,8 @@ class ARMv7Emulator(val text: List<Int>) : Emulator {
             // Increment PC as usual
             registers.setPC(currentPC + 4)
         }
+
+        publisher.onRegisterStateChanged(registers)
     }
 
     override fun backward() {

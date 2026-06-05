@@ -13,8 +13,6 @@ import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiManager
 import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
-import io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory
-import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindow
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory
 import io.github.asmflow.assembly.execution.AssemblyExecutionResult
 import io.github.asmflow.assembly.util.functional.toOption
@@ -49,7 +47,7 @@ class AssemblyRunProfileState(
                 val result = assembler.assemble(listOf(psiFile))
 
                 if (!result.isErr()) {
-                    val emulator = ARMv7Emulator(result.unwrap())
+                    val emulator = ARMv7Emulator(environment.project, result.unwrap())
                     while (emulator.inBounds()) {
                         emulator.forward()
                     }
