@@ -9,7 +9,7 @@ import io.github.asmflow.assembly.emulator.Emulator
 import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
 
 class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
-    val publisher = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
+    val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
 
     val registers = ARMv7RegisterState()
     override val name = "armv7"

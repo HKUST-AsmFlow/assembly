@@ -12,16 +12,14 @@ class ARMv7RegisterViewToolWindowFactory : AssemblyToolWindowFactory {
         toolWindow.setStripeShortTitleProvider { "ARMv7 Registers" }
         project.messageBus.connect().subscribe(EmulatorStateNotifier.EMULATOR_STATE_TOPIC, object : EmulatorStateNotifier {
             override fun onRegisterStateChanged(registerState: ARMv7RegisterState) {
-                TODO("Not yet implemented")
+                val content = toolWindow.contentManager.factory.createContent(
+                    ARMv7RegisterViewToolWindow.makeContent(registerState),
+                    null,
+                    false
+                )
+                toolWindow.contentManager.addContent(content)
             }
         })
-
-        val content = toolWindow.contentManager.factory.createContent(
-            ARMv7RegisterViewToolWindow.makeContent(),
-            null,
-            false
-        )
-        toolWindow.contentManager.addContent(content)
     }
 
     object Companion : AssemblyToolWindowFactoryCompanion {
