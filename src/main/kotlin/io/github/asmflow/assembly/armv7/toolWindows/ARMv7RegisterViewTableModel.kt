@@ -3,15 +3,34 @@ package io.github.asmflow.assembly.armv7.toolWindows
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import javax.swing.table.AbstractTableModel
 
-class ARMv7RegisterViewTableModel(val registers: ARMv7RegisterState) : AbstractTableModel() {
+class ARMv7RegisterViewTableModel(initialRegisters: ARMv7RegisterState) : AbstractTableModel() {
+    private var registers: ARMv7RegisterState = initialRegisters
+
+    override fun getColumnName(column: Int): String? = when (column) {
+        0 -> "Register"
+        1 -> "Value"
+        else -> null
+    }
+
     override fun getColumnCount(): Int = 2
 
     override fun getRowCount(): Int = 16
 
     override fun getValueAt(rowIndex: Int, columnIndex: Int): Any =
         when (columnIndex) {
-            0 -> "R$rowIndex"
-            1 -> registers.get(rowIndex)
+            0 -> when (rowIndex) {
+                13 -> "R13 (SP)"
+                14 -> "R14 (LR)"
+                15 -> "R15 (PC)"
+                else -> "R$rowIndex"
+            }
+            1 -> "0x%08X".format(registers.get(rowIndex))
             else -> throw IllegalArgumentException("Unexpected column index: $columnIndex")
         }
+
+    fun updateRegisterData(newRegisters: ARMv7RegisterState) {
+        this.registers = newRegisters
+
+        fireTableDataChanged()
+    }
 }

@@ -10,14 +10,18 @@ import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
 class ARMv7RegisterViewToolWindowFactory : AssemblyToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         toolWindow.setStripeShortTitleProvider { "ARMv7 Registers" }
+
+        val registerComponentManager = ARMv7RegisterViewToolWindow()
+        val content = toolWindow.contentManager.factory.createContent(
+            registerComponentManager.getContent(),
+            null,
+            false
+        )
+        toolWindow.contentManager.addContent(content)
+
         project.messageBus.connect().subscribe(EmulatorStateNotifier.EMULATOR_STATE_TOPIC, object : EmulatorStateNotifier {
             override fun onRegisterStateChanged(registerState: ARMv7RegisterState) {
-                val content = toolWindow.contentManager.factory.createContent(
-                    ARMv7RegisterViewToolWindow.makeContent(registerState),
-                    null,
-                    false
-                )
-                toolWindow.contentManager.addContent(content)
+                registerComponentManager.updateState(registerState)
             }
         })
     }
