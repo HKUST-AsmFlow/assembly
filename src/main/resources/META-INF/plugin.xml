@@ -32,12 +32,16 @@
             implementationClass="io.github.asmflow.assembly.armv7.ARMv7ParserDefinition" />
         <lang.syntaxHighlighterFactory language="ARMv7_ASM"
             implementationClass="io.github.asmflow.assembly.armv7.editor.colors.ARMv7SyntaxHighlighterFactory" />
-        <programRunner implementation="io.github.asmflow.assembly.execution.runners.AssemblyDebugProgramRunner" />
+        <programRunner implementation="io.github.asmflow.assembly.armv7.execution.runners.ARMv7DebugProgramRunner" />
         <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler"
             fileType="ARMv7 Assembly" />
         <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory"
             icon="AllIcons.Toolwindows.Documentation" anchor="right" id="ARMv7 Mnemonics Documentation" />
         <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory"
-            icon="AllIcons.Toolwindows.ToolWindowComponents" anchor="right" id="ARMv7 Register View"/>
+            icon="AllIcons.Toolwindows.ToolWindowComponents" anchor="right" id="ARMv7 Register View" />
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij.xdebugger">
+        <breakpointType implementation="io.github.asmflow.assembly.armv7.debugger.breakpoints.ARMv7BreakpointType" />
     </extensions>
 </idea-plugin>

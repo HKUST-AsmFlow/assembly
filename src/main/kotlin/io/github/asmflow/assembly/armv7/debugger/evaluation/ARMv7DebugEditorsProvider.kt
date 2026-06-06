@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.debugger.evaluation
+package io.github.asmflow.assembly.armv7.debugger.evaluation
 
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.EditorFactory
@@ -10,7 +10,7 @@ import com.intellij.xdebugger.evaluation.EvaluationMode
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider
 import io.github.asmflow.assembly.armv7.ARMv7FileType
 
-class AssemblyDebugEditorsProvider : XDebuggerEditorsProvider() {
+class ARMv7DebugEditorsProvider : XDebuggerEditorsProvider() {
     override fun getFileType(): FileType = ARMv7FileType
 
     override fun createDocument(
