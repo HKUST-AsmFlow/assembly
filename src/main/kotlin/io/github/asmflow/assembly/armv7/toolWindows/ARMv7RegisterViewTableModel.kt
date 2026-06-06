@@ -4,8 +4,15 @@ import io.github.asmflow.assembly.armv7.assembler.ARMv7DataProcessingEncoder.toI
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import javax.swing.table.AbstractTableModel
 
-class ARMv7RegisterViewTableModel(initialRegisters: ARMv7RegisterState) : AbstractTableModel() {
+class ARMv7RegisterViewTableModel(
+    initialRegisters: ARMv7RegisterState,
+    var base: ARMv7RegisterViewToolWindow.NumberRepresentation
+) : AbstractTableModel() {
     private var registers: ARMv7RegisterState = initialRegisters
+
+    fun setNumberRepresentation(repr: ARMv7RegisterViewToolWindow.NumberRepresentation) {
+        base = repr
+    }
 
     override fun getColumnName(column: Int): String? = when (column) {
         0 -> "Register"
@@ -36,7 +43,15 @@ class ARMv7RegisterViewTableModel(initialRegisters: ARMv7RegisterState) : Abstra
                     17 -> registers.getCPSR().Z.toInt()
                     18 -> registers.getCPSR().C.toInt()
                     19 -> registers.getCPSR().V.toInt()
-                    else -> "0x%08X".format(registers.get(rowIndex))
+                    else -> when (base) {
+                        ARMv7RegisterViewToolWindow.NumberRepresentation.Hexadecimal -> "0x%08X".format(
+                            registers.get(
+                                rowIndex
+                            )
+                        )
+
+                        ARMv7RegisterViewToolWindow.NumberRepresentation.Decimal -> registers.get(rowIndex)
+                    }
                 }
             }
 
