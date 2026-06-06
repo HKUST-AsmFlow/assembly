@@ -14,7 +14,7 @@ import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory
 import io.github.asmflow.assembly.execution.AssemblyExecutionResult
-import io.github.asmflow.assembly.execution.progress.AssemblyEmulatorProgressHandler
+import io.github.asmflow.assembly.execution.process.AssemblyEmulatorProcessHandler
 import io.github.asmflow.assembly.util.functional.toOption
 import java.nio.file.Paths
 
@@ -41,7 +41,7 @@ class AssemblyRunProfileState(
         val console = consoleBuilder.console
         console.print("Assembling ${scriptVirtualFile.name}...\n", ConsoleViewContentType.NORMAL_OUTPUT)
 
-        val processHandler = AssemblyEmulatorProgressHandler {
+        val processHandler = AssemblyEmulatorProcessHandler {
             when (config.getEmulatorFlavour()) {
                 AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
                     val assembler = ARMv7Assembler(console)

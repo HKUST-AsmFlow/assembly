@@ -1,12 +1,12 @@
-package io.github.asmflow.assembly.execution.progress
+package io.github.asmflow.assembly.execution.process
 
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.openapi.application.ApplicationManager
 import java.io.OutputStream
 
-class AssemblyEmulatorProgressHandler(
-    private val runEmulation: AssemblyEmulatorProgressHandler.() -> Unit
+class AssemblyEmulatorProcessHandler(
+    private val runEmulation: AssemblyEmulatorProcessHandler.() -> Unit
 ) : ProcessHandler() {
     override fun detachIsDefault(): Boolean = true
 
