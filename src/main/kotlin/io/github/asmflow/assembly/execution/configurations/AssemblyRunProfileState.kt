@@ -4,7 +4,6 @@ import com.intellij.execution.ExecutionResult
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.filters.TextConsoleBuilderFactory
-import com.intellij.execution.process.NopProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleViewContentType
@@ -15,6 +14,7 @@ import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory
 import io.github.asmflow.assembly.execution.AssemblyExecutionResult
+import io.github.asmflow.assembly.execution.progress.AssemblyEmulatorProgressHandler
 import io.github.asmflow.assembly.util.functional.toOption
 import java.nio.file.Paths
 
@@ -41,23 +41,23 @@ class AssemblyRunProfileState(
         val console = consoleBuilder.console
         console.print("Assembling ${scriptVirtualFile.name}...\n", ConsoleViewContentType.NORMAL_OUTPUT)
 
-        when (config.getEmulatorFlavour()) {
-            AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
-                val assembler = ARMv7Assembler(console)
-                val result = assembler.assemble(listOf(psiFile))
+        val processHandler = AssemblyEmulatorProgressHandler {
+            when (config.getEmulatorFlavour()) {
+                AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
+                    val assembler = ARMv7Assembler(console)
+                    val result = assembler.assemble(listOf(psiFile))
 
-                if (!result.isErr()) {
-                    val emulator = ARMv7Emulator(environment.project, result.unwrap())
-                    while (emulator.inBounds()) {
-                        emulator.forward()
+                    if (!result.isErr()) {
+                        val emulator = ARMv7Emulator(environment.project, result.unwrap())
+                        while (emulator.inBounds() && !isProcessTerminating) {
+                            emulator.forward()
+                        }
                     }
                 }
             }
         }
-
-        val processHandler = NopProcessHandler()
+        console.attachToProcess(processHandler)
         processHandler.startNotify()
-        processHandler.destroyProcess()
 
         return AssemblyExecutionResult(console, processHandler)
     }
