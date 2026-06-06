@@ -12,11 +12,13 @@ class ARMv7BranchEncoder(val symbols: HashMap<String, Int>) : ARMv7InstructionEn
         operands: List<ARMv7Operand>,
         addrCounter: Int
     ): List<Int> {
-        if (instruction.baseMnemonic == "b" || instruction.baseMnemonic == "bl"){
+        if (instruction.baseMnemonic == "b" || instruction.baseMnemonic == "bl") {
             if (operands.size != 1) throw AssemblySyntaxException("Invalid syntax for branch mnemonic, needed 1 argument, recieved ${operands.size}.")
             val targetLabel = operands[0].label ?: throw AssemblySyntaxException("Invalid first operand, needed label")
-            val targetLocation = symbols[targetLabel.text] ?: throw AssemblySyntaxException("Label ${targetLabel.text} does not exist")
-            val imm24 = (targetLocation - (addrCounter + 2)) and 0xFFFFFF // Clip the the top 8 bits they will be sign extended later
+            val targetLocation =
+                symbols[targetLabel.text] ?: throw AssemblySyntaxException("Label ${targetLabel.text} does not exist")
+            val imm24 =
+                (targetLocation - (addrCounter + 2)) and 0xFFFFFF // Clip the the top 8 bits they will be sign extended later
             // No shifting and PC + 2 instead of PC + 8, we are working already in terms
             // of instructions, not bytes
 

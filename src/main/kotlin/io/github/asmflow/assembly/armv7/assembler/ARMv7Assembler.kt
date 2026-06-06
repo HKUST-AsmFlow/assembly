@@ -14,15 +14,23 @@ import io.github.asmflow.assembly.util.functional.Ok
 import io.github.asmflow.assembly.util.functional.resultOfException
 
 class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
-    fun getEncoderFromInstruction(instruction: ARMv7Instruction, symbols: HashMap<String, Int>): ARMv7InstructionEncoder {
-        return when(ARMv7InstructionDatabase.get(instruction.baseMnemonic).unwrap().format){
+    fun getEncoderFromInstruction(
+        instruction: ARMv7Instruction,
+        symbols: HashMap<String, Int>
+    ): ARMv7InstructionEncoder {
+        return when (ARMv7InstructionDatabase.get(instruction.baseMnemonic).unwrap().format) {
             InstructionFormat.DATA_PROCESSING -> ARMv7DataProcessingEncoder
             InstructionFormat.BRANCH -> ARMv7BranchEncoder(symbols)
             InstructionFormat.PSUEDO -> PsuedoEncoderFactory.getEncoder(instruction.baseMnemonic)
             else -> throw AssemblySyntaxException("Mnemonic for ${instruction.text} is invalid in the database.")
         }
     }
-    fun encodeInstruction(instruction: ARMv7Instruction, symbols: HashMap<String, Int>, addrCounter: Int): AssemblerResult<List<Int>, AssemblerError> {
+
+    fun encodeInstruction(
+        instruction: ARMv7Instruction,
+        symbols: HashMap<String, Int>,
+        addrCounter: Int
+    ): AssemblerResult<List<Int>, AssemblerError> {
         // TODO: make sure the instruction actually takes operands before returning an error
         val operands =
             instruction.operands ?: return Err(
@@ -36,11 +44,13 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
             return Err(AssemblerError("Instruction ${instruction.text} is not supported by AsmFlow.", instruction))
 
         return try {
-            resultOfException { getEncoderFromInstruction(instruction, symbols).encode(
-                instruction,
-                operands.operandList.requireNoNulls(),
-                addrCounter
-            )}
+            resultOfException {
+                getEncoderFromInstruction(instruction, symbols).encode(
+                    instruction,
+                    operands.operandList.requireNoNulls(),
+                    addrCounter
+                )
+            }
                 .mapErr { AssemblerError(it.message.orEmpty(), instruction) }
         } catch (_: IllegalArgumentException) {
             throw Exception("This should not happen")
@@ -57,10 +67,10 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         // otherwise increment by 1
         // Build a map of labels corresponding to the Address/4
         var addrCounter: Int = 0 // Assuming text section starts at 0x00000000
-        for (child in file.children){
+        for (child in file.children) {
             if (child is ARMv7Instruction) {
                 val encoder = getEncoderFromInstruction(child, symbols)
-                addrCounter += if (encoder is ARMv7PsuedoEncoder){
+                addrCounter += if (encoder is ARMv7PsuedoEncoder) {
                     encoder.expandsTo
                 } else {
                     1
@@ -78,11 +88,10 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
             if (child is ARMv7Instruction) {
                 val encoder = getEncoderFromInstruction(child, symbols)
                 val result = encodeInstruction(child, symbols, addrCounter)
-                if (result.isErr()){
+                if (result.isErr()) {
                     errors.add(result.unwrapErr())
                     debug("Error: ${result.unwrapErr().message} \n")
-                }
-                else
+                } else
                     instructions.addAll(result.unwrap())
 
                 addrCounter += if (encoder is ARMv7PsuedoEncoder) {

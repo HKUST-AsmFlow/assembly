@@ -19,11 +19,12 @@ class ARMv7RegisterViewToolWindowFactory : AssemblyToolWindowFactory {
         )
         toolWindow.contentManager.addContent(content)
 
-        project.messageBus.connect().subscribe(EmulatorStateNotifier.EMULATOR_STATE_TOPIC, object : EmulatorStateNotifier {
-            override fun onRegisterStateChanged(registerState: ARMv7RegisterState) {
-                registerComponentManager.updateState(registerState)
-            }
-        })
+        project.messageBus.connect()
+            .subscribe(EmulatorStateNotifier.EMULATOR_STATE_TOPIC, object : EmulatorStateNotifier {
+                override fun onRegisterStateChanged(registerState: ARMv7RegisterState) {
+                    registerComponentManager.updateState(registerState)
+                }
+            })
     }
 
     object Companion : AssemblyToolWindowFactoryCompanion {

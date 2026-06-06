@@ -8,6 +8,7 @@ sealed class ARMv7InstructionOperand {
     data class Register(val register: ARMv7Register, val shift: Option<Shift>) : ARMv7InstructionOperand() {
         data class Shift(val shiftType: ARMv7ShiftType, val shiftBy: ARMv7InstructionOperand)
     }
+
     data class RegisterWithOffset(val register: ARMv7Register, val offset: Offset) : ARMv7InstructionOperand()
 
     sealed class Offset {

@@ -53,6 +53,7 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             cpsr.C = inst.operand2.getCarryOut()
         }
     }
+
     private fun updateAddFlags(op1: Int, op2: Int, carryIn: Int, result: Int) {
         val cpsr = registers.getCPSR()
         cpsr.N = result < 0

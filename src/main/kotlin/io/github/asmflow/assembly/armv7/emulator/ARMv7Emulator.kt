@@ -19,18 +19,18 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
         val currentPC = registers.getPC()
         currentIdx = currentPC / 4
 
-        if (currentIdx >= text.size || currentIdx < 0){
+        if (currentIdx >= text.size || currentIdx < 0) {
             throw EmulationException("Index $currentIdx with PC ${registers.getPC()} out of bounds of .text region of ${text.size} words.")
         }
 
         val instruction = text[currentIdx]
-        if (ARMv7ConditionCodeDecoder.shouldExecute(instruction, registers)){
+        if (ARMv7ConditionCodeDecoder.shouldExecute(instruction, registers)) {
 
             // Simulate PC + 8 "illusion"
             registers.setPC(currentPC + 8)
 
             // Execute
-            when((instruction ushr 26) and 0b11){
+            when ((instruction ushr 26) and 0b11) {
                 0b00 -> ARMv7DataProcessingExecutor(registers).execute(instruction)
                 0b10 -> ARMv7BranchExecutor(registers).execute(instruction)
             }
@@ -38,17 +38,15 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
             // Pipeline flush check
             val pcAfterExecution = registers.getPC()
 
-            if (pcAfterExecution == currentPC + 8){
+            if (pcAfterExecution == currentPC + 8) {
                 // PC not modified by instruction, continue pipeline as usual
                 registers.setPC(currentPC + 4)
-            }
-            else {
+            } else {
                 // The PC was modified.
                 // Do nothing, the PC already
                 // has the relevant value set by the instruction
             }
-        }
-        else {
+        } else {
             // Instruction skipped.
             // Increment PC as usual
             registers.setPC(currentPC + 4)

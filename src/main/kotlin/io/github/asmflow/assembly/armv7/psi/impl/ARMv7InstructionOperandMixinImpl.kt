@@ -23,6 +23,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             else -> s
         }
     }
+
     override val operand: ARMv7InstructionOperand by lazy {
         when {
             label != null -> {
@@ -70,7 +71,9 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                 val register =
                     ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }.toOption().unwrap()
                 val pair = registerWithShift!!.shift.toOption().map { psi ->
-                    val shiftType = ARMv7ShiftType.entries.find { psi.shiftType.textMatches(it.name.lowercase()) }.toOption().unwrap()
+                    val shiftType =
+                        ARMv7ShiftType.entries.find { psi.shiftType.textMatches(it.name.lowercase()) }.toOption()
+                            .unwrap()
                     // todo: register from psi to armv7register enum
                     Pair(shiftType, TODO())
                 }

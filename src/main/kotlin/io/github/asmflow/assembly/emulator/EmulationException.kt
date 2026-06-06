@@ -1,4 +1,3 @@
 package io.github.asmflow.assembly.emulator
 
-class EmulationException(message: String) : Exception(message) {
-}
+class EmulationException(message: String) : Exception(message)

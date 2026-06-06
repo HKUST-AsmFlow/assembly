@@ -29,6 +29,7 @@ class ARMv7RegisterViewTableModel(initialRegisters: ARMv7RegisterState) : Abstra
                 19 -> "V (CPSR)"
                 else -> "R$rowIndex"
             }
+
             1 -> {
                 when (rowIndex) {
                     16 -> registers.getCPSR().N.toInt()
@@ -38,6 +39,7 @@ class ARMv7RegisterViewTableModel(initialRegisters: ARMv7RegisterState) : Abstra
                     else -> "0x%08X".format(registers.get(rowIndex))
                 }
             }
+
             else -> throw IllegalArgumentException("Unexpected column index: $columnIndex")
         }
 

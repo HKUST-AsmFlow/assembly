@@ -4,7 +4,7 @@ import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
 object PsuedoEncoderFactory {
     fun getEncoder(mnemonic: String): ARMv7PsuedoEncoder {
-        return when(mnemonic.lowercase()){
+        return when (mnemonic.lowercase()) {
             "adr" -> AdrEncoder
             "adrl" -> AdrlEncoder
             "ldr" -> LdrPsuedoEncoder

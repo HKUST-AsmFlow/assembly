@@ -15,7 +15,7 @@ enum class InstructionFormat(val instructionClass: Int?, val humanReadble: Strin
     PSUEDO(null, "Psuedo");
 
     companion object {
-        fun String.toInstructionFormat() = entries.find {it.humanReadble == this}
+        fun String.toInstructionFormat() = entries.find { it.humanReadble == this }
     }
 }
 

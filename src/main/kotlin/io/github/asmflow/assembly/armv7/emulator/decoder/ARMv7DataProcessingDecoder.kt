@@ -22,7 +22,7 @@ data class DecodedDataProcessingInstruction(
     val operand2: DecodedOperand2
 )
 
-sealed class DecodedOperand2() {
+sealed class DecodedOperand2 {
     abstract fun getValue(): Int
     abstract fun getCarryOut(): Boolean // only for register shift operations
     data class Immediate(val imm12: Int, private val registers: ARMv7RegisterState) : DecodedOperand2() {
