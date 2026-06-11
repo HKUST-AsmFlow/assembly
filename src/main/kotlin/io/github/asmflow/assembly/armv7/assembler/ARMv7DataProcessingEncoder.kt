@@ -75,7 +75,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7InstructionOperand.Register
     ) =
         when (instruction.baseMnemonic) {
-            "adc", "add", "and" -> encodeRegisterVariant(
+            "adc", "add", "and", "sub" -> encodeRegisterVariant(
                 instruction.conditionCode,
                 getOpcode(instruction.baseMnemonic),
                 instruction.setsFlags,
@@ -93,7 +93,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7InstructionOperand.Register,
         Rd: ARMv7InstructionOperand.Register
     ) = when(instruction.baseMnemonic) {
-        "adc", "add", "and" -> encodeRegisterVariant(
+        "adc", "add", "and", "sub" -> encodeRegisterVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -113,7 +113,15 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
     ) = when (instruction.baseMnemonic) {
         // No need to support certain weird psuedos with negative immediates since
         // these are not required to be supported by ARM standards
-        "adc", "add", "and" -> encodeImmediateVariant(
+        "add" if immediateNumber < 0 -> encodeImmediateVariant(
+            instruction.conditionCode,
+            getOpcode("sub"),
+            instruction.setsFlags,
+            Rn.register,
+            Rd.register,
+            ARMv7Immediate.encode12bitImmediate((-immediateNumber).toUInt())
+        ) // Support add with negative immediate by encoding as SUB
+        "adc", "add", "and", "sub" -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,

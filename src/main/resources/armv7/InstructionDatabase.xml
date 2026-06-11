@@ -267,7 +267,7 @@
     <instruction name="strh" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strht" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strt" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="sub" supportsFlags="true" supportsConditionCodes="true"/>
+    <instruction name="sub" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0010"/>
     <instruction name="subw" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="svc" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="swp" supportsFlags="false" supportsConditionCodes="true"/>

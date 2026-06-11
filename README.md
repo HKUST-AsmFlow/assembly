@@ -6,7 +6,7 @@
 - [x] ADC 
 - [x] ADD
 - [x] AND
-- [ ] SUB
+- [x] SUB
 - [ ] MOV
 - [ ] CMP
 - [ ] EOR
