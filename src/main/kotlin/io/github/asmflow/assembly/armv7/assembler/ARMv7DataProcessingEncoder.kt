@@ -262,6 +262,14 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             }
         }
 
+        // Immediate variant with only two arguments
+        if (operands.size == 2){
+            val (rd, imm) = operands.map{it.operand}
+            if (rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number){
+                if (!rd.shift.isSome()) return listOf(processTwoArgImmediateVariant(instruction, rd, imm.value))
+            }
+        }
+
         // Check for immediate variant
         if (operands.size == 3) {
             val (rd, rn, imm) = operands.map { it.operand }
