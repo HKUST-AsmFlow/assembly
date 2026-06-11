@@ -85,8 +85,25 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
                 Rm.shift
             )
 
-            else -> throw AssemblySyntaxException("Invalid mnemonic for register DP format: $instruction.baseMnemonic")
+            else -> throw AssemblySyntaxException("Invalid mnemonic for register DP format: ${instruction.baseMnemonic}")
         }
+
+    fun processTwoArgRegisterVariant(
+        instruction: ARMv7InstructionMixin,
+        Rm: ARMv7InstructionOperand.Register,
+        Rd: ARMv7InstructionOperand.Register
+    ) = when(instruction.baseMnemonic) {
+        "adc", "add", "and" -> encodeRegisterVariant(
+            instruction.conditionCode,
+            getOpcode(instruction.baseMnemonic),
+            instruction.setsFlags,
+            Rd.register,
+            Rd.register,
+            Rm.register,
+            Rm.shift
+        )
+        else -> throw AssemblySyntaxException("Invalid mnemonic for two-argument register DP format: ${instruction.baseMnemonic}")
+    }
 
     fun processImmediateVariant(
         instruction: ARMv7InstructionMixin,
@@ -105,7 +122,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
         )
 
-        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate DP format: $instruction.baseMnemonic")
+        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate DP format: ${instruction.baseMnemonic}")
     }
 
     fun processRSRVariant(
@@ -127,7 +144,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             shiftType
         )
 
-        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate RSR format: $instruction.baseMnemonic")
+        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate RSR format: ${instruction.baseMnemonic}")
 
     }
 
@@ -168,6 +185,23 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             }
         }
 
+        // Register variant with only two arguments
+        // Two cases: either <Rn> = <Rd>
+        // Or instruction itself requires two arguments, e.g. mov
+
+        if (operands.size == 2){
+            val (rd, rm) = operands.map{it.operand}
+            if (rd is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register){
+                if (!rd.shift.isSome()){
+                    return listOf(processTwoArgRegisterVariant(
+                        instruction,
+                        rm,
+                        rd
+                    ))
+                }
+            }
+        }
+
         // Check for immediate variant
         if (operands.size == 3) {
             val (rd, rn, imm) = operands.map { it.operand }
@@ -183,6 +217,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             }
         }
 
+        // RSR variant
         if (operands.size == 3) {
             val (rd, rn, rsr) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rsr is ARMv7InstructionOperand.Register
@@ -201,6 +236,6 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             }
         }
 
-        throw AssemblySyntaxException("Invalid or unsupported format for this mnemonic.")
+        throw AssemblySyntaxException("Invalid or unsupported format for mnemonic ${instruction.baseMnemonic}")
     }
 }
