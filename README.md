@@ -7,7 +7,9 @@
 - [x] ADD
 - [x] AND
 - [x] SUB
-- [ ] MOV
+- [x] MOV
+- [ ] MOVW / MOVT
+- [x] MVN
 - [ ] CMP
 - [ ] EOR
 - [ ] ORR

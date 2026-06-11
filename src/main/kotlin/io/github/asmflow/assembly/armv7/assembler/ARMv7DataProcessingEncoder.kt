@@ -102,7 +102,59 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             Rm.register,
             Rm.shift
         )
+        // Fuck the UAL
+        "mov", "mvn" -> encodeRegisterVariant(
+            instruction.conditionCode,
+            getOpcode(instruction.baseMnemonic),
+            instruction.setsFlags,
+            ARMv7Register.R0,
+            Rd.register,
+            Rm.register,
+            Rm.shift
+        )
         else -> throw AssemblySyntaxException("Invalid mnemonic for two-argument register DP format: ${instruction.baseMnemonic}")
+    }
+
+    // TODO also support negative immediate for MVN/SUB
+    // Maybe in a cleaner way in code :)
+    fun processTwoArgImmediateVariant(
+        instruction: ARMv7InstructionMixin,
+        Rd: ARMv7InstructionOperand.Register,
+        immediateNumber: Int
+    ) = when(instruction.baseMnemonic){
+        "add" if immediateNumber < 0 -> encodeImmediateVariant(
+            instruction.conditionCode,
+            getOpcode("sub"),
+            instruction.setsFlags,
+             Rd.register,
+            Rd.register,
+            ARMv7Immediate.encode12bitImmediate((-immediateNumber).toUInt())
+        )
+        "mov" if immediateNumber < 0 -> encodeImmediateVariant(
+            instruction.conditionCode,
+            getOpcode("mvn"),
+            instruction.setsFlags,
+            ARMv7Register.R0,
+            Rd.register,
+            ARMv7Immediate.encode12bitImmediate((-immediateNumber - 1).toUInt()) // Two's complement
+        )
+        "adc", "add", "and", "sub" -> encodeImmediateVariant(
+            instruction.conditionCode,
+            getOpcode(instruction.baseMnemonic),
+            instruction.setsFlags,
+            Rd.register,
+            Rd.register,
+            ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
+        )
+        "mov", "mvn" -> encodeImmediateVariant(
+            instruction.conditionCode,
+            getOpcode(instruction.baseMnemonic),
+            instruction.setsFlags,
+            ARMv7Register.R0,
+            Rd.register,
+            ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
+        )
+        else -> throw AssemblySyntaxException("Invalid mnemonic for two-argument immediate format: ${instruction.baseMnemonic}")
     }
 
     fun processImmediateVariant(

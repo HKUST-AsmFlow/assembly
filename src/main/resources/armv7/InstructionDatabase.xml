@@ -146,7 +146,7 @@
     <instruction name="mls" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Multiply and Subtract</shortDescription>
     </instruction>
-    <instruction name="mov" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="mov" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="1101">
         <shortDescription>Move</shortDescription>
     </instruction>
     <instruction name="movt" supportsFlags="false" supportsConditionCodes="true">
@@ -164,7 +164,7 @@
     <instruction name="mul" supportsFlags="true" supportsConditionCodes="true">
         <shortDescription>Multiply</shortDescription>
     </instruction>
-    <instruction name="mvn" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="mvn" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="1111">
         <shortDescription>Bitwise NOT</shortDescription>
     </instruction>
     <instruction name="nop" supportsFlags="false" supportsConditionCodes="true">
