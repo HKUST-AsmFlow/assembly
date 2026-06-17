@@ -8,6 +8,9 @@ import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.editor.colors.ARMv7TextAttributes
 import io.github.asmflow.assembly.armv7.psi.*
 
+/**
+ * Class which provides syntax highlighting for ARMv7 instructions.
+ */
 class ARMv7InstructionAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         when (element) {

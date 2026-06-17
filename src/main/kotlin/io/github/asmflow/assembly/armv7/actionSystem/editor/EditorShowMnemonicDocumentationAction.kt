@@ -11,6 +11,9 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Mnemonic
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory
 import io.github.asmflow.assembly.util.functional.toOption
 
+/**
+ * Class representin an action which shows the documentation for assembly mnemonics.
+ */
 class EditorShowMnemonicDocumentationAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project.toOption()
@@ -26,6 +29,13 @@ class EditorShowMnemonicDocumentationAction : AnAction() {
 
     override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
+    /**
+     * Updates the shown documentation window.
+     *
+     * If the file, editor or project is closed, hide the window and return.
+     * Otherwise, if the caret is moved to another non-element position, hide the window and return.
+     * Finally, check if the current element can be a valid ARMv7 mnemonic, and display it if it is valid.
+     */
     override fun update(event: AnActionEvent) {
         val project = event.project.toOption()
         val editor = event.getData(CommonDataKeys.EDITOR).toOption()
