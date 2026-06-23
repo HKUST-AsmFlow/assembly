@@ -10,10 +10,10 @@
 - [x] MOV
 - [ ] MOVW / MOVT
 - [x] MVN
-- [ ] CMP
-- [ ] EOR
-- [ ] ORR
-- [ ] BIC
+- [x] CMP
+- [x] EOR
+- [x] ORR
+- [x] BIC
 
 ### Branch
 - [x] B

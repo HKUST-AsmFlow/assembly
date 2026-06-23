@@ -12,6 +12,8 @@ import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.util.functional.Option
 
 object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
+    private val binaryDataProcessingMnemonics = setOf("adc", "add", "and", "bic", "eor", "orr", "sub")
+
     fun Boolean.toInt() = if (this) 1 else 0
     fun encodeRegisterVariant(
         condition: ARMv7InstructionConditionCode,
@@ -74,8 +76,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rd: ARMv7InstructionOperand.Register,
         Rm: ARMv7InstructionOperand.Register
     ) =
-        when (instruction.baseMnemonic) {
-            "adc", "add", "and", "sub" -> encodeRegisterVariant(
+        when {
+            instruction.baseMnemonic in binaryDataProcessingMnemonics -> encodeRegisterVariant(
                 instruction.conditionCode,
                 getOpcode(instruction.baseMnemonic),
                 instruction.setsFlags,
@@ -92,8 +94,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         instruction: ARMv7InstructionMixin,
         Rm: ARMv7InstructionOperand.Register,
         Rd: ARMv7InstructionOperand.Register
-    ) = when(instruction.baseMnemonic) {
-        "adc", "add", "and", "sub" -> encodeRegisterVariant(
+    ) = when {
+        instruction.baseMnemonic in binaryDataProcessingMnemonics -> encodeRegisterVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -103,7 +105,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             Rm.shift
         )
         // Fuck the UAL
-        "mov", "mvn" -> encodeRegisterVariant(
+        instruction.baseMnemonic in setOf("mov", "mvn") -> encodeRegisterVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -121,8 +123,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         instruction: ARMv7InstructionMixin,
         Rd: ARMv7InstructionOperand.Register,
         immediateNumber: Int
-    ) = when(instruction.baseMnemonic){
-        "add" if immediateNumber < 0 -> encodeImmediateVariant(
+    ) = when {
+        instruction.baseMnemonic == "add" && immediateNumber < 0 -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode("sub"),
             instruction.setsFlags,
@@ -130,7 +132,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             Rd.register,
             ARMv7Immediate.encode12bitImmediate((-immediateNumber).toUInt())
         )
-        "mov" if immediateNumber < 0 -> encodeImmediateVariant(
+        instruction.baseMnemonic == "mov" && immediateNumber < 0 -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode("mvn"),
             instruction.setsFlags,
@@ -138,7 +140,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             Rd.register,
             ARMv7Immediate.encode12bitImmediate((-immediateNumber - 1).toUInt()) // Two's complement
         )
-        "adc", "add", "and", "sub" -> encodeImmediateVariant(
+        instruction.baseMnemonic in binaryDataProcessingMnemonics -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -146,7 +148,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             Rd.register,
             ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
         )
-        "mov", "mvn" -> encodeImmediateVariant(
+        instruction.baseMnemonic in setOf("mov", "mvn") -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -162,10 +164,10 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rn: ARMv7InstructionOperand.Register,
         Rd: ARMv7InstructionOperand.Register,
         immediateNumber: Int
-    ) = when (instruction.baseMnemonic) {
+    ) = when {
         // No need to support certain weird psuedos with negative immediates since
         // these are not required to be supported by ARM standards
-        "add" if immediateNumber < 0 -> encodeImmediateVariant(
+        instruction.baseMnemonic == "add" && immediateNumber < 0 -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode("sub"),
             instruction.setsFlags,
@@ -173,7 +175,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
             Rd.register,
             ARMv7Immediate.encode12bitImmediate((-immediateNumber).toUInt())
         ) // Support add with negative immediate by encoding as SUB
-        "adc", "add", "and", "sub" -> encodeImmediateVariant(
+        instruction.baseMnemonic in binaryDataProcessingMnemonics -> encodeImmediateVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -192,8 +194,8 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7Register,
         Rs: ARMv7Register,
         shiftType: ARMv7ShiftType
-    ) = when (instruction.baseMnemonic) {
-        "adc", "add", "and" -> encodeRSRVariant(
+    ) = when {
+        instruction.baseMnemonic in binaryDataProcessingMnemonics -> encodeRSRVariant(
             instruction.conditionCode,
             getOpcode(instruction.baseMnemonic),
             instruction.setsFlags,
@@ -207,6 +209,33 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         else -> throw AssemblySyntaxException("Invalid mnemonic for immediate RSR format: ${instruction.baseMnemonic}")
 
     }
+
+    fun processCmpRegisterVariant(
+        instruction: ARMv7InstructionMixin,
+        Rn: ARMv7InstructionOperand.Register,
+        Rm: ARMv7InstructionOperand.Register
+    ) = encodeRegisterVariant(
+        instruction.conditionCode,
+        getOpcode("cmp"),
+        true,
+        Rn.register,
+        ARMv7Register.R0,
+        Rm.register,
+        Rm.shift
+    )
+
+    fun processCmpImmediateVariant(
+        instruction: ARMv7InstructionMixin,
+        Rn: ARMv7InstructionOperand.Register,
+        immediateNumber: Int
+    ) = encodeImmediateVariant(
+        instruction.conditionCode,
+        getOpcode("cmp"),
+        true,
+        Rn.register,
+        ARMv7Register.R0,
+        ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
+    )
 
     override fun encode(
         instruction: ARMv7InstructionMixin,
@@ -227,7 +256,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         // b) Register shift encoding: Bottom 12 bits specify another register, type of shift, and 5 bit immediate for shift amount
         // c) Register shifted register: Bottom 12 bits specify a register, which is shifted by the amount specified in another register, according to a certain type.
 
-        if (operands.size !in 1..3) throw AssemblySyntaxException("Too few or too little operands in instruction ${instruction.text}") // Register with shift is encoded as one operand
+        if (operands.size !in 1..3) throw AssemblySyntaxException("Too few or too little operands in instruction ${instruction.baseMnemonic}") // Register with shift is encoded as one operand
         // TODO: perform some common checks on operands,
         // for this type of instructions
         // Check for register variant
@@ -251,6 +280,10 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
 
         if (operands.size == 2){
             val (rd, rm) = operands.map{it.operand}
+            if (instruction.baseMnemonic == "cmp" && rd is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register) {
+                return listOf(processCmpRegisterVariant(instruction, rd, rm))
+            }
+
             if (rd is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register){
                 if (!rd.shift.isSome()){
                     return listOf(processTwoArgRegisterVariant(
@@ -265,6 +298,10 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         // Immediate variant with only two arguments
         if (operands.size == 2){
             val (rd, imm) = operands.map{it.operand}
+            if (instruction.baseMnemonic == "cmp" && rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
+                return listOf(processCmpImmediateVariant(instruction, rd, imm.value))
+            }
+
             if (rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number){
                 if (!rd.shift.isSome()) return listOf(processTwoArgImmediateVariant(instruction, rd, imm.value))
             }
