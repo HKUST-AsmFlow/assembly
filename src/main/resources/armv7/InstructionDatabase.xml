@@ -23,7 +23,7 @@
     <instruction name="bfi" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Bit Field Insert</shortDescription>
     </instruction>
-    <instruction name="bic" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="bic" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="1110">
         <shortDescription>Bitwise Bit Clear</shortDescription>
     </instruction>
     <instruction name="bkpt" supportsFlags="false" supportsConditionCodes="false">
@@ -56,7 +56,7 @@
     <instruction name="cmn" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Compare Negative</shortDescription>
     </instruction>
-    <instruction name="cmp" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="cmp" supportsFlags="false" supportsConditionCodes="true" format="DataProcessing" opcode="1010">
         <shortDescription>Compare</shortDescription>
     </instruction>
     <instruction name="csdb" supportsFlags="false" supportsConditionCodes="true">
@@ -71,7 +71,7 @@
     <instruction name="dsb" supportsFlags="false" supportsConditionCodes="false">
         <shortDescription>Data Synchronization Barrier</shortDescription>
     </instruction>
-    <instruction name="eor" supportsFlags="true" supportsConditionCodes="true">
+    <instruction name="eor" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0001">
         <shortDescription>Bitwise XOR</shortDescription>
     </instruction>
     <instruction name="isb" supportsFlags="false" supportsConditionCodes="false">
@@ -171,7 +171,7 @@
         <shortDescription>No Operation</shortDescription>
     </instruction>
     <instruction name="orn" supportsFlags="true" supportsConditionCodes="true"/>
-    <instruction name="orr" supportsFlags="true" supportsConditionCodes="true"/>
+    <instruction name="orr" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="1100"/>
     <instruction name="pkhbt" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="pkhtb" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="pld" supportsFlags="false" supportsConditionCodes="true"/>
