@@ -40,8 +40,30 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                 )
             )
 
-        if (ARMv7InstructionDatabase.get(instruction.baseMnemonic).isNone())
+        val databaseInstruction = ARMv7InstructionDatabase.get(instruction.baseMnemonic)
+        if (databaseInstruction.isNone()) {
             return Err(AssemblerError("Instruction ${instruction.text} is not supported by AsmFlow.", instruction))
+        }
+
+        val instructionEntry = databaseInstruction.unwrap()
+
+        if (instruction.setsFlags && !instructionEntry.supportsFlags) {
+            return Err(
+                AssemblerError(
+                    "Instruction ${instruction.text} does not support the S suffix.",
+                    instruction
+                )
+            )
+        }
+
+        if (instruction.conditionCode != ARMv7InstructionConditionCode.AL && !instructionEntry.supportsConditionCodes) {
+            return Err(
+                AssemblerError(
+                    "Instruction ${instruction.text} does not support condition codes.",
+                    instruction
+                )
+            )
+        }
 
         return try {
             resultOfException {
