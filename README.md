@@ -18,7 +18,7 @@
 ### Branch
 - [x] B
 - [x] BL
-- [ ] BX
+- [x] BX
 
 ### Memory
 - [ ] LDR

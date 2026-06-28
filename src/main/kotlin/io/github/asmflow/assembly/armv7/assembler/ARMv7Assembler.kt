@@ -6,6 +6,7 @@ import io.github.asmflow.assembly.armv7.assembler.psuedo.ARMv7PsuedoEncoder
 import io.github.asmflow.assembly.armv7.assembler.psuedo.PsuedoEncoderFactory
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.database.InstructionFormat
+import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7LabelWithColon
 import io.github.asmflow.assembly.assembler.*
@@ -21,6 +22,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         return when (ARMv7InstructionDatabase.get(instruction.baseMnemonic).unwrap().format) {
             InstructionFormat.DATA_PROCESSING -> ARMv7DataProcessingEncoder
             InstructionFormat.BRANCH -> ARMv7BranchEncoder(symbols)
+            InstructionFormat.BRANCH_EXCHANGE -> ARMv7BranchExchangeEncoder
             InstructionFormat.PSUEDO -> PsuedoEncoderFactory.getEncoder(instruction.baseMnemonic)
             else -> throw AssemblySyntaxException("Mnemonic for ${instruction.text} is invalid in the database.")
         }

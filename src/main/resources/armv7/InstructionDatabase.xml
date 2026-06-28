@@ -35,7 +35,7 @@
     <instruction name="blx" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Branch with Link and Exchange</shortDescription>
     </instruction>
-    <instruction name="bx" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="bx" supportsFlags="false" supportsConditionCodes="true" format="BranchExchange">
         <shortDescription>Branch and Exchange</shortDescription>
     </instruction>
     <instruction name="bxj" supportsFlags="false" supportsConditionCodes="true">
