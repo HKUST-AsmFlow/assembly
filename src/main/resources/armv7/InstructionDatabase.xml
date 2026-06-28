@@ -149,11 +149,11 @@
     <instruction name="mov" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="1101">
         <shortDescription>Move</shortDescription>
     </instruction>
-    <instruction name="movt" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="movt" supportsFlags="false" supportsConditionCodes="true" format="DataProcessing" opcode="1010">
         <shortDescription>Move Top</shortDescription>
     </instruction>
-    <instruction name="movw" supportsFlags="false" supportsConditionCodes="true">
-        <shortDescription>Move</shortDescription>
+    <instruction name="movw" supportsFlags="false" supportsConditionCodes="true" format="DataProcessing" opcode="1000">
+        <shortDescription>Move Wide</shortDescription>
     </instruction>
     <instruction name="mrs" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Move from Special Register</shortDescription>

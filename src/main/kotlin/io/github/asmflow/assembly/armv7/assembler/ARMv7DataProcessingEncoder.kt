@@ -237,6 +237,21 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         ARMv7Immediate.encode12bitImmediate(immediateNumber.toUInt())
     )
 
+
+    // cond .... 0011 ... 0000 ... imm4 ... Rd .. imm12 MOVW
+    // cond .... 0011 ... 0100 ... imm4 ... Rd ... imm12 MOVT
+
+    fun processMovTWVariants(
+        instruction: ARMv7InstructionMixin,
+        Rd: ARMv7InstructionOperand.Register,
+        immediateNumber: Int
+    ): Int {
+        val (imm4, imm12) = ARMv7Immediate.encode16bitImmediate(immediateNumber.toUInt())
+        val instruction = ((instruction.conditionCode.code shl 28) or (0b00110 shl 23) or (instruction.baseMnemonic == "movt").toInt() shl 22
+                or (0b00 shl 20) or (imm4 shl 16) or (Rd.register.getIDSafe() shl 12) or imm12)
+        return instruction
+    }
+
     override fun encode(
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>,
@@ -298,12 +313,10 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         // Immediate variant with only two arguments
         if (operands.size == 2){
             val (rd, imm) = operands.map{it.operand}
-            if (instruction.baseMnemonic == "cmp" && rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
-                return listOf(processCmpImmediateVariant(instruction, rd, imm.value))
-            }
-
-            if (rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number){
-                if (!rd.shift.isSome()) return listOf(processTwoArgImmediateVariant(instruction, rd, imm.value))
+            if (rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number && !rd.shift.isSome()){
+                if (instruction.baseMnemonic == "cmp") return listOf(processCmpImmediateVariant(instruction, rd, imm.value))
+                if (instruction.baseMnemonic in setOf("movw", "movt")) return listOf(processMovTWVariants(instruction, rd, imm.value))
+                return listOf(processTwoArgImmediateVariant(instruction, rd, imm.value))
             }
         }
 
