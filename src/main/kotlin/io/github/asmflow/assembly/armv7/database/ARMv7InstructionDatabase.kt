@@ -12,6 +12,7 @@ enum class InstructionFormat(val instructionClass: Int?, val humanReadble: Strin
     MULTIPLY(0b00, "Multiply"),
     MEMORY_ACCESS(0b01, "MemoryAccess"),
     BRANCH(0b10, "Branch"),
+    BRANCH_EXCHANGE(0b00, "BranchExchange"),
     COPROCESSOR_AND_SYSTEM(0b11, "Misc"),
     PSUEDO(null, "Psuedo");
 

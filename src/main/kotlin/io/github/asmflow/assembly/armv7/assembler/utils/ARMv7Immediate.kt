@@ -74,6 +74,12 @@ object ARMv7Immediate {
         )
     }
 
+    // returns (imm4, imm12)
+    fun encode16bitImmediate(input: UInt): Pair<Int, Int> {
+        if (input >= (1u shl 16)) throw AssemblySyntaxException("Value $input cannot be encoded as a 16 bit integer because it is too large.")
+        return (input shr 12).toInt() to (input and 0xFFFu).toInt()
+    }
+
     fun decode12bitImmediate(imm12: Int): Int {
         val shiftAmount = (imm12 ushr 8) and 0xF // bits [11:8]
         val rotateAmount = shiftAmount * 2 // ROR amount
