@@ -63,7 +63,7 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
-            cpsr.C = inst.operand2.getCarryOut()
+            // carry todo
         }
     }
 
@@ -74,11 +74,51 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         val result = op1 - op2
     }
 
-    private fun execEor(inst: DecodedDataProcessingInstruction) {}
+    private fun execEor(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
 
-    private fun execSub(inst: DecodedDataProcessingInstruction) {}
+        val result = op1 xor op2
+        registers.set(inst.rd, result)
 
-    private fun execOrr(inst: DecodedDataProcessingInstruction) {}
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            // carry todo
+        }
+    }
+
+    private fun execSub(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 - op2
+        registers.set(inst.rd, result)
+
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            // carry todo
+            // overflow todo
+        }
+    }
+
+    private fun execOrr(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 or op2
+        registers.set(inst.rd, result)
+
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            // carry todo
+        }
+    }
 
     private fun updateAddFlags(op1: Int, op2: Int, carryIn: Int, result: Int) {
         val cpsr = registers.getCPSR()
