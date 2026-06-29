@@ -53,9 +53,26 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         }
     }
 
-    private fun execBic(inst: DecodedDataProcessingInstruction) {}
+    private fun execBic(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
 
-    private fun execCmp(inst: DecodedDataProcessingInstruction) {}
+        val result = op1 and op2.inv()
+        registers.set(inst.rd, result)
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            cpsr.C = inst.operand2.getCarryOut()
+        }
+    }
+
+    private fun execCmp(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 - op2
+    }
 
     private fun execEor(inst: DecodedDataProcessingInstruction) {}
 
