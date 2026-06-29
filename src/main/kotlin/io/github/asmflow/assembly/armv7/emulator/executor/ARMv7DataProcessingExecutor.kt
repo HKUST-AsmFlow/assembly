@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.emulator.executor
 
-import com.jetbrains.rhizomedb.register
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.emulator.ARMv7DataProcessingDecoder
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
@@ -27,6 +26,11 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             "add" -> execAdd(decoded, withCarry = false)
             "adc" -> execAdd(decoded, withCarry = true)
             "and" -> execAnd(decoded)
+            "sub" -> TODO()
+            "cmp" -> TODO()
+            "eor" -> TODO()
+            "orr" -> TODO()
+            "bic" -> TODO()
         }
     }
 
@@ -53,6 +57,16 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             cpsr.C = inst.operand2.getCarryOut()
         }
     }
+
+    private fun execBic(inst: DecodedDataProcessingInstruction) {}
+
+    private fun execCmp(inst: DecodedDataProcessingInstruction) {}
+
+    private fun execEor(inst: DecodedDataProcessingInstruction) {}
+
+    private fun execSub(inst: DecodedDataProcessingInstruction) {}
+
+    private fun execOrr(inst: DecodedDataProcessingInstruction) {}
 
     private fun updateAddFlags(op1: Int, op2: Int, carryIn: Int, result: Int) {
         val cpsr = registers.getCPSR()
