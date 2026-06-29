@@ -1,13 +1,8 @@
 package io.github.asmflow.assembly.armv7.emulator.executor
 
-import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
-import io.github.asmflow.assembly.armv7.emulator.ARMv7DataProcessingDecoder
+import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7DataProcessingDecoder
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
-import io.github.asmflow.assembly.armv7.emulator.DecodedDataProcessingInstruction
-import io.github.asmflow.assembly.armv7.emulator.DecodedOperand2
-import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
-import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
-import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
+import io.github.asmflow.assembly.armv7.emulator.decoder.DecodedDataProcessingInstruction
 
 class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
     /**
@@ -26,11 +21,11 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             "add" -> execAdd(decoded, withCarry = false)
             "adc" -> execAdd(decoded, withCarry = true)
             "and" -> execAnd(decoded)
-            "sub" -> TODO()
-            "cmp" -> TODO()
-            "eor" -> TODO()
-            "orr" -> TODO()
-            "bic" -> TODO()
+            "sub" -> execSub(decoded)
+            "cmp" -> execCmp(decoded)
+            "eor" -> execEor(decoded)
+            "orr" -> execOrr(decoded)
+            "bic" -> execBic(decoded)
         }
     }
 
