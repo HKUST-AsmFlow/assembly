@@ -7,6 +7,12 @@ import io.github.asmflow.assembly.util.functional.toOption
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
+/**
+ * Enum for all possible instruction formats in ARM.
+ *
+ * Each instruction format has a human-readable name for printing,
+ * and an instruction class (bits 25 to 27).
+ */
 enum class InstructionFormat(val instructionClass: Int?, val humanReadble: String) {
     DATA_PROCESSING(0b00, "DataProcessing"),
     MULTIPLY(0b00, "Multiply"),
@@ -39,6 +45,17 @@ object ARMv7InstructionDatabase :
 
     data object InstructionVariant
 
+    /**
+     * Reads the XML document storing the mnemonics. Each XML entry has the following attributes:
+     * - name (String, required)
+     * - supportsFlags (bool, default false)
+     * - supportsConditionCodes (bool, default false)
+     * - format (enum, default PSEUDO)
+     * - opcode (int (in binary))
+     *
+     * Each entry may also have the following sub-element:
+     * - shortDescription (String)
+     */
     override fun parseDocument(document: Document): Map<String, Instruction> {
         val instructions = document.getElementsByTagName("instruction")
 

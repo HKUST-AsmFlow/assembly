@@ -8,12 +8,23 @@ import io.github.asmflow.assembly.emulator.EmulationException
 import io.github.asmflow.assembly.emulator.Emulator
 import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
 
+/**
+ * Class representing an emulator capable of executing ARMv7 instructions.
+ */
 class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
     val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
 
     val registers = ARMv7RegisterState()
     override val name = "armv7"
+
+    /**
+     * Index for keeping track of the current instruction.
+     */
     override var currentIdx = registers.getPC() / 4 // just 0x000.. (start of .text)
+
+    /**
+     * Executes the next ARMv7 instruction.
+     */
     override fun forward() {
         // for now, directly access the text[i] for the ith instruction
         val currentPC = registers.getPC()
@@ -59,6 +70,9 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Checks whether there is a next instruction.
+     */
     override fun inBounds(): Boolean {
         currentIdx = registers.getPC() / 4
         return currentIdx < text.size && currentIdx >= 0
