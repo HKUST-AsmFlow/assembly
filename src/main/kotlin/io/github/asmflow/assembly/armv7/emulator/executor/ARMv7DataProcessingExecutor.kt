@@ -63,7 +63,7 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
-            // carry todo
+            cpsr.C = inst.operand2.getCarryOut()
         }
     }
 
@@ -72,6 +72,15 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         val op2 = inst.operand2.getValue()
 
         val result = op1 - op2
+        val cpsr = registers.getCPSR()
+        cpsr.N = result < 0
+        cpsr.Z = result == 0
+
+        val unsignedOp1 = op1.toLong() and 0xFFFFFFFFL
+        val unsignedOp2 = op2.toLong() and 0xFFFFFFFFL
+        cpsr.C = unsignedOp1 >= unsignedOp2
+
+        cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
     }
 
     private fun execEor(inst: DecodedDataProcessingInstruction) {
@@ -85,7 +94,7 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
-            // carry todo
+            cpsr.C = inst.operand2.getCarryOut()
         }
     }
 
@@ -100,8 +109,12 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
-            // carry todo
-            // overflow todo
+
+            val unsignedOp1 = op1.toLong() and 0xFFFFFFFFL
+            val unsignedOp2 = op2.toLong() and 0xFFFFFFFFL
+            cpsr.C = unsignedOp1 >= unsignedOp2
+
+            cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
         }
     }
 
@@ -116,7 +129,7 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
-            // carry todo
+            cpsr.C = inst.operand2.getCarryOut()
         }
     }
 
@@ -129,5 +142,4 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         // signed overflow for addition
         cpsr.V = (((op1 xor result) and (op2 xor result)) < 0)
     }
-
 }
