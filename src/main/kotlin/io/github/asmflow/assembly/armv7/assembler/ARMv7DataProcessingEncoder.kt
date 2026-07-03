@@ -11,6 +11,9 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.util.functional.Option
 
+/**
+ * Object providing support for encoding data processing instructions.
+ */
 object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
     private val binaryDataProcessingMnemonics = setOf("adc", "add", "and", "bic", "eor", "orr", "sub")
 

@@ -3,7 +3,13 @@ package io.github.asmflow.assembly.armv7.assembler.utils
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
+/**
+ * Utility object for converting string-type immediates into their integer representation.
+ */
 object ARMv7Immediate {
+    /**
+     * Preprocesses the immediate to handle radix indicater and leading '#' symbols.
+     */
     fun preProcessImmediate(input: String): UInt {
         if (input.isEmpty()) throw AssemblySyntaxException("Immediate is empty in $input")
         val trimmed = if (input.startsWith("#")) input.substring(1) else input

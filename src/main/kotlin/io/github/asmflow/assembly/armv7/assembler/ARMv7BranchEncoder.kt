@@ -1,11 +1,16 @@
 package io.github.asmflow.assembly.armv7.assembler
 
-import com.intellij.rml.dfa.utils.toInt
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
+/**
+ * Encoder for branch instructions.
+ *
+ * Supports the resolution of 'b' and 'bl' instructions to their correct binary representation
+ * by using the input symbol table.
+ */
 class ARMv7BranchEncoder(val symbols: HashMap<String, Int>) : ARMv7InstructionEncoder {
     override fun encode(
         instruction: ARMv7InstructionMixin,

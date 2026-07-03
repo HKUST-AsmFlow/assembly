@@ -14,7 +14,16 @@ import io.github.asmflow.assembly.util.functional.Err
 import io.github.asmflow.assembly.util.functional.Ok
 import io.github.asmflow.assembly.util.functional.resultOfException
 
+/**
+ * Class representing a ARMv7 assembler which transforms assembly into encoded instructions (integers).
+ *
+ * After resolving all labels to a fixed address, the class delegates the task of encoding an instruction
+ * to different encoders, depending on the type of instruction used.
+ */
 class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
+    /**
+     * Gets the encoder for a single ARMv7 instruction, throwing an exception if it does not exist.
+     */
     fun getEncoderFromInstruction(
         instruction: ARMv7Instruction,
         symbols: HashMap<String, Int>
@@ -28,6 +37,10 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         }
     }
 
+    /**
+     * Validates the existence and correctness of an instruction,
+     * and converts it into (a sequence of) integers.
+     */
     fun encodeInstruction(
         instruction: ARMv7Instruction,
         symbols: HashMap<String, Int>,
@@ -81,6 +94,11 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         }
     }
 
+    /**
+     * Assembles a file.
+     *
+     * Currently, the implementation only supports a single file; multi-file support may be implemented in the future.
+     */
     override fun assemble(files: List<PsiFile>): AssemblerResult<List<Int>, List<AssemblerError>> {
         val file = files[0] // For now support one file
         val errors = mutableListOf<AssemblerError>()

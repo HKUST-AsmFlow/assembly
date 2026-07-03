@@ -13,6 +13,13 @@ data class DecodedBranchInstruction(
 
 class ARMv7BranchDecoder {
 
+    /**
+     * Decodes a raw branch instruction into a DecodedBranchInstruction.
+     *
+     * First checks whether the branch signature (bits 25 to 28) are correct.
+     * Then, checks whether this instruction is a link instruction (BL),
+     * and computes the byte offset by sign-extending the remaining bits.
+     */
     fun decode(raw: Int): DecodedBranchInstruction {
 
         val signature = (raw ushr 25) and 0b111
