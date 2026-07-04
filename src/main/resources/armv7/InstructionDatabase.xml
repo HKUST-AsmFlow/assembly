@@ -77,22 +77,22 @@
     <instruction name="isb" supportsFlags="false" supportsConditionCodes="false">
         <shortDescription>Instruction Synchronization Barrier</shortDescription>
     </instruction>
-    <instruction name="ldm" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldm" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple</shortDescription>
     </instruction>
-    <instruction name="ldmda" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldmda" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple Decrement After</shortDescription>
     </instruction>
-    <instruction name="ldmdb" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldmdb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple Decrement Before</shortDescription>
     </instruction>
-    <instruction name="ldmib" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldmib" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple Increment Before</shortDescription>
     </instruction>
-    <instruction name="ldr" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldr" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Register</shortDescription>
     </instruction>
-    <instruction name="ldrb" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldrb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Register Byte</shortDescription>
     </instruction>
     <instruction name="ldrbt" supportsFlags="false" supportsConditionCodes="true">
@@ -113,19 +113,19 @@
     <instruction name="ldrexh" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Load Register Exclusive Halfword</shortDescription>
     </instruction>
-    <instruction name="ldrh" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldrh" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Register Halfword</shortDescription>
     </instruction>
     <instruction name="ldrht" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Load Register Halfword Unprivileged</shortDescription>
     </instruction>
-    <instruction name="ldrsb" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldrsb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Register Signed Byte</shortDescription>
     </instruction>
     <instruction name="ldrsbt" supportsFlags="false" supportsConditionCodes="true">
         <shortDescription>Load Register Signed Byte Unprivileged</shortDescription>
     </instruction>
-    <instruction name="ldrsh" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="ldrsh" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Register Signed Halfword</shortDescription>
     </instruction>
     <instruction name="ldrsht" supportsFlags="false" supportsConditionCodes="true">
@@ -252,19 +252,33 @@
     <instruction name="ssax" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="ssub16" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="ssub8" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="stm" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="stmda" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="stmdb" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="stmib" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="str" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="strb" supportsFlags="false" supportsConditionCodes="true"/>
+    <instruction name="stm" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple</shortDescription>
+    </instruction>
+    <instruction name="stmda" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Decrement After</shortDescription>
+    </instruction>
+    <instruction name="stmdb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Decrement Before</shortDescription>
+    </instruction>
+    <instruction name="stmib" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Increment Before</shortDescription>
+    </instruction>
+    <instruction name="str" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Register</shortDescription>
+    </instruction>
+    <instruction name="strb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Register Byte</shortDescription>
+    </instruction>
     <instruction name="strbt" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strd" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strex" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strexb" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strexd" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strexh" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="strh" supportsFlags="false" supportsConditionCodes="true"/>
+    <instruction name="strh" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Register Halfword</shortDescription>
+    </instruction>
     <instruction name="strht" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="strt" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="sub" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0010"/>
