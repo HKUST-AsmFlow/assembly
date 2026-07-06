@@ -1,15 +1,10 @@
-package io.github.asmflow.assembly.armv7.emulator
+package io.github.asmflow.assembly.armv7.emulator.decoder
 
-import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7Immediate
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
-import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
+import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.execution.ShiftResult
 import io.github.asmflow.assembly.emulator.EmulationException
-import io.github.asmflow.assembly.util.functional.None
-import io.github.asmflow.assembly.util.functional.Option
-import io.github.asmflow.assembly.util.functional.Some
-import io.github.asmflow.assembly.util.functional.toOption
 
 /**
  * Basic decoded representation for ARM data-processing instructions.

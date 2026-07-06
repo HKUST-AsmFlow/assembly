@@ -1,14 +1,8 @@
 package io.github.asmflow.assembly.armv7.emulator.executor
 
-import com.jetbrains.rhizomedb.register
-import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
-import io.github.asmflow.assembly.armv7.emulator.ARMv7DataProcessingDecoder
+import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7DataProcessingDecoder
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
-import io.github.asmflow.assembly.armv7.emulator.DecodedDataProcessingInstruction
-import io.github.asmflow.assembly.armv7.emulator.DecodedOperand2
-import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
-import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
-import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
+import io.github.asmflow.assembly.armv7.emulator.decoder.DecodedDataProcessingInstruction
 
 class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
     /**
@@ -27,6 +21,11 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             "add" -> execAdd(decoded, withCarry = false)
             "adc" -> execAdd(decoded, withCarry = true)
             "and" -> execAnd(decoded)
+            "sub" -> execSub(decoded)
+            "cmp" -> execCmp(decoded)
+            "eor" -> execEor(decoded)
+            "orr" -> execOrr(decoded)
+            "bic" -> execBic(decoded)
         }
     }
 
@@ -54,6 +53,86 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         }
     }
 
+    private fun execBic(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 and op2.inv()
+        registers.set(inst.rd, result)
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            cpsr.C = inst.operand2.getCarryOut()
+        }
+    }
+
+    private fun execCmp(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 - op2
+        val cpsr = registers.getCPSR()
+        cpsr.N = result < 0
+        cpsr.Z = result == 0
+
+        val unsignedOp1 = op1.toLong() and 0xFFFFFFFFL
+        val unsignedOp2 = op2.toLong() and 0xFFFFFFFFL
+        cpsr.C = unsignedOp1 >= unsignedOp2
+
+        cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
+    }
+
+    private fun execEor(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 xor op2
+        registers.set(inst.rd, result)
+
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            cpsr.C = inst.operand2.getCarryOut()
+        }
+    }
+
+    private fun execSub(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 - op2
+        registers.set(inst.rd, result)
+
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+
+            val unsignedOp1 = op1.toLong() and 0xFFFFFFFFL
+            val unsignedOp2 = op2.toLong() and 0xFFFFFFFFL
+            cpsr.C = unsignedOp1 >= unsignedOp2
+
+            cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
+        }
+    }
+
+    private fun execOrr(inst: DecodedDataProcessingInstruction) {
+        val op1 = registers.get(inst.rn)
+        val op2 = inst.operand2.getValue()
+
+        val result = op1 or op2
+        registers.set(inst.rd, result)
+
+        if (inst.setFlags) {
+            val cpsr = registers.getCPSR()
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            cpsr.C = inst.operand2.getCarryOut()
+        }
+    }
+
     private fun updateAddFlags(op1: Int, op2: Int, carryIn: Int, result: Int) {
         val cpsr = registers.getCPSR()
         cpsr.N = result < 0
@@ -63,5 +142,4 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         // signed overflow for addition
         cpsr.V = (((op1 xor result) and (op2 xor result)) < 0)
     }
-
 }
