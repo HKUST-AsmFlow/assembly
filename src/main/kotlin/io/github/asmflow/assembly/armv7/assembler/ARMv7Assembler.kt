@@ -28,10 +28,12 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         instruction: ARMv7Instruction,
         symbols: HashMap<String, Int>
     ): ARMv7InstructionEncoder {
+        // TODO: Special-case LDR pseudoinstructions vs regular LDR instructions
         return when (ARMv7InstructionDatabase.get(instruction.baseMnemonic).unwrap().format) {
             InstructionFormat.DATA_PROCESSING -> ARMv7DataProcessingEncoder
             InstructionFormat.BRANCH -> ARMv7BranchEncoder(symbols)
             InstructionFormat.BRANCH_EXCHANGE -> ARMv7BranchExchangeEncoder
+            InstructionFormat.MEMORY_ACCESS -> ARMv7MemoryAccessEncoder(symbols)
             InstructionFormat.PSUEDO -> PsuedoEncoderFactory.getEncoder(instruction.baseMnemonic, symbols)
             else -> throw AssemblySyntaxException("Mnemonic for ${instruction.text} is invalid in the database.")
         }
