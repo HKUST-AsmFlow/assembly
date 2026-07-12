@@ -8,6 +8,7 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7Register
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes
+import io.github.asmflow.assembly.util.functional.None
 import io.github.asmflow.assembly.util.functional.toOption
 import io.github.asmflow.assembly.util.unreachable
 
@@ -44,14 +45,22 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             return stripRadixPrefix(numberPsi.text).toInt(radix) * (if (isNegative) -1 else 1)
         }
 
-        fun toOffsetArgs(offsetNode: ASTNode): Pair<ARMv7Register, Offset.Numerical> {
+        fun toNumericalOffsetArgs(offsetNode: ASTNode): Pair<ARMv7Register, Offset.NumericalOffset> {
             val registerPsi = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER)!!.psi
-            val register =
-                ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }!!
+            val register = ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }!!
 
             val numNode = offsetNode.findChildByType(ARMv7TokenTypes.NUMBER)
             val num = numNode?.let { parseNumericalNode(it) } ?: 0
-            return Pair(register, Offset.Numerical(num))
+            return Pair(register, Offset.NumericalOffset(num))
+        }
+
+        fun toRegisterOffsetArgs(offsetNode: ASTNode): Pair<ARMv7Register, Offset.RegisterOffset> {
+            val registerPsi = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER)!!.psi
+            val register = ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }!!
+
+            val registerShift = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER_WITH_SHIFT)!!.psi
+            // TODO
+            return Pair(register, Offset.RegisterOffset(ARMv7InstructionOperand.Register(register, None)))
         }
     }
 
@@ -69,7 +78,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             }
 
             offset != null -> {
-                val (reg, num) = toOffsetArgs(offset!!.node)
+                val (reg, num) = toNumericalOffsetArgs(offset!!.node)
                 ARMv7InstructionOperand.RegisterWithOffset(reg, num,
                     ARMv7InstructionOperand.AddressingFlags(preIndexed = false, postIndexed = false))
             }
@@ -80,13 +89,13 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             }
 
             postindexed != null -> {
-                val (reg, num) = toOffsetArgs(postindexed!!.node)
+                val (reg, num) = toNumericalOffsetArgs(postindexed!!.node)
                 ARMv7InstructionOperand.RegisterWithOffset(reg, num,
                     ARMv7InstructionOperand.AddressingFlags(preIndexed = false, postIndexed = true))
             }
 
             preindexed != null -> {
-                val (reg, num) = toOffsetArgs(preindexed!!.node)
+                val (reg, num) = toNumericalOffsetArgs(preindexed!!.node)
                 ARMv7InstructionOperand.RegisterWithOffset(reg, num,
                     ARMv7InstructionOperand.AddressingFlags(preIndexed = true, postIndexed = false))
             }
@@ -99,10 +108,16 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                 val pair = registerWithShift!!.shift.toOption().map { psi ->
                     val shiftType =
                         ARMv7ShiftType.entries.find { psi.shiftType.textMatches(it.name.lowercase()) }!!
-                    // todo: register from psi to armv7register enum
-                    Pair(shiftType, TODO())
+                    val shiftBy = when {
+                        psi.register != null ->
+                            ARMv7InstructionOperand.Register(
+                                ARMv7Register.entries.find { psi.register!!.textMatches(it.name.lowercase()) }!!, None
+                            )
+                        psi.number != null -> ARMv7InstructionOperand.Number(parseNumericalNode(psi.number!!.node))
+                        else -> unreachable()
+                    }
+                    Pair(shiftType, shiftBy)
                 }
-                // todo fix error here
 
                 ARMv7InstructionOperand.Register(
                     register = register,
