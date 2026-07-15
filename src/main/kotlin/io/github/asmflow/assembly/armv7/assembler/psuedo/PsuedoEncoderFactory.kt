@@ -11,10 +11,10 @@ import io.github.asmflow.assembly.assembler.AssemblySyntaxException
  * - ldr
  */
 object PsuedoEncoderFactory {
-    fun getEncoder(mnemonic: String): ARMv7PsuedoEncoder {
+    fun getEncoder(mnemonic: String, symbols: HashMap<String, Int>): ARMv7PsuedoEncoder {
         return when (mnemonic.lowercase()) {
-            "adr" -> AdrEncoder
-            "adrl" -> AdrlEncoder
+            "adr" -> AdrEncoder(symbols)
+            "adrl" -> AdrlEncoder(symbols)
             "ldr" -> LdrPsuedoEncoder
             else -> throw AssemblySyntaxException("No psuedo-encoder implemented for $mnemonic")
         }

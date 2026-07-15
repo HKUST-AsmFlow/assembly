@@ -9,9 +9,12 @@ sealed class ARMv7InstructionOperand {
         data class Shift(val shiftType: ARMv7ShiftType, val shiftBy: ARMv7InstructionOperand)
     }
 
-    data class RegisterWithOffset(val register: ARMv7Register, val offset: Offset) : ARMv7InstructionOperand()
+    data class RegisterWithOffset(val register: ARMv7Register, val offset: Offset, val flags: AddressingFlags) : ARMv7InstructionOperand()
+
+    data class AddressingFlags(val preIndexed: Boolean, val postIndexed: Boolean)
 
     sealed class Offset {
-        data class Numerical(val amount: Int) : ARMv7InstructionOperand()
+        data class NumericalOffset(val amount: Int) : Offset()
+        data class RegisterOffset(val register: Register) : Offset()
     }
 }
