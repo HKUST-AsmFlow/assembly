@@ -135,8 +135,15 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                 if (result.isErr()) {
                     errors.add(result.unwrapErr())
                     debug("Error: ${result.unwrapErr().message} \n")
-                } else
-                    instructions.addAll(result.unwrap())
+                } else {
+                    val encoded = result.unwrap()
+                    encoded.forEach { word ->
+                        debug(
+                            "Encoded ${child.text} -> 0x${word.toUInt().toString(16).uppercase().padStart(8, '0')}\n"
+                        )
+                    }
+                    instructions.addAll(encoded)
+                }
 
                 addrCounter += if (encoder is ARMv7PsuedoEncoder) {
                     encoder.expandsTo
