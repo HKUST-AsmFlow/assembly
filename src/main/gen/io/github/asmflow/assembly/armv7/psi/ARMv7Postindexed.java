@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ARMv7Postindexed extends PsiElement {
 
-  @NotNull
+  @Nullable
   ARMv7Number getNumber();
 
   @NotNull
-  ARMv7Register getRegister();
+  List<ARMv7Register> getRegisterList();
 
 }
