@@ -47,7 +47,7 @@
 File ::= Item*
 private Item ::= (LabelWithColon | Instruction | Directive) LINE_FEED | LINE_FEED
 
-Register ::= REG
+Register ::= MINUS? REG
 
 Directive ::= DOT DirectiveName DirectiveParameters? {
   pin = 2
@@ -79,7 +79,7 @@ Shift ::= ShiftType (Number | Register)
 Offset ::= LBRACKET Register (COMMA Number)? RBRACKET
 OffsetVariant ::= LBRACKET Register COMMA RegisterWithShift RBRACKET BANG?
 Preindexed ::= LBRACKET Register COMMA Number RBRACKET BANG
-Postindexed ::= LBRACKET Register RBRACKET COMMA Number
+Postindexed ::= LBRACKET Register RBRACKET COMMA (Number | Register)
 
 Mnemonic ::= IDENTIFIER
 
