@@ -41,18 +41,6 @@ public class ARMv7OperandImpl extends ARMv7InstructionOperandMixinImpl implement
 
   @Override
   @Nullable
-  public ARMv7Offset getOffset() {
-    return findChildByClass(ARMv7Offset.class);
-  }
-
-  @Override
-  @Nullable
-  public ARMv7OffsetVariant getOffsetVariant() {
-    return findChildByClass(ARMv7OffsetVariant.class);
-  }
-
-  @Override
-  @Nullable
   public ARMv7Postindexed getPostindexed() {
     return findChildByClass(ARMv7Postindexed.class);
   }

@@ -29,15 +29,15 @@ public class ARMv7PostindexedImpl extends ASTWrapperPsiElement implements ARMv7P
   }
 
   @Override
-  @Nullable
-  public ARMv7Number getNumber() {
-    return findChildByClass(ARMv7Number.class);
+  @NotNull
+  public ARMv7FlexibleOffset getFlexibleOffset() {
+    return findNotNullChildByClass(ARMv7FlexibleOffset.class);
   }
 
   @Override
   @NotNull
-  public List<ARMv7Register> getRegisterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
+  public ARMv7Register getRegister() {
+    return findNotNullChildByClass(ARMv7Register.class);
   }
 
 }

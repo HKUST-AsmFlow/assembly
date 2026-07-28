@@ -24,6 +24,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFlexibleOffset(@NotNull ARMv7FlexibleOffset o) {
+    visitPsiElement(o);
+  }
+
   public void visitInstruction(@NotNull ARMv7Instruction o) {
     visitInstructionMixin(o);
   }
@@ -41,14 +45,6 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitNumber(@NotNull ARMv7Number o) {
-    visitPsiElement(o);
-  }
-
-  public void visitOffset(@NotNull ARMv7Offset o) {
-    visitPsiElement(o);
-  }
-
-  public void visitOffsetVariant(@NotNull ARMv7OffsetVariant o) {
     visitPsiElement(o);
   }
 

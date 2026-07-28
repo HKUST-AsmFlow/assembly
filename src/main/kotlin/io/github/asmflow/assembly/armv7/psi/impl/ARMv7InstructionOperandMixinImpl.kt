@@ -77,16 +77,16 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                 ARMv7InstructionOperand.Number(num)
             }
 
-            offset != null -> {
-                val (reg, num) = toNumericalOffsetArgs(offset!!.node)
-                ARMv7InstructionOperand.RegisterWithOffset(reg, num,
-                    ARMv7InstructionOperand.AddressingFlags(preIndexed = false, postIndexed = false))
-            }
-
-            offsetVariant != null -> {
-                // Deal with this later
-                TODO("Offset variants are not yet supported!")
-            }
+//            offset != null -> {
+//                val (reg, num) = toNumericalOffsetArgs(offset!!.node)
+//                ARMv7InstructionOperand.RegisterWithOffset(reg, num,
+//                    ARMv7InstructionOperand.AddressingFlags(preIndexed = false, postIndexed = false))
+//            }
+//
+//            offsetVariant != null -> {
+//                // Deal with this later
+//                TODO("Offset variants are not yet supported!")
+//            }
 
             postindexed != null -> {
                 val (reg, num) = toNumericalOffsetArgs(postindexed!!.node)
