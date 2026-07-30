@@ -11,7 +11,11 @@ sealed class ARMv7InstructionOperand {
 
     data class RegisterWithOffset(val register: ARMv7Register, val offset: Offset, val flags: AddressingFlags) : ARMv7InstructionOperand()
 
-    data class AddressingFlags(val preIndexed: Boolean, val postIndexed: Boolean)
+    data class AddressingFlags(
+        val preIndexed: Boolean,
+        val add: Boolean,
+        val writeBack: Boolean,
+    )
 
     sealed class Offset {
         data class NumericalOffset(val amount: Int) : Offset()

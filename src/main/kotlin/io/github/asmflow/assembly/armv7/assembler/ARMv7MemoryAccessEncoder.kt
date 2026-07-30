@@ -15,15 +15,6 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
 
     private fun Boolean.toInt() = if (this) 1 else 0
 
-    private fun pwFromFlags(flags: ARMv7InstructionOperand.AddressingFlags): Pair<Boolean, Boolean> =
-        when {
-            flags.preIndexed && flags.postIndexed ->
-                throw AssemblySyntaxException("Addressing mode cannot be both pre-indexed and post-indexed.")
-            flags.preIndexed -> true to true
-            flags.postIndexed -> false to true
-            else -> true to false
-        }
-
     /**
      * Encodes LDR/STR (word, immediate offset) — ARM A1, bits [27:25] = 010.
      *
@@ -74,12 +65,9 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
             }
 
             is ARMv7InstructionOperand.Register -> {
-                // Register-controlled shift (e.g. `lsl r3`): Rs in [11:8], bit4=1
-                (shiftBy.register.getIDSafe() shl 8) or
-                    (0 shl 7) or
-                    (shiftInfo.shiftType.code shl 5) or
-                    (1 shl 4) or
-                    Rm.getIDSafe()
+                throw AssemblySyntaxException(
+                    "Register-controlled shifts are not supported for memory register offsets. Use an immediate shift."
+                )
             }
 
             else -> throw AssemblySyntaxException("Invalid shift operand for memory offset register.")
@@ -122,16 +110,15 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
         amount: Int,
         flags: ARMv7InstructionOperand.AddressingFlags,
     ): Int {
-        val (imm12, add) = ARMv7Immediate.encodeNumericalOffset(amount)
-        val (P, W) = pwFromFlags(flags)
+        val (imm12, _) = ARMv7Immediate.encodeNumericalOffset(amount)
         val isLoad = getOpcode(instruction.baseMnemonic) == 1
 
         return encodeLoadStoreWordImmediate(
             condition = instruction.conditionCode,
             L = isLoad,
-            P = P,
-            U = add,
-            W = W,
+            P = flags.preIndexed,
+            U = flags.add,
+            W = flags.writeBack,
             Rn = Rn,
             Rt = Rt.register,
             imm12 = imm12,
@@ -145,15 +132,14 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
         index: ARMv7InstructionOperand.Register,
         flags: ARMv7InstructionOperand.AddressingFlags,
     ): Int {
-        val (P, W) = pwFromFlags(flags)
         val isLoad = getOpcode(instruction.baseMnemonic) == 1
 
         return encodeLoadStoreWordRegister(
             condition = instruction.conditionCode,
             L = isLoad,
-            P = P,
-            U = true,
-            W = W,
+            P = flags.preIndexed,
+            U = flags.add,
+            W = flags.writeBack,
             Rn = Rn,
             Rt = Rt.register,
             Rm = index.register,

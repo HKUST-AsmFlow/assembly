@@ -1,0 +1,25 @@
+.global main
+
+main:
+  ldr r0, [r1]
+  ldr r0, [r1, #4]
+  ldr r0, [r1, #-4]
+  ldr r0, [r1, #4]!
+  ldr r0, [r1], #4
+  ldr r0, [r1], #-4
+  ldr r0, [r1, r2]
+  ldr r0, [r1, -r2]
+  ldr r0, [r1, r2, lsl #2]
+  ldr r0, [r1, r2]!
+  ldr r0, [r1], r2
+  str r0, [r1]
+  str r0, [r1, #8]
+  str r0, [r1, #-8]
+  str r0, [r1, #8]!
+  str r0, [r1], #8
+  str r0, [r1], #-8
+  str r0, [r1, r2]
+  str r0, [r1, -r2]
+  str r0, [r1, r2, lsl #3]
+  str r0, [r1, r2]!
+  str r0, [r1], r2

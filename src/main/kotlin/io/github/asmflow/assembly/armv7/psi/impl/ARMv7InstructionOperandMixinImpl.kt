@@ -8,9 +8,11 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7Register
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes
+import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.util.functional.None
 import io.github.asmflow.assembly.util.functional.toOption
 import io.github.asmflow.assembly.util.unreachable
+import kotlin.math.abs
 
 abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Operand {
     companion object {
@@ -45,22 +47,87 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             return stripRadixPrefix(numberPsi.text).toInt(radix) * (if (isNegative) -1 else 1)
         }
 
-        fun toNumericalOffsetArgs(offsetNode: ASTNode): Pair<ARMv7Register, Offset.NumericalOffset> {
-            val registerPsi = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER)!!.psi
-            val register = ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }!!
+        fun parseRegisterNode(registerNode: ASTNode): ARMv7Register {
+            if (registerNode.findChildByType(ARMv7TokenTypes.MINUS) != null) {
+                throw AssemblySyntaxException("Signed base/index registers are not supported in memory addressing.")
+            }
 
-            val numNode = offsetNode.findChildByType(ARMv7TokenTypes.NUMBER)
+            val regToken = registerNode.findChildByType(ARMv7TokenTypes.REG)?.psi
+                ?: throw AssemblySyntaxException("Invalid register operand.")
+            return ARMv7Register.entries.find { regToken.textMatches(it.name.lowercase()) }
+                ?: throw AssemblySyntaxException("Unknown register ${regToken.text}.")
+        }
+
+        fun parseRegisterWithShiftNode(registerWithShiftNode: ASTNode): ARMv7InstructionOperand.Register {
+            val registerNode = registerWithShiftNode.findChildByType(ARMv7TokenTypes.REGISTER)
+                ?: throw AssemblySyntaxException("Register offset expected.")
+            val register = parseRegisterNode(registerNode)
+
+            val shiftNode = registerWithShiftNode.findChildByType(ARMv7TokenTypes.SHIFT)
+            if (shiftNode == null) {
+                return ARMv7InstructionOperand.Register(register, None)
+            }
+
+            val shiftTypePsi = shiftNode.findChildByType(ARMv7TokenTypes.SHIFT_TYPE)?.psi
+                ?: throw AssemblySyntaxException("Shift type expected for register offset.")
+            val shiftType = ARMv7ShiftType.entries.find { shiftTypePsi.textMatches(it.name.lowercase()) }
+                ?: throw AssemblySyntaxException("Unknown shift type ${shiftTypePsi.text}.")
+
+            val shiftBy = when {
+                shiftNode.findChildByType(ARMv7TokenTypes.NUMBER) != null ->
+                    ARMv7InstructionOperand.Number(parseNumericalNode(shiftNode.findChildByType(ARMv7TokenTypes.NUMBER)!!))
+                shiftNode.findChildByType(ARMv7TokenTypes.REGISTER) != null ->
+                    ARMv7InstructionOperand.Register(parseRegisterNode(shiftNode.findChildByType(ARMv7TokenTypes.REGISTER)!!), None)
+                else -> throw AssemblySyntaxException("Invalid shift amount in register offset.")
+            }
+
+            return ARMv7InstructionOperand.Register(
+                register = register,
+                shift = ARMv7InstructionOperand.Register.Shift(shiftType, shiftBy).toOption(),
+            )
+        }
+
+        fun toNumericalOffsetArgs(offsetNode: ASTNode): Pair<ARMv7Register, Offset.NumericalOffset> {
+            val registerNode = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER)
+                ?: throw AssemblySyntaxException("Base register expected for memory addressing.")
+            val register = parseRegisterNode(registerNode)
+
+            val flexibleOffsetNode = offsetNode.findChildByType(ARMv7TokenTypes.FLEXIBLE_OFFSET)
+            val numNode = flexibleOffsetNode?.findChildByType(ARMv7TokenTypes.NUMBER)
             val num = numNode?.let { parseNumericalNode(it) } ?: 0
-            return Pair(register, Offset.NumericalOffset(num))
+            return Pair(register, Offset.NumericalOffset(abs(num)))
         }
 
         fun toRegisterOffsetArgs(offsetNode: ASTNode): Pair<ARMv7Register, Offset.RegisterOffset> {
-            val registerPsi = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER)!!.psi
-            val register = ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }!!
+            val registerNode = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER)
+                ?: throw AssemblySyntaxException("Base register expected for memory addressing.")
+            val baseRegister = parseRegisterNode(registerNode)
 
-            val registerShift = offsetNode.findChildByType(ARMv7TokenTypes.REGISTER_WITH_SHIFT)!!.psi
-            // TODO
-            return Pair(register, Offset.RegisterOffset(ARMv7InstructionOperand.Register(register, None)))
+            val flexibleOffsetNode = offsetNode.findChildByType(ARMv7TokenTypes.FLEXIBLE_OFFSET)
+            val registerShiftNode = flexibleOffsetNode?.findChildByType(ARMv7TokenTypes.REGISTER_WITH_SHIFT)
+                ?: throw AssemblySyntaxException("Register offset expected.")
+            val indexRegister = parseRegisterWithShiftNode(registerShiftNode)
+            return Pair(baseRegister, Offset.RegisterOffset(indexRegister))
+        }
+
+        fun parseAddressingMode(offsetNode: ASTNode): Triple<Boolean, Boolean, Boolean> {
+            val preIndexed = offsetNode.elementType == ARMv7TokenTypes.PREINDEXED
+            val writeBack = if (preIndexed) {
+                offsetNode.findChildByType(ARMv7TokenTypes.BANG) != null
+            } else {
+                true
+            }
+
+            val flexibleOffsetNode = offsetNode.findChildByType(ARMv7TokenTypes.FLEXIBLE_OFFSET)
+            val numNode = flexibleOffsetNode?.findChildByType(ARMv7TokenTypes.NUMBER)
+            if (numNode != null) {
+                val signedOffset = parseNumericalNode(numNode)
+                return Triple(preIndexed, signedOffset >= 0, writeBack)
+            }
+
+            val registerOffsetNode = flexibleOffsetNode
+            val add = registerOffsetNode?.text?.trim()?.startsWith("-") != true
+            return Triple(preIndexed, add, writeBack)
         }
     }
 
@@ -77,27 +144,40 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                 ARMv7InstructionOperand.Number(num)
             }
 
-//            offset != null -> {
-//                val (reg, num) = toNumericalOffsetArgs(offset!!.node)
-//                ARMv7InstructionOperand.RegisterWithOffset(reg, num,
-//                    ARMv7InstructionOperand.AddressingFlags(preIndexed = false, postIndexed = false))
-//            }
-//
-//            offsetVariant != null -> {
-//                // Deal with this later
-//                TODO("Offset variants are not yet supported!")
-//            }
-
             postindexed != null -> {
-                val (reg, num) = toNumericalOffsetArgs(postindexed!!.node)
-                ARMv7InstructionOperand.RegisterWithOffset(reg, num,
-                    ARMv7InstructionOperand.AddressingFlags(preIndexed = false, postIndexed = true))
+                val postindexedNode = postindexed!!.node
+                val (preIndexed, add, writeBack) = parseAddressingMode(postindexedNode)
+                val flexibleOffsetNode = postindexedNode.findChildByType(ARMv7TokenTypes.FLEXIBLE_OFFSET)
+                val numericalOffset = flexibleOffsetNode == null ||
+                    flexibleOffsetNode.findChildByType(ARMv7TokenTypes.NUMBER) != null
+                val (reg, offset) = if (numericalOffset) {
+                    toNumericalOffsetArgs(postindexedNode)
+                } else {
+                    toRegisterOffsetArgs(postindexedNode)
+                }
+                ARMv7InstructionOperand.RegisterWithOffset(
+                    reg,
+                    offset,
+                    ARMv7InstructionOperand.AddressingFlags(preIndexed = preIndexed, add = add, writeBack = writeBack),
+                )
             }
 
             preindexed != null -> {
-                val (reg, num) = toNumericalOffsetArgs(preindexed!!.node)
-                ARMv7InstructionOperand.RegisterWithOffset(reg, num,
-                    ARMv7InstructionOperand.AddressingFlags(preIndexed = true, postIndexed = false))
+                val preindexedNode = preindexed!!.node
+                val (preIndexed, add, writeBack) = parseAddressingMode(preindexedNode)
+                val flexibleOffsetNode = preindexedNode.findChildByType(ARMv7TokenTypes.FLEXIBLE_OFFSET)
+                val numericalOffset = flexibleOffsetNode == null ||
+                    flexibleOffsetNode.findChildByType(ARMv7TokenTypes.NUMBER) != null
+                val (reg, offset) = if (numericalOffset) {
+                    toNumericalOffsetArgs(preindexedNode)
+                } else {
+                    toRegisterOffsetArgs(preindexedNode)
+                }
+                ARMv7InstructionOperand.RegisterWithOffset(
+                    reg,
+                    offset,
+                    ARMv7InstructionOperand.AddressingFlags(preIndexed = preIndexed, add = add, writeBack = writeBack),
+                )
             }
 
             registerWithShift != null -> {
