@@ -13,13 +13,12 @@ public interface ARMv7TokenTypes {
   IElementType DIRECTIVE_NAME = new ARMv7ElementType("DIRECTIVE_NAME");
   IElementType DIRECTIVE_PARAMETER = new ARMv7ElementType("DIRECTIVE_PARAMETER");
   IElementType DIRECTIVE_PARAMETERS = new ARMv7ElementType("DIRECTIVE_PARAMETERS");
+  IElementType FLEXIBLE_OFFSET = new ARMv7ElementType("FLEXIBLE_OFFSET");
   IElementType INSTRUCTION = new ARMv7ElementType("INSTRUCTION");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType LABEL_WITH_COLON = new ARMv7ElementType("LABEL_WITH_COLON");
   IElementType MNEMONIC = new ARMv7ElementType("MNEMONIC");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
-  IElementType OFFSET = new ARMv7ElementType("OFFSET");
-  IElementType OFFSET_VARIANT = new ARMv7ElementType("OFFSET_VARIANT");
   IElementType OPERAND = new ARMv7ElementType("OPERAND");
   IElementType OPERANDS = new ARMv7ElementType("OPERANDS");
   IElementType POSTINDEXED = new ARMv7ElementType("POSTINDEXED");
@@ -64,6 +63,9 @@ public interface ARMv7TokenTypes {
       else if (type == DIRECTIVE_PARAMETERS) {
         return new ARMv7DirectiveParametersImpl(node);
       }
+      else if (type == FLEXIBLE_OFFSET) {
+        return new ARMv7FlexibleOffsetImpl(node);
+      }
       else if (type == INSTRUCTION) {
         return new ARMv7InstructionImpl(node);
       }
@@ -78,12 +80,6 @@ public interface ARMv7TokenTypes {
       }
       else if (type == NUMBER) {
         return new ARMv7NumberImpl(node);
-      }
-      else if (type == OFFSET) {
-        return new ARMv7OffsetImpl(node);
-      }
-      else if (type == OFFSET_VARIANT) {
-        return new ARMv7OffsetVariantImpl(node);
       }
       else if (type == OPERAND) {
         return new ARMv7OperandImpl(node);

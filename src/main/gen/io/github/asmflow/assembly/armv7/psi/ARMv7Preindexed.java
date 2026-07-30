@@ -8,8 +8,8 @@ import com.intellij.psi.PsiElement;
 
 public interface ARMv7Preindexed extends PsiElement {
 
-  @NotNull
-  ARMv7Number getNumber();
+  @Nullable
+  ARMv7FlexibleOffset getFlexibleOffset();
 
   @NotNull
   ARMv7Register getRegister();

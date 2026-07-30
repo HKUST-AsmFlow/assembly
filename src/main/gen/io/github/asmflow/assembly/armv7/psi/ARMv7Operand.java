@@ -15,12 +15,6 @@ public interface ARMv7Operand extends ARMv7InstructionOperandMixin {
   ARMv7Number getNumber();
 
   @Nullable
-  ARMv7Offset getOffset();
-
-  @Nullable
-  ARMv7OffsetVariant getOffsetVariant();
-
-  @Nullable
   ARMv7Postindexed getPostindexed();
 
   @Nullable

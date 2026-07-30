@@ -12,14 +12,14 @@ import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7OffsetImpl extends ASTWrapperPsiElement implements ARMv7Offset {
+public class ARMv7FlexibleOffsetImpl extends ASTWrapperPsiElement implements ARMv7FlexibleOffset {
 
-  public ARMv7OffsetImpl(@NotNull ASTNode node) {
+  public ARMv7FlexibleOffsetImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitOffset(this);
+    visitor.visitFlexibleOffset(this);
   }
 
   @Override
@@ -35,9 +35,15 @@ public class ARMv7OffsetImpl extends ASTWrapperPsiElement implements ARMv7Offset
   }
 
   @Override
-  @NotNull
-  public ARMv7Register getRegister() {
-    return findNotNullChildByClass(ARMv7Register.class);
+  @Nullable
+  public ARMv7RegisterWithShift getRegisterWithShift() {
+    return findChildByClass(ARMv7RegisterWithShift.class);
+  }
+
+  @Override
+  @Nullable
+  public ARMv7Sign getSign() {
+    return findChildByClass(ARMv7Sign.class);
   }
 
 }

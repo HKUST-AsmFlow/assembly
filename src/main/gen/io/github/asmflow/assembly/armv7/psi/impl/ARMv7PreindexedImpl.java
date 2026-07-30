@@ -29,9 +29,9 @@ public class ARMv7PreindexedImpl extends ASTWrapperPsiElement implements ARMv7Pr
   }
 
   @Override
-  @NotNull
-  public ARMv7Number getNumber() {
-    return findNotNullChildByClass(ARMv7Number.class);
+  @Nullable
+  public ARMv7FlexibleOffset getFlexibleOffset() {
+    return findChildByClass(ARMv7FlexibleOffset.class);
   }
 
   @Override
