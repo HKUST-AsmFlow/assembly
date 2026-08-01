@@ -133,9 +133,7 @@ abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
         when {
             number != null -> number!!.operand
 
-            label != null -> {
-                ARMv7InstructionOperand.Label(label = label!!.text)
-            }
+            label != null -> ARMv7InstructionOperand.Label(label = label!!.text)
 
             postindexed != null -> {
                 val postindexedNode = postindexed!!.node

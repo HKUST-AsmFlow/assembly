@@ -47,7 +47,10 @@
 File ::= Item*
 private Item ::= (LabelWithColon | Instruction | Directive) LINE_FEED | LINE_FEED
 
-Register ::= MINUS? REG
+Register ::= REG {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7RegisterMixin"
+}
 
 Directive ::= DOT DirectiveName DirectiveParameters? {
   pin = 2

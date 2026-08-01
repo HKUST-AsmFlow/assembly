@@ -457,23 +457,15 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MINUS? REG
+  // REG
   public static boolean Register(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Register")) return false;
-    if (!nextTokenIs(b, "<register>", MINUS, REG)) return false;
+    if (!nextTokenIs(b, REG)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, REGISTER, "<register>");
-    r = Register_0(b, l + 1);
-    r = r && consumeToken(b, REG);
-    exit_section_(b, l, m, r, false, null);
+    Marker m = enter_section_(b);
+    r = consumeToken(b, REG);
+    exit_section_(b, m, REGISTER, r);
     return r;
-  }
-
-  // MINUS?
-  private static boolean Register_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Register_0")) return false;
-    consumeToken(b, MINUS);
-    return true;
   }
 
   /* ********************************************************** */
@@ -482,6 +474,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //   | RegisterWithShift
   static boolean RegisterOperand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterOperand")) return false;
+    if (!nextTokenIs(b, "", LBRACKET, REG)) return false;
     boolean r;
     r = Postindexed(b, l + 1);
     if (!r) r = Preindexed(b, l + 1);
@@ -493,12 +486,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   // Register (COMMA Shift)?
   public static boolean RegisterWithShift(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithShift")) return false;
-    if (!nextTokenIs(b, "<register with shift>", MINUS, REG)) return false;
+    if (!nextTokenIs(b, REG)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, REGISTER_WITH_SHIFT, "<register with shift>");
+    Marker m = enter_section_(b);
     r = Register(b, l + 1);
     r = r && RegisterWithShift_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, REGISTER_WITH_SHIFT, r);
     return r;
   }
 
