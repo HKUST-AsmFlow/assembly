@@ -20,5 +20,9 @@ sealed class ARMv7InstructionOperand {
     sealed class Offset {
         data class NumericalOffset(val amount: Int) : Offset()
         data class RegisterOffset(val register: Register) : Offset()
+
+        companion object {
+            val ZERO = NumericalOffset(0)
+        }
     }
 }

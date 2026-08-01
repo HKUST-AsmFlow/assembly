@@ -74,8 +74,14 @@ private RegisterOperand ::= Postindexed
   | Preindexed
   | RegisterWithShift
 
-Postindexed ::= LBRACKET Register RBRACKET COMMA FlexibleOffset
-Preindexed ::= LBRACKET Register (COMMA FlexibleOffset)? RBRACKET BANG?
+Postindexed ::= LBRACKET Register RBRACKET COMMA FlexibleOffset {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7PostindexedOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
+Preindexed ::= LBRACKET Register (COMMA FlexibleOffset)? RBRACKET BANG? {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7PreindexedOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
 
 FlexibleOffset ::= Number | Sign? RegisterWithShift {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7FlexibleOffsetMixinImpl"

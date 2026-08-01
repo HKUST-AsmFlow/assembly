@@ -74,11 +74,11 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitPostindexed(@NotNull ARMv7Postindexed o) {
-    visitPsiElement(o);
+    visitOperandMixin(o);
   }
 
   public void visitPreindexed(@NotNull ARMv7Preindexed o) {
-    visitPsiElement(o);
+    visitOperandMixin(o);
   }
 
   public void visitRegister(@NotNull ARMv7Register o) {
