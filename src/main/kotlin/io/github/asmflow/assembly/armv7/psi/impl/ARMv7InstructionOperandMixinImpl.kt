@@ -63,10 +63,11 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                 ?: throw AssemblySyntaxException("Register offset expected.")
             val register = parseRegisterNode(registerNode)
 
-            val shiftNode = registerWithShiftNode.findChildByType(ARMv7TokenTypes.SHIFT)
-            if (shiftNode == null) {
-                return ARMv7InstructionOperand.Register(register, None)
-            }
+            val shiftNode =
+                registerWithShiftNode.findChildByType(ARMv7TokenTypes.SHIFT) ?: return ARMv7InstructionOperand.Register(
+                    register,
+                    None
+                )
 
             val shiftTypePsi = shiftNode.findChildByType(ARMv7TokenTypes.SHIFT_TYPE)?.psi
                 ?: throw AssemblySyntaxException("Shift type expected for register offset.")
@@ -112,11 +113,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
 
         fun parseAddressingMode(offsetNode: ASTNode): Triple<Boolean, Boolean, Boolean> {
             val preIndexed = offsetNode.elementType == ARMv7TokenTypes.PREINDEXED
-            val writeBack = if (preIndexed) {
-                offsetNode.findChildByType(ARMv7TokenTypes.BANG) != null
-            } else {
-                true
-            }
+            val writeBack = !preIndexed || offsetNode.findChildByType(ARMv7TokenTypes.BANG) != null
 
             val flexibleOffsetNode = offsetNode.findChildByType(ARMv7TokenTypes.FLEXIBLE_OFFSET)
             val numNode = flexibleOffsetNode?.findChildByType(ARMv7TokenTypes.NUMBER)
