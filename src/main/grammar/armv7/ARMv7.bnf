@@ -63,8 +63,8 @@ Instruction ::= Mnemonic Operands? {
 }
 Operands ::= Operand (COMMA Operand)*
 Operand ::= RegisterOperand | Label | Number {
-  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7InstructionOperandMixinImpl"
-  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionOperandMixin"
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7OperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
 }
 
 private RegisterOperand ::= Postindexed
@@ -85,6 +85,23 @@ ShiftType ::= IDENTIFIER
 LabelWithColon ::= Label COLON
 Label ::= IDENTIFIER
 
-Sign ::= (PLUS | MINUS)
-Number ::= POUND Sign? Based
-private Based ::= !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
+Sign ::= PLUS | MINUS
+Number ::= POUND Sign? NumberLiteral {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7NumberOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
+private NumberLiteral ::= !<<afterWhitespace>> (BinaryLiteral | DecimalLiteral | HexadecimalLiteral | OctalLiteral)
+
+BinaryLiteral ::= BINARY_NUMBER {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7BinaryNumberMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
+}
+DecimalLiteral ::= DECIMAL_NUMBER {
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
+}
+HexadecimalLiteral ::= HEXADECIMAL_NUMBER {
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
+}
+OctalLiteral ::= OCTAL_NUMBER {
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
+}

@@ -9,16 +9,20 @@ import io.github.asmflow.assembly.armv7.psi.impl.*;
 
 public interface ARMv7TokenTypes {
 
+  IElementType BINARY_LITERAL = new ARMv7ElementType("BINARY_LITERAL");
+  IElementType DECIMAL_LITERAL = new ARMv7ElementType("DECIMAL_LITERAL");
   IElementType DIRECTIVE = new ARMv7ElementType("DIRECTIVE");
   IElementType DIRECTIVE_NAME = new ARMv7ElementType("DIRECTIVE_NAME");
   IElementType DIRECTIVE_PARAMETER = new ARMv7ElementType("DIRECTIVE_PARAMETER");
   IElementType DIRECTIVE_PARAMETERS = new ARMv7ElementType("DIRECTIVE_PARAMETERS");
   IElementType FLEXIBLE_OFFSET = new ARMv7ElementType("FLEXIBLE_OFFSET");
+  IElementType HEXADECIMAL_LITERAL = new ARMv7ElementType("HEXADECIMAL_LITERAL");
   IElementType INSTRUCTION = new ARMv7ElementType("INSTRUCTION");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType LABEL_WITH_COLON = new ARMv7ElementType("LABEL_WITH_COLON");
   IElementType MNEMONIC = new ARMv7ElementType("MNEMONIC");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
+  IElementType OCTAL_LITERAL = new ARMv7ElementType("OCTAL_LITERAL");
   IElementType OPERAND = new ARMv7ElementType("OPERAND");
   IElementType OPERANDS = new ARMv7ElementType("OPERANDS");
   IElementType POSTINDEXED = new ARMv7ElementType("POSTINDEXED");
@@ -51,7 +55,13 @@ public interface ARMv7TokenTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == DIRECTIVE) {
+      if (type == BINARY_LITERAL) {
+        return new ARMv7BinaryLiteralImpl(node);
+      }
+      else if (type == DECIMAL_LITERAL) {
+        return new ARMv7DecimalLiteralImpl(node);
+      }
+      else if (type == DIRECTIVE) {
         return new ARMv7DirectiveImpl(node);
       }
       else if (type == DIRECTIVE_NAME) {
@@ -65,6 +75,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == FLEXIBLE_OFFSET) {
         return new ARMv7FlexibleOffsetImpl(node);
+      }
+      else if (type == HEXADECIMAL_LITERAL) {
+        return new ARMv7HexadecimalLiteralImpl(node);
       }
       else if (type == INSTRUCTION) {
         return new ARMv7InstructionImpl(node);
@@ -80,6 +93,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == NUMBER) {
         return new ARMv7NumberImpl(node);
+      }
+      else if (type == OCTAL_LITERAL) {
+        return new ARMv7OctalLiteralImpl(node);
       }
       else if (type == OPERAND) {
         return new ARMv7OperandImpl(node);

@@ -14,7 +14,7 @@ import io.github.asmflow.assembly.util.functional.toOption
 import io.github.asmflow.assembly.util.unreachable
 import kotlin.math.abs
 
-abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Operand {
+abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Operand {
     companion object {
         fun stripRadixPrefix(raw: String): String {
             val s = raw.trim()
@@ -28,6 +28,7 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
                 else -> s
             }
         }
+
         fun parseNumericalNode(numberNode: ASTNode): Int {
             val numberPsi = numberNode.findChildByType(ARMv7TokenTypes.BINARY_NUMBER) ?: numberNode.findChildByType(
                 ARMv7TokenTypes.DECIMAL_NUMBER
@@ -130,15 +131,10 @@ abstract class ARMv7InstructionOperandMixinImpl(node: ASTNode) : ASTWrapperPsiEl
 
     override val operand: ARMv7InstructionOperand by lazy {
         when {
+            number != null -> number!!.operand
+
             label != null -> {
                 ARMv7InstructionOperand.Label(label = label!!.text)
-            }
-
-            number != null -> {
-                val numberNode = number!!.node
-                val num = parseNumericalNode(numberNode)
-
-                ARMv7InstructionOperand.Number(num)
             }
 
             postindexed != null -> {

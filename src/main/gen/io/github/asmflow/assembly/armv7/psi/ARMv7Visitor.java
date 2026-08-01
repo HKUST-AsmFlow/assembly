@@ -8,6 +8,14 @@ import com.intellij.psi.PsiElement;
 
 public class ARMv7Visitor extends PsiElementVisitor {
 
+  public void visitBinaryLiteral(@NotNull ARMv7BinaryLiteral o) {
+    visitNumberMixin(o);
+  }
+
+  public void visitDecimalLiteral(@NotNull ARMv7DecimalLiteral o) {
+    visitNumberMixin(o);
+  }
+
   public void visitDirective(@NotNull ARMv7Directive o) {
     visitPsiElement(o);
   }
@@ -28,6 +36,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitHexadecimalLiteral(@NotNull ARMv7HexadecimalLiteral o) {
+    visitNumberMixin(o);
+  }
+
   public void visitInstruction(@NotNull ARMv7Instruction o) {
     visitInstructionMixin(o);
   }
@@ -45,11 +57,15 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitNumber(@NotNull ARMv7Number o) {
-    visitPsiElement(o);
+    visitOperandMixin(o);
+  }
+
+  public void visitOctalLiteral(@NotNull ARMv7OctalLiteral o) {
+    visitNumberMixin(o);
   }
 
   public void visitOperand(@NotNull ARMv7Operand o) {
-    visitInstructionOperandMixin(o);
+    visitOperandMixin(o);
   }
 
   public void visitOperands(@NotNull ARMv7Operands o) {
@@ -88,7 +104,11 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitInstructionOperandMixin(@NotNull ARMv7InstructionOperandMixin o) {
+  public void visitNumberMixin(@NotNull ARMv7NumberMixin o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOperandMixin(@NotNull ARMv7OperandMixin o) {
     visitPsiElement(o);
   }
 
