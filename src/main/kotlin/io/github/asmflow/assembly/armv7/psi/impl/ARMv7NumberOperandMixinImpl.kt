@@ -10,6 +10,7 @@ abstract class ARMv7NumberOperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement
     override val operand by lazy {
         ARMv7InstructionOperand.Number((sign?.multiplier ?: 1) * literal.value)
     }
+    override val value by lazy { literal.value }
 
     private val literal = children.filterIsInstance<ARMv7NumberMixin>().single()
 }

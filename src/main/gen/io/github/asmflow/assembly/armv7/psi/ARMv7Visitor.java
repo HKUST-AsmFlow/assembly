@@ -33,7 +33,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitFlexibleOffset(@NotNull ARMv7FlexibleOffset o) {
-    visitPsiElement(o);
+    visitFlexibleOffsetMixin(o);
   }
 
   public void visitHexadecimalLiteral(@NotNull ARMv7HexadecimalLiteral o) {
@@ -57,7 +57,8 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitNumber(@NotNull ARMv7Number o) {
-    visitOperandMixin(o);
+    visitNumberMixin(o);
+    // visitOperandMixin(o);
   }
 
   public void visitOctalLiteral(@NotNull ARMv7OctalLiteral o) {
@@ -98,6 +99,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
 
   public void visitSign(@NotNull ARMv7Sign o) {
     visitSignMixin(o);
+  }
+
+  public void visitFlexibleOffsetMixin(@NotNull ARMv7FlexibleOffsetMixin o) {
+    visitPsiElement(o);
   }
 
   public void visitInstructionMixin(@NotNull ARMv7InstructionMixin o) {

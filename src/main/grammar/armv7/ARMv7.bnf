@@ -76,7 +76,11 @@ private RegisterOperand ::= Postindexed
 
 Postindexed ::= LBRACKET Register RBRACKET COMMA FlexibleOffset
 Preindexed ::= LBRACKET Register (COMMA FlexibleOffset)? RBRACKET BANG?
-FlexibleOffset ::= Number | Sign? RegisterWithShift
+
+FlexibleOffset ::= Number | Sign? RegisterWithShift {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7FlexibleOffsetMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7FlexibleOffsetMixin"
+}
 
 RegisterWithShift ::= Register (COMMA Shift)? {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterWithShiftOperandMixinImpl"
@@ -103,7 +107,10 @@ Sign ::= PLUS | MINUS {
 }
 Number ::= POUND Sign? NumberLiteral {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7NumberOperandMixinImpl"
-  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+  implements = [
+    "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
+    "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+  ]
 }
 private NumberLiteral ::= !<<afterWhitespace>> (BinaryLiteral | DecimalLiteral | HexadecimalLiteral | OctalLiteral)
 

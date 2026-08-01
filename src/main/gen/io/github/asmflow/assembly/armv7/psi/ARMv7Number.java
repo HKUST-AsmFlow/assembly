@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Number extends ARMv7OperandMixin {
+public interface ARMv7Number extends ARMv7NumberMixin, ARMv7OperandMixin {
 
   @Nullable
   ARMv7BinaryLiteral getBinaryLiteral();
