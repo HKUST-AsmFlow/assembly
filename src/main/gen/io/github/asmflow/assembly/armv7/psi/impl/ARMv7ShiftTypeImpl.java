@@ -9,10 +9,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7ShiftTypeImpl extends ASTWrapperPsiElement implements ARMv7ShiftType {
+public class ARMv7ShiftTypeImpl extends ARMv7ShiftTypeMixinImpl implements ARMv7ShiftType {
 
   public ARMv7ShiftTypeImpl(@NotNull ASTNode node) {
     super(node);

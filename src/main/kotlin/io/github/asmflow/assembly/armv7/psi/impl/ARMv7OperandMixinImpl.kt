@@ -131,9 +131,9 @@ abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
 
     override val operand: ARMv7InstructionOperand by lazy {
         when {
-            number != null -> number!!.operand
-
             label != null -> ARMv7InstructionOperand.Label(label = label!!.text)
+            number != null -> number!!.operand
+            registerWithShift != null -> registerWithShift!!.operand
 
             postindexed != null -> {
                 val postindexedNode = postindexed!!.node
@@ -168,31 +168,6 @@ abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
                     reg,
                     offset,
                     ARMv7InstructionOperand.AddressingFlags(preIndexed = preIndexed, add = add, writeBack = writeBack),
-                )
-            }
-
-            registerWithShift != null -> {
-                val registerPsi =
-                    registerWithShift!!.node.findChildByType(ARMv7TokenTypes.REGISTER)!!.psi
-                val register =
-                    ARMv7Register.entries.find { registerPsi.textMatches(it.name.lowercase()) }!!
-                val pair = registerWithShift!!.shift.toOption().map { psi ->
-                    val shiftType =
-                        ARMv7ShiftType.entries.find { psi.shiftType.textMatches(it.name.lowercase()) }!!
-                    val shiftBy = when {
-                        psi.register != null ->
-                            ARMv7InstructionOperand.Register(
-                                ARMv7Register.entries.find { psi.register!!.textMatches(it.name.lowercase()) }!!, None
-                            )
-                        psi.number != null -> ARMv7InstructionOperand.Number(parseNumericalNode(psi.number!!.node))
-                        else -> unreachable()
-                    }
-                    Pair(shiftType, shiftBy)
-                }
-
-                ARMv7InstructionOperand.Register(
-                    register = register,
-                    shift = pair.map { ARMv7InstructionOperand.Register.Shift(it.first, it.second) }
                 )
             }
 

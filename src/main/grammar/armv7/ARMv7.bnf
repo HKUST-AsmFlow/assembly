@@ -78,12 +78,21 @@ Postindexed ::= LBRACKET Register RBRACKET COMMA FlexibleOffset
 Preindexed ::= LBRACKET Register (COMMA FlexibleOffset)? RBRACKET BANG?
 FlexibleOffset ::= Number | Sign? RegisterWithShift
 
-RegisterWithShift ::= Register (COMMA Shift)?
-Shift ::= ShiftType (Number | Register)
+RegisterWithShift ::= Register (COMMA Shift)? {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterWithShiftOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
+Shift ::= ShiftType (Number | Register) {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7ShiftMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7ShiftMixin"
+}
 
 Mnemonic ::= IDENTIFIER
 
-ShiftType ::= IDENTIFIER
+ShiftType ::= IDENTIFIER {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7ShiftTypeMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7ShiftTypeMixin"
+}
 
 LabelWithColon ::= Label COLON
 Label ::= IDENTIFIER

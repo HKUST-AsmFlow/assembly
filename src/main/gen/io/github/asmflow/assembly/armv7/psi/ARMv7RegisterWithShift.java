@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7RegisterWithShift extends PsiElement {
+public interface ARMv7RegisterWithShift extends ARMv7OperandMixin {
 
   @NotNull
   ARMv7Register getRegister();
