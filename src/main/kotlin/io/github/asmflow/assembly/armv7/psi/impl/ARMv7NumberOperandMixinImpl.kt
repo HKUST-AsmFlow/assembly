@@ -8,8 +8,7 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin
 
 abstract class ARMv7NumberOperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Number {
     override val operand by lazy {
-        // todo(HTGAzureX1212): handle sign
-        ARMv7InstructionOperand.Number(literal.value)
+        ARMv7InstructionOperand.Number((sign?.multiplier ?: 1) * literal.value)
     }
 
     private val literal = children.filterIsInstance<ARMv7NumberMixin>().single()

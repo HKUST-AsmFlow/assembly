@@ -9,10 +9,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7DecimalLiteralImpl extends ASTWrapperPsiElement implements ARMv7DecimalLiteral {
+public class ARMv7DecimalLiteralImpl extends ARMv7DecimalNumberMixinImpl implements ARMv7DecimalLiteral {
 
   public ARMv7DecimalLiteralImpl(@NotNull ASTNode node) {
     super(node);

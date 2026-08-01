@@ -1,5 +1,7 @@
 package io.github.asmflow.assembly.armv7.psi
 
-interface ARMv7NumberMixin {
+import com.intellij.psi.PsiElement
+
+interface ARMv7NumberMixin : PsiElement {
     val value: Int
 }

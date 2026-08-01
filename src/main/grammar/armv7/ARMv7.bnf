@@ -85,7 +85,10 @@ ShiftType ::= IDENTIFIER
 LabelWithColon ::= Label COLON
 Label ::= IDENTIFIER
 
-Sign ::= PLUS | MINUS
+Sign ::= PLUS | MINUS {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7SignMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7SignMixin"
+}
 Number ::= POUND Sign? NumberLiteral {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7NumberOperandMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
@@ -97,11 +100,14 @@ BinaryLiteral ::= BINARY_NUMBER {
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
 }
 DecimalLiteral ::= DECIMAL_NUMBER {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7DecimalNumberMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
 }
 HexadecimalLiteral ::= HEXADECIMAL_NUMBER {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7HexadecimalNumberMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
 }
 OctalLiteral ::= OCTAL_NUMBER {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7OctalNumberMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
 }

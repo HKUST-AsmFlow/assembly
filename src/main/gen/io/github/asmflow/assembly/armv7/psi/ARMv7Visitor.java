@@ -97,7 +97,7 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitSign(@NotNull ARMv7Sign o) {
-    visitPsiElement(o);
+    visitSignMixin(o);
   }
 
   public void visitInstructionMixin(@NotNull ARMv7InstructionMixin o) {
@@ -109,6 +109,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
   }
 
   public void visitOperandMixin(@NotNull ARMv7OperandMixin o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSignMixin(@NotNull ARMv7SignMixin o) {
     visitPsiElement(o);
   }
 
