@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7ConditionCodeDecoder
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
+import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7MemoryExecutor
 import io.github.asmflow.assembly.emulator.EmulationException
 import io.github.asmflow.assembly.emulator.Emulator
 import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
@@ -15,6 +16,7 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
     val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
 
     val registers = ARMv7RegisterState()
+    val memory = ARMv7MemoryState()
     override val name = "armv7"
 
     /**
@@ -43,6 +45,7 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
             // Execute
             when ((instruction ushr 26) and 0b11) {
                 0b00 -> ARMv7DataProcessingExecutor(registers).execute(instruction)
+                0b01 -> ARMv7MemoryExecutor(registers, memory).execute(instruction)
                 0b10 -> ARMv7BranchExecutor(registers).execute(instruction)
             }
 
