@@ -7,10 +7,12 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Number
 import io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin
 
 abstract class ARMv7NumberOperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Number {
-    override val operand by lazy {
-        ARMv7InstructionOperand.Number((sign?.multiplier ?: 1) * literal.value)
-    }
-    override val value by lazy { literal.value }
+    override val operand: ARMv7InstructionOperand
+        get() = ARMv7InstructionOperand.Number((sign?.multiplier ?: 1) * literal.value)
 
-    private val literal = children.filterIsInstance<ARMv7NumberMixin>().single()
+    override val value: Int
+        get() = literal.value
+
+    private val literal: ARMv7NumberMixin
+        get() = children.filterIsInstance<ARMv7NumberMixin>().single()
 }

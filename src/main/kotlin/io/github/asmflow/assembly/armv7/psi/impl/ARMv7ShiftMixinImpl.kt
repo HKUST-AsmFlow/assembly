@@ -8,8 +8,8 @@ import io.github.asmflow.assembly.util.functional.None
 import io.github.asmflow.assembly.util.unreachable
 
 abstract class ARMv7ShiftMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Shift {
-    override val shift: ARMv7InstructionOperand.Register.Shift by lazy {
-        ARMv7InstructionOperand.Register.Shift(
+    override val shift: ARMv7InstructionOperand.Register.Shift
+        get() = ARMv7InstructionOperand.Register.Shift(
             shiftType.shiftType,
             when {
                 number != null -> number!!.operand
@@ -17,5 +17,4 @@ abstract class ARMv7ShiftMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), 
                 else -> unreachable()
             }
         )
-    }
 }

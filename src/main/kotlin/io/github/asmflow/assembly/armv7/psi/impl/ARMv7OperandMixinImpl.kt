@@ -7,8 +7,8 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.util.unreachable
 
 abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Operand {
-    override val operand: ARMv7InstructionOperand by lazy {
-        when {
+    override val operand: ARMv7InstructionOperand
+        get() = when {
             label != null -> ARMv7InstructionOperand.Label(label = label!!.text)
             number != null -> number!!.operand
             postindexed != null -> postindexed!!.operand
@@ -17,5 +17,4 @@ abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
 
             else -> unreachable()
         }
-    }
 }
