@@ -10,7 +10,12 @@ import kotlin.math.abs
 
 abstract class ARMv7FlexibleOffsetMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7FlexibleOffset {
     override val add: Boolean
-        get() = (sign?.multiplier ?: 1) > 0
+        get() = when {
+            // #-imm: sign lives inside Number (POUND Sign? NumberLiteral)
+            number != null -> (number!!.sign?.multiplier ?: 1) > 0
+            // -Rm: sign is a FlexibleOffset child
+            else -> (sign?.multiplier ?: 1) > 0
+        }
 
     override val offset: ARMv7InstructionOperand.Offset
         get() = when {
