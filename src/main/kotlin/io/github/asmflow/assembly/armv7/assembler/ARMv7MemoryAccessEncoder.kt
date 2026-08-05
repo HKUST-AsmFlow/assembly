@@ -118,7 +118,8 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
             L = isLoad,
             P = flags.preIndexed,
             U = flags.add,
-            W = flags.writeBack,
+            // W=1 only for pre-index with writeback (!). Post-index is P=0,W=0 (P=0,W=1 is LDRT/STRT).
+            W = flags.preIndexed && flags.writeBack,
             Rn = Rn,
             Rt = Rt.register,
             imm12 = imm12,
@@ -139,7 +140,8 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
             L = isLoad,
             P = flags.preIndexed,
             U = flags.add,
-            W = flags.writeBack,
+            // W=1 only for pre-index with writeback (!). Post-index is P=0,W=0 (P=0,W=1 is LDRT/STRT).
+            W = flags.preIndexed && flags.writeBack,
             Rn = Rn,
             Rt = Rt.register,
             Rm = index.register,
