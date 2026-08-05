@@ -37,35 +37,26 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !<<afterWhitespace>> (BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER)
-  static boolean Based(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Based")) return false;
+  // BINARY_NUMBER
+  public static boolean BinaryLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BinaryLiteral")) return false;
+    if (!nextTokenIs(b, BINARY_NUMBER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Based_0(b, l + 1);
-    r = r && Based_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // !<<afterWhitespace>>
-  private static boolean Based_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Based_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !afterWhitespace(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // BINARY_NUMBER | DECIMAL_NUMBER | HEXADECIMAL_NUMBER | OCTAL_NUMBER
-  private static boolean Based_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Based_1")) return false;
-    boolean r;
     r = consumeToken(b, BINARY_NUMBER);
-    if (!r) r = consumeToken(b, DECIMAL_NUMBER);
-    if (!r) r = consumeToken(b, HEXADECIMAL_NUMBER);
-    if (!r) r = consumeToken(b, OCTAL_NUMBER);
+    exit_section_(b, m, BINARY_LITERAL, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // DECIMAL_NUMBER
+  public static boolean DecimalLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DecimalLiteral")) return false;
+    if (!nextTokenIs(b, DECIMAL_NUMBER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DECIMAL_NUMBER);
+    exit_section_(b, m, DECIMAL_LITERAL, r);
     return r;
   }
 
@@ -194,6 +185,18 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // HEXADECIMAL_NUMBER
+  public static boolean HexadecimalLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "HexadecimalLiteral")) return false;
+    if (!nextTokenIs(b, HEXADECIMAL_NUMBER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, HEXADECIMAL_NUMBER);
+    exit_section_(b, m, HEXADECIMAL_LITERAL, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // Mnemonic Operands?
   public static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
@@ -285,7 +288,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // POUND Sign? Based
+  // POUND Sign? NumberLiteral
   public static boolean Number(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Number")) return false;
     if (!nextTokenIs(b, POUND)) return false;
@@ -293,7 +296,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, POUND);
     r = r && Number_1(b, l + 1);
-    r = r && Based(b, l + 1);
+    r = r && NumberLiteral(b, l + 1);
     exit_section_(b, m, NUMBER, r);
     return r;
   }
@@ -303,6 +306,51 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "Number_1")) return false;
     Sign(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // !<<afterWhitespace>> (BinaryLiteral | DecimalLiteral | HexadecimalLiteral | OctalLiteral)
+  static boolean NumberLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumberLiteral")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NumberLiteral_0(b, l + 1);
+    r = r && NumberLiteral_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !<<afterWhitespace>>
+  private static boolean NumberLiteral_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumberLiteral_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !afterWhitespace(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // BinaryLiteral | DecimalLiteral | HexadecimalLiteral | OctalLiteral
+  private static boolean NumberLiteral_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumberLiteral_1")) return false;
+    boolean r;
+    r = BinaryLiteral(b, l + 1);
+    if (!r) r = DecimalLiteral(b, l + 1);
+    if (!r) r = HexadecimalLiteral(b, l + 1);
+    if (!r) r = OctalLiteral(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // OCTAL_NUMBER
+  public static boolean OctalLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OctalLiteral")) return false;
+    if (!nextTokenIs(b, OCTAL_NUMBER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OCTAL_NUMBER);
+    exit_section_(b, m, OCTAL_LITERAL, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -409,23 +457,15 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MINUS? REG
+  // REG
   public static boolean Register(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Register")) return false;
-    if (!nextTokenIs(b, "<register>", MINUS, REG)) return false;
+    if (!nextTokenIs(b, REG)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, REGISTER, "<register>");
-    r = Register_0(b, l + 1);
-    r = r && consumeToken(b, REG);
-    exit_section_(b, l, m, r, false, null);
+    Marker m = enter_section_(b);
+    r = consumeToken(b, REG);
+    exit_section_(b, m, REGISTER, r);
     return r;
-  }
-
-  // MINUS?
-  private static boolean Register_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Register_0")) return false;
-    consumeToken(b, MINUS);
-    return true;
   }
 
   /* ********************************************************** */
@@ -434,6 +474,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   //   | RegisterWithShift
   static boolean RegisterOperand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterOperand")) return false;
+    if (!nextTokenIs(b, "", LBRACKET, REG)) return false;
     boolean r;
     r = Postindexed(b, l + 1);
     if (!r) r = Preindexed(b, l + 1);
@@ -445,12 +486,12 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   // Register (COMMA Shift)?
   public static boolean RegisterWithShift(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterWithShift")) return false;
-    if (!nextTokenIs(b, "<register with shift>", MINUS, REG)) return false;
+    if (!nextTokenIs(b, REG)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, REGISTER_WITH_SHIFT, "<register with shift>");
+    Marker m = enter_section_(b);
     r = Register(b, l + 1);
     r = r && RegisterWithShift_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, REGISTER_WITH_SHIFT, r);
     return r;
   }
 

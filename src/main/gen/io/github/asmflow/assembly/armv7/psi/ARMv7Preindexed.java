@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Preindexed extends PsiElement {
+public interface ARMv7Preindexed extends ARMv7OperandMixin {
 
   @Nullable
   ARMv7FlexibleOffset getFlexibleOffset();

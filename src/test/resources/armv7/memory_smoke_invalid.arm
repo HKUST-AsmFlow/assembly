@@ -1,0 +1,5 @@
+.global main
+
+main:
+  ldr r0, [r1, r2, lsl r3]
+  str r0, [-r1]

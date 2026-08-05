@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7Operand extends ARMv7InstructionOperandMixin {
+public interface ARMv7Operand extends ARMv7OperandMixin {
 
   @Nullable
   ARMv7Label getLabel();

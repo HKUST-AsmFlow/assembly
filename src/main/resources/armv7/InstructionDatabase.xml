@@ -89,7 +89,7 @@
     <instruction name="ldmib" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple Increment Before</shortDescription>
     </instruction>
-    <instruction name="ldr" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+    <instruction name="ldr" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess" opcode="1">
         <shortDescription>Load Register</shortDescription>
     </instruction>
     <instruction name="ldrb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
@@ -264,7 +264,7 @@
     <instruction name="stmib" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Store Multiple Increment Before</shortDescription>
     </instruction>
-    <instruction name="str" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+    <instruction name="str" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess" opcode="0">
         <shortDescription>Store Register</shortDescription>
     </instruction>
     <instruction name="strb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">

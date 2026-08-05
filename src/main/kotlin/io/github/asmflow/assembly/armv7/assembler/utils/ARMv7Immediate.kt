@@ -104,4 +104,21 @@ object ARMv7Immediate {
         return value.toInt()
 
     }
+
+    /**
+     * Encodes a signed `#imm` offset used by LDR/STR immediate addressing (A8.8.64 / A8.8.205).
+     *
+     * The instruction stores the absolute value in imm12 and uses the U bit to select add vs subtract.
+     *
+     * @return imm12 magnitude and whether the offset is added (U=1) or subtracted (U=0)
+     */
+    fun encodeNumericalOffset(signedOffset: Int): Pair<Int, Boolean> {
+        val magnitude = kotlin.math.abs(signedOffset)
+        if (magnitude !in 0..4095) {
+            throw AssemblySyntaxException(
+                "Offset $signedOffset out of range for LDR/STR (magnitude must be 0-4095)."
+            )
+        }
+        return magnitude to (signedOffset >= 0)
+    }
 }
