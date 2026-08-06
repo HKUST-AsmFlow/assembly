@@ -28,6 +28,7 @@ public interface ARMv7TokenTypes {
   IElementType POSTINDEXED = new ARMv7ElementType("POSTINDEXED");
   IElementType PREINDEXED = new ARMv7ElementType("PREINDEXED");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
+  IElementType REGISTER_LIST = new ARMv7ElementType("REGISTER_LIST");
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
@@ -42,12 +43,14 @@ public interface ARMv7TokenTypes {
   IElementType DOT = new ARMv7TokenType(".");
   IElementType HEXADECIMAL_NUMBER = new ARMv7TokenType("hexadecimal number");
   IElementType IDENTIFIER = new ARMv7TokenType("identifier");
+  IElementType LBRACE = new ARMv7TokenType("{");
   IElementType LBRACKET = new ARMv7TokenType("[");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType MINUS = new ARMv7TokenType("-");
   IElementType OCTAL_NUMBER = new ARMv7TokenType("octal number");
   IElementType PLUS = new ARMv7TokenType("+");
   IElementType POUND = new ARMv7TokenType("#");
+  IElementType RBRACE = new ARMv7TokenType("}");
   IElementType RBRACKET = new ARMv7TokenType("]");
   IElementType REG = new ARMv7TokenType("register");
   IElementType STRING = new ARMv7TokenType("string");
@@ -111,6 +114,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == REGISTER) {
         return new ARMv7RegisterImpl(node);
+      }
+      else if (type == REGISTER_LIST) {
+        return new ARMv7RegisterListImpl(node);
       }
       else if (type == REGISTER_WITH_SHIFT) {
         return new ARMv7RegisterWithShiftImpl(node);

@@ -77,18 +77,18 @@ public class ARMv7LexerImpl implements FlexLexer {
     "\1\14\1\15\1\16\5\17\2\20\1\21\5\0\1\22"+
     "\6\23\24\24\1\25\1\26\1\27\1\0\1\24\1\0"+
     "\1\23\1\30\1\31\3\23\5\24\1\32\2\24\1\33"+
-    "\1\34\1\24\1\35\1\36\4\24\1\37\2\24\1\0"+
-    "\1\40\10\0\1\3\u01da\0\12\41\206\0\12\41\306\0"+
-    "\12\41\234\0\12\41\166\0\12\41\140\0\12\41\166\0"+
-    "\12\41\106\0\12\41\u0116\0\12\41\106\0\12\41\u0146\0"+
-    "\12\41\46\0\12\41\u012c\0\12\41\200\0\12\41\246\0"+
-    "\12\41\6\0\12\41\266\0\12\41\126\0\12\41\206\0"+
-    "\12\41\6\0\12\41\316\0\2\3\u01a6\0\12\41\46\0"+
-    "\12\41\306\0\12\41\26\0\12\41\126\0\12\41\u0196\0"+
-    "\12\41\6\0\u0100\42\240\0\12\41\206\0\12\41\u012c\0"+
-    "\12\41\200\0\12\41\74\0\12\41\220\0\12\41\166\0"+
-    "\12\41\146\0\12\41\206\0\12\41\106\0\12\41\266\0"+
-    "\12\41\u0164\0\62\41\100\0\12\41\266\0";
+    "\1\34\1\24\1\35\1\36\4\24\1\37\2\24\1\40"+
+    "\1\41\1\42\7\0\1\3\u01da\0\12\43\206\0\12\43"+
+    "\306\0\12\43\234\0\12\43\166\0\12\43\140\0\12\43"+
+    "\166\0\12\43\106\0\12\43\u0116\0\12\43\106\0\12\43"+
+    "\u0146\0\12\43\46\0\12\43\u012c\0\12\43\200\0\12\43"+
+    "\246\0\12\43\6\0\12\43\266\0\12\43\126\0\12\43"+
+    "\206\0\12\43\6\0\12\43\316\0\2\3\u01a6\0\12\43"+
+    "\46\0\12\43\306\0\12\43\26\0\12\43\126\0\12\43"+
+    "\u0196\0\12\43\6\0\u0100\44\240\0\12\43\206\0\12\43"+
+    "\u012c\0\12\43\200\0\12\43\74\0\12\43\220\0\12\43"+
+    "\166\0\12\43\146\0\12\43\206\0\12\43\106\0\12\43"+
+    "\266\0\12\43\u0164\0\62\43\100\0\12\43\266\0";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[7424];
@@ -117,11 +117,11 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\2\3\1\4\1\5\1\6\1\7"+
     "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
-    "\1\20\10\16\1\5\1\0\1\21\1\16\1\22\1\23"+
-    "\3\22\2\24";
+    "\1\20\10\16\1\21\1\22\1\5\1\0\1\23\1\16"+
+    "\1\24\1\25\3\24\2\26";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[37];
+    int [] result = new int[39];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -146,14 +146,14 @@ public class ARMv7LexerImpl implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\43\0\106\0\43\0\151\0\43\0\214\0\43"+
-    "\0\43\0\43\0\43\0\43\0\257\0\43\0\322\0\365"+
-    "\0\43\0\43\0\u0118\0\u013b\0\u015e\0\u0181\0\u01a4\0\u01c7"+
-    "\0\u01ea\0\u020d\0\43\0\u0230\0\u0253\0\u0276\0\365\0\u0299"+
-    "\0\43\0\u02bc\0\u0276\0\u02df\0\u020d";
+    "\0\0\0\45\0\112\0\45\0\157\0\45\0\224\0\45"+
+    "\0\45\0\45\0\45\0\45\0\271\0\45\0\336\0\u0103"+
+    "\0\45\0\45\0\u0128\0\u014d\0\u0172\0\u0197\0\u01bc\0\u01e1"+
+    "\0\u0206\0\u022b\0\45\0\45\0\45\0\u0250\0\u0275\0\u029a"+
+    "\0\u0103\0\u02bf\0\45\0\u02e4\0\u029a\0\u0309\0\u022b";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[37];
+    int [] result = new int[39];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -179,23 +179,24 @@ public class ARMv7LexerImpl implements FlexLexer {
     "\1\2\1\3\2\4\1\5\1\6\1\7\1\10\1\11"+
     "\1\12\1\13\1\14\5\15\1\16\1\17\2\20\1\21"+
     "\1\2\1\22\1\23\1\24\1\25\1\26\1\27\1\30"+
-    "\1\31\1\32\1\2\1\15\1\2\44\0\1\3\43\0"+
-    "\1\4\40\0\2\7\1\0\1\7\1\0\1\7\1\33"+
-    "\17\7\1\34\14\7\14\0\5\15\20\0\1\15\1\0"+
-    "\2\17\3\0\35\17\24\0\2\20\3\0\10\20\17\0"+
-    "\2\35\5\0\2\20\3\0\10\20\1\35\25\0\2\20"+
-    "\3\0\4\20\1\36\3\20\26\0\2\20\3\0\5\20"+
-    "\1\37\2\20\17\0\4\40\3\0\2\20\3\0\10\20"+
-    "\26\0\2\20\3\0\1\20\1\37\6\20\17\0\1\41"+
-    "\1\42\3\41\2\0\2\20\3\0\10\20\26\0\2\20"+
-    "\3\0\4\20\1\43\3\20\17\0\5\44\2\0\1\45"+
-    "\1\20\3\0\2\45\6\20\3\0\2\7\1\0\1\7"+
-    "\1\0\36\7\14\0\2\35\22\0\1\35\25\0\2\20"+
-    "\3\0\6\20\1\25\1\20\17\0\4\40\37\0\3\41"+
-    "\40\0\5\44\2\0\1\44\4\0\2\44\11\0";
+    "\1\31\1\32\1\33\1\2\1\34\1\15\1\2\46\0"+
+    "\1\3\45\0\1\4\42\0\2\7\1\0\1\7\1\0"+
+    "\1\7\1\35\17\7\1\36\16\7\14\0\5\15\22\0"+
+    "\1\15\1\0\2\17\3\0\37\17\24\0\2\20\3\0"+
+    "\10\20\21\0\2\37\5\0\2\20\3\0\10\20\1\0"+
+    "\1\37\26\0\2\20\3\0\4\20\1\40\3\20\30\0"+
+    "\2\20\3\0\5\20\1\41\2\20\21\0\4\42\3\0"+
+    "\2\20\3\0\10\20\30\0\2\20\3\0\1\20\1\41"+
+    "\6\20\21\0\1\43\1\44\3\43\2\0\2\20\3\0"+
+    "\10\20\30\0\2\20\3\0\4\20\1\45\3\20\21\0"+
+    "\5\46\2\0\1\47\1\20\3\0\2\47\6\20\5\0"+
+    "\2\7\1\0\1\7\1\0\40\7\14\0\2\37\23\0"+
+    "\1\37\26\0\2\20\3\0\6\20\1\25\1\20\21\0"+
+    "\4\42\41\0\3\43\42\0\5\46\2\0\1\46\4\0"+
+    "\2\46\13\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[770];
+    int [] result = new int[814];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -234,11 +235,11 @@ public class ARMv7LexerImpl implements FlexLexer {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\1\11\1\1\1\11\1\1\1\11\1\1\5\11"+
-    "\1\1\1\11\2\1\2\11\10\1\1\11\1\0\4\1"+
+    "\1\1\1\11\2\1\2\11\10\1\3\11\1\0\4\1"+
     "\1\11\4\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[37];
+    int [] result = new int[39];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -551,102 +552,112 @@ public class ARMv7LexerImpl implements FlexLexer {
             { return BAD_CHARACTER;
             }
           // fall through
-          case 21: break;
+          case 23: break;
           case 2:
             { return WHITE_SPACE;
             }
           // fall through
-          case 22: break;
+          case 24: break;
           case 3:
             { return LINE_FEED;
             }
           // fall through
-          case 23: break;
+          case 25: break;
           case 4:
             { return BANG;
             }
           // fall through
-          case 24: break;
+          case 26: break;
           case 5:
             { return STRING;
             }
           // fall through
-          case 25: break;
+          case 27: break;
           case 6:
             { return POUND;
             }
           // fall through
-          case 26: break;
+          case 28: break;
           case 7:
             { return PLUS;
             }
           // fall through
-          case 27: break;
+          case 29: break;
           case 8:
             { return COMMA;
             }
           // fall through
-          case 28: break;
+          case 30: break;
           case 9:
             { return MINUS;
             }
           // fall through
-          case 29: break;
+          case 31: break;
           case 10:
             { return DOT;
             }
           // fall through
-          case 30: break;
+          case 32: break;
           case 11:
             { return DECIMAL_NUMBER;
             }
           // fall through
-          case 31: break;
+          case 33: break;
           case 12:
             { return COLON;
             }
           // fall through
-          case 32: break;
+          case 34: break;
           case 13:
             { return COMMENT;
             }
           // fall through
-          case 33: break;
+          case 35: break;
           case 14:
             { return IDENTIFIER;
             }
           // fall through
-          case 34: break;
+          case 36: break;
           case 15:
             { return LBRACKET;
             }
           // fall through
-          case 35: break;
+          case 37: break;
           case 16:
             { return RBRACKET;
             }
           // fall through
-          case 36: break;
-          case 17:
-            { return BINARY_NUMBER;
-            }
-          // fall through
-          case 37: break;
-          case 18:
-            { return REG;
-            }
-          // fall through
           case 38: break;
-          case 19:
-            { return OCTAL_NUMBER;
+          case 17:
+            { return LBRACE;
             }
           // fall through
           case 39: break;
-          case 20:
-            { return HEXADECIMAL_NUMBER;
+          case 18:
+            { return RBRACE;
             }
           // fall through
           case 40: break;
+          case 19:
+            { return BINARY_NUMBER;
+            }
+          // fall through
+          case 41: break;
+          case 20:
+            { return REG;
+            }
+          // fall through
+          case 42: break;
+          case 21:
+            { return OCTAL_NUMBER;
+            }
+          // fall through
+          case 43: break;
+          case 22:
+            { return HEXADECIMAL_NUMBER;
+            }
+          // fall through
+          case 44: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

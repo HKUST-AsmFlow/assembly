@@ -21,6 +21,9 @@ public interface ARMv7Operand extends ARMv7OperandMixin {
   ARMv7Preindexed getPreindexed();
 
   @Nullable
+  ARMv7RegisterList getRegisterList();
+
+  @Nullable
   ARMv7RegisterWithShift getRegisterWithShift();
 
 }

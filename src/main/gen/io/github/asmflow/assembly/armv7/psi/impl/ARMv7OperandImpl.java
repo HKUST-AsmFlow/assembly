@@ -53,6 +53,12 @@ public class ARMv7OperandImpl extends ARMv7OperandMixinImpl implements ARMv7Oper
 
   @Override
   @Nullable
+  public ARMv7RegisterList getRegisterList() {
+    return findChildByClass(ARMv7RegisterList.class);
+  }
+
+  @Override
+  @Nullable
   public ARMv7RegisterWithShift getRegisterWithShift() {
     return findChildByClass(ARMv7RegisterWithShift.class);
   }

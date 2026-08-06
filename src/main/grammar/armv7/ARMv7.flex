@@ -39,10 +39,12 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   ":" { return COLON; }
   "," { return COMMA; }
   "." { return DOT; }
+  "{" { return LBRACE; }
   "[" { return LBRACKET; }
   "-" { return MINUS; }
   "+" { return PLUS; }
   "#" { return POUND; }
+  "}" { return RBRACE; }
   "]" { return RBRACKET; }
 
   "r0" { return REG; }
