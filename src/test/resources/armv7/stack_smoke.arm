@@ -1,0 +1,11 @@
+.global main
+
+main:
+  add r0, r0, #5 @ r0 = 5
+  add r1, r1, #6 @ r1 = 6
+  str r0, [sp, #-4]! @ push r0 to stack
+  str r1, [sp, #-4]! @ push r1 to stack
+  ldr r2, [sp], #4 @ pop stack into r2
+  ldr r3, [sp], #4 @ pop stack into r3
+  @ expected LIFO: r2 = 6, r3 = 5
+  
