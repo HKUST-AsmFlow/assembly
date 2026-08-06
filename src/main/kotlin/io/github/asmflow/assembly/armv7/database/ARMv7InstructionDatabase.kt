@@ -92,10 +92,11 @@ object ARMv7InstructionDatabase :
 
     fun allInstructions(): List<Instruction> = data.values.toList()
 
-    fun get(mnemonic: String): Option<Instruction> = data[mnemonic].toOption()
+    fun get(mnemonic: String): Option<Instruction> = data[mnemonic.lowercase()].toOption()
 
     fun getOpcode(mnemonic: String): Int {
-        return data[mnemonic]?.opcode?.toInt() ?: throw Exception("Database incomplete for mnemonic $mnemonic")
+        return data[mnemonic.lowercase()]?.opcode?.toInt()
+            ?: throw Exception("Database incomplete for mnemonic $mnemonic")
     }
 
     fun findByOpcode(
