@@ -37,12 +37,15 @@ class ARMv7MemoryDecoder(private val registers: ARMv7RegisterState) {
     fun extractMemoryBits(instruction: Int): MemoryControlBits {
         val preIdx = ((instruction shr 24) and 1) != 0
         val add = ((instruction shr 23) and 1) != 0
-        val writeBack = ((instruction shr 21) and 1) != 0
+        val w = ((instruction shr 21) and 1) != 0
+        // ARM: wback = (P == '0') || (W == '1'). Post-index encodes P=0,W=0.
+        val writeBack = !preIdx || w
         return MemoryControlBits(preIdx, add, writeBack)
     }
 
     fun decode(raw: Int): DecodedMemoryInstruction {
-        val isImmediate = ((raw shr 25) and 1) != 0
+        // A1 word LDR/STR: [27:25]=010 immediate, [27:25]=011 register → I/bit25=0 means imm
+        val isImmediate = ((raw shr 25) and 1) == 0
         val isByte = ((raw shr 22) and 1) != 0
         val isLoad = ((raw shr 20) and 1) != 0
         
