@@ -6,7 +6,7 @@ class RegisterProgression(
     override val start: ARMv7Register,
     override val endInclusive: ARMv7Register
 ) : ClosedRange<ARMv7Register>, Iterable<ARMv7Register> {
-    override fun iterator(): Iterator<ARMv7Register> = ARMv7Register.entries.iterator()
+    override fun iterator(): Iterator<ARMv7Register> = ARMv7Register.entries.slice(start.ordinal..endInclusive.ordinal).iterator()
 
     companion object {
         operator fun ARMv7Register.rangeTo(other: ARMv7Register) = RegisterProgression(this, other)
