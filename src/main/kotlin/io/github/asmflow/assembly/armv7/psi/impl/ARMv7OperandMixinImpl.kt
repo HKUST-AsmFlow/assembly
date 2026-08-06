@@ -13,6 +13,7 @@ abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             number != null -> number!!.operand
             postindexed != null -> postindexed!!.operand
             preindexed != null -> preindexed!!.operand
+            registerList != null -> registerList!!.operand
             registerWithShift != null -> registerWithShift!!.operand
 
             else -> unreachable()

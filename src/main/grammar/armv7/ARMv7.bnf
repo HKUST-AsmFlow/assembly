@@ -53,11 +53,18 @@ Register ::= REG {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7RegisterMixin"
 }
+RegisterRange ::= Register MINUS Register {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterRangeMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7RegisterRangeMixin"
+}
 
-RegisterList ::= LBRACE RegisterListItems RBRACE
+RegisterList ::= LBRACE RegisterListItems RBRACE {
+  pin = 1
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterListOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
 private RegisterListItems ::= RegisterListItem (COMMA RegisterListItem)*
 private RegisterListItem ::= RegisterRange | Register
-private RegisterRange ::= Register MINUS Register
 
 Directive ::= DOT DirectiveName DirectiveParameters? {
   pin = 2

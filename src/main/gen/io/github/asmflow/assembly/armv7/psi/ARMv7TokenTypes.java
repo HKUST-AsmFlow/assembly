@@ -29,6 +29,7 @@ public interface ARMv7TokenTypes {
   IElementType PREINDEXED = new ARMv7ElementType("PREINDEXED");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
   IElementType REGISTER_LIST = new ARMv7ElementType("REGISTER_LIST");
+  IElementType REGISTER_RANGE = new ARMv7ElementType("REGISTER_RANGE");
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
@@ -117,6 +118,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == REGISTER_LIST) {
         return new ARMv7RegisterListImpl(node);
+      }
+      else if (type == REGISTER_RANGE) {
+        return new ARMv7RegisterRangeImpl(node);
       }
       else if (type == REGISTER_WITH_SHIFT) {
         return new ARMv7RegisterWithShiftImpl(node);

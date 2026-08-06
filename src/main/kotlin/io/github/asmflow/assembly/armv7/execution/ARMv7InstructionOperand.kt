@@ -1,6 +1,7 @@
 package io.github.asmflow.assembly.armv7.execution
 
 import io.github.asmflow.assembly.util.functional.Option
+import java.util.SortedSet
 
 sealed class ARMv7InstructionOperand {
     data class Label(val label: String) : ARMv7InstructionOperand()
@@ -8,6 +9,7 @@ sealed class ARMv7InstructionOperand {
     data class Register(val register: ARMv7Register, val shift: Option<Shift>) : ARMv7InstructionOperand() {
         data class Shift(val shiftType: ARMv7ShiftType, val shiftBy: ARMv7InstructionOperand)
     }
+    data class RegisterList(val registers: SortedSet<ARMv7Register>) : ARMv7InstructionOperand()
 
     data class RegisterWithOffset(val register: ARMv7Register, val offset: Offset, val flags: AddressingFlags) : ARMv7InstructionOperand()
 

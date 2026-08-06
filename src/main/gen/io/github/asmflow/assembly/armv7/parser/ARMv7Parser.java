@@ -474,13 +474,14 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   public static boolean RegisterList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterList")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, REGISTER_LIST, null);
     r = consumeToken(b, LBRACE);
-    r = r && RegisterListItems(b, l + 1);
-    r = r && consumeToken(b, RBRACE);
-    exit_section_(b, m, REGISTER_LIST, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, RegisterListItems(b, l + 1));
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -545,7 +546,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // Register MINUS Register
-  static boolean RegisterRange(PsiBuilder b, int l) {
+  public static boolean RegisterRange(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterRange")) return false;
     if (!nextTokenIs(b, REG)) return false;
     boolean r;
@@ -553,7 +554,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = Register(b, l + 1);
     r = r && consumeToken(b, MINUS);
     r = r && Register(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, REGISTER_RANGE, r);
     return r;
   }
 

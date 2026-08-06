@@ -11,14 +11,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes.*;
 import io.github.asmflow.assembly.armv7.psi.*;
 
-public class ARMv7RegisterListImpl extends ARMv7RegisterListOperandMixinImpl implements ARMv7RegisterList {
+public class ARMv7RegisterRangeImpl extends ARMv7RegisterRangeMixinImpl implements ARMv7RegisterRange {
 
-  public ARMv7RegisterListImpl(@NotNull ASTNode node) {
+  public ARMv7RegisterRangeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ARMv7Visitor visitor) {
-    visitor.visitRegisterList(this);
+    visitor.visitRegisterRange(this);
   }
 
   @Override
@@ -31,12 +31,6 @@ public class ARMv7RegisterListImpl extends ARMv7RegisterListOperandMixinImpl imp
   @NotNull
   public List<ARMv7Register> getRegisterList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7Register.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ARMv7RegisterRange> getRegisterRangeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ARMv7RegisterRange.class);
   }
 
 }

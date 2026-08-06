@@ -6,12 +6,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ARMv7RegisterList extends ARMv7OperandMixin {
+public interface ARMv7RegisterRange extends ARMv7RegisterRangeMixin {
 
   @NotNull
   List<ARMv7Register> getRegisterList();
-
-  @NotNull
-  List<ARMv7RegisterRange> getRegisterRangeList();
 
 }
