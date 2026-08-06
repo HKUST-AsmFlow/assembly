@@ -36,6 +36,7 @@
         COMMA = ","
         COLON = ":"
         DOT = "."
+        EQUAL = "="
         LBRACE = "{"
         LBRACKET = "["
         MINUS = "-"
@@ -79,8 +80,13 @@ Instruction ::= Mnemonic Operands? {
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin"
 }
 Operands ::= Operand (COMMA Operand)*
-Operand ::= RegisterList | RegisterOperand | Label | Number {
+Operand ::= RegisterList | RegisterOperand | Label | Number | LiteralLoad {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7OperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
+
+LiteralLoad ::= EQUAL NumberLiteral {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7LiteralLoadOperandMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
 }
 

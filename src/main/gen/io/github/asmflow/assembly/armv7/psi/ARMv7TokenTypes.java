@@ -20,6 +20,7 @@ public interface ARMv7TokenTypes {
   IElementType INSTRUCTION = new ARMv7ElementType("INSTRUCTION");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType LABEL_WITH_COLON = new ARMv7ElementType("LABEL_WITH_COLON");
+  IElementType LITERAL_LOAD = new ARMv7ElementType("LITERAL_LOAD");
   IElementType MNEMONIC = new ARMv7ElementType("MNEMONIC");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
   IElementType OCTAL_LITERAL = new ARMv7ElementType("OCTAL_LITERAL");
@@ -42,6 +43,7 @@ public interface ARMv7TokenTypes {
   IElementType COMMENT = new ARMv7TokenType("comment");
   IElementType DECIMAL_NUMBER = new ARMv7TokenType("decimal number");
   IElementType DOT = new ARMv7TokenType(".");
+  IElementType EQUAL = new ARMv7TokenType("=");
   IElementType HEXADECIMAL_NUMBER = new ARMv7TokenType("hexadecimal number");
   IElementType IDENTIFIER = new ARMv7TokenType("identifier");
   IElementType LBRACE = new ARMv7TokenType("{");
@@ -91,6 +93,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == LABEL_WITH_COLON) {
         return new ARMv7LabelWithColonImpl(node);
+      }
+      else if (type == LITERAL_LOAD) {
+        return new ARMv7LiteralLoadImpl(node);
       }
       else if (type == MNEMONIC) {
         return new ARMv7MnemonicImpl(node);

@@ -35,6 +35,12 @@ public class ARMv7OperandImpl extends ARMv7OperandMixinImpl implements ARMv7Oper
 
   @Override
   @Nullable
+  public ARMv7LiteralLoad getLiteralLoad() {
+    return findChildByClass(ARMv7LiteralLoad.class);
+  }
+
+  @Override
+  @Nullable
   public ARMv7Number getNumber() {
     return findChildByClass(ARMv7Number.class);
   }

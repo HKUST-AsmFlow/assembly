@@ -39,6 +39,7 @@ STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
   ":" { return COLON; }
   "," { return COMMA; }
   "." { return DOT; }
+  "=" { return EQUAL; }
   "{" { return LBRACE; }
   "[" { return LBRACKET; }
   "-" { return MINUS; }

@@ -12,6 +12,9 @@ public interface ARMv7Operand extends ARMv7OperandMixin {
   ARMv7Label getLabel();
 
   @Nullable
+  ARMv7LiteralLoad getLiteralLoad();
+
+  @Nullable
   ARMv7Number getNumber();
 
   @Nullable

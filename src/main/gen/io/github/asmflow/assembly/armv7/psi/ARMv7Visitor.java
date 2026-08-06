@@ -52,6 +52,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLiteralLoad(@NotNull ARMv7LiteralLoad o) {
+    visitOperandMixin(o);
+  }
+
   public void visitMnemonic(@NotNull ARMv7Mnemonic o) {
     visitPsiElement(o);
   }

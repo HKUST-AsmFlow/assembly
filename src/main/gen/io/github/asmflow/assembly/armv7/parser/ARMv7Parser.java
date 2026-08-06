@@ -276,6 +276,19 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // EQUAL NumberLiteral
+  public static boolean LiteralLoad(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralLoad")) return false;
+    if (!nextTokenIs(b, EQUAL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EQUAL);
+    r = r && NumberLiteral(b, l + 1);
+    exit_section_(b, m, LITERAL_LOAD, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IDENTIFIER
   public static boolean Mnemonic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Mnemonic")) return false;
@@ -354,7 +367,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // RegisterList | RegisterOperand | Label | Number
+  // RegisterList | RegisterOperand | Label | Number | LiteralLoad
   public static boolean Operand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Operand")) return false;
     boolean r;
@@ -363,6 +376,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     if (!r) r = RegisterOperand(b, l + 1);
     if (!r) r = Label(b, l + 1);
     if (!r) r = Number(b, l + 1);
+    if (!r) r = LiteralLoad(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
