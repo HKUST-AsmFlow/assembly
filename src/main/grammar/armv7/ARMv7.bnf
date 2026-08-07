@@ -36,10 +36,13 @@
         COMMA = ","
         COLON = ":"
         DOT = "."
+        EQUAL = "="
+        LBRACE = "{"
         LBRACKET = "["
         MINUS = "-"
         PLUS = "+"
         POUND = "#"
+        RBRACE = "}"
         RBRACKET = "]"
     ]
 }
@@ -51,6 +54,18 @@ Register ::= REG {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7RegisterMixin"
 }
+RegisterRange ::= Register MINUS Register {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterRangeMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7RegisterRangeMixin"
+}
+
+RegisterList ::= LBRACE RegisterListItems RBRACE {
+  pin = 1
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterListOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
+private RegisterListItems ::= RegisterListItem (COMMA RegisterListItem)*
+private RegisterListItem ::= RegisterRange | Register
 
 Directive ::= DOT DirectiveName DirectiveParameters? {
   pin = 2
@@ -65,8 +80,13 @@ Instruction ::= Mnemonic Operands? {
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin"
 }
 Operands ::= Operand (COMMA Operand)*
-Operand ::= RegisterOperand | Label | Number {
+Operand ::= RegisterList | RegisterOperand | Label | Number | LiteralLoad {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7OperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
+
+LiteralLoad ::= EQUAL NumberLiteral {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7LiteralLoadOperandMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
 }
 

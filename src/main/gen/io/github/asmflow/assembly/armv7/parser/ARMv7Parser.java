@@ -276,6 +276,19 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // EQUAL NumberLiteral
+  public static boolean LiteralLoad(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralLoad")) return false;
+    if (!nextTokenIs(b, EQUAL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EQUAL);
+    r = r && NumberLiteral(b, l + 1);
+    exit_section_(b, m, LITERAL_LOAD, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IDENTIFIER
   public static boolean Mnemonic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Mnemonic")) return false;
@@ -354,14 +367,16 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // RegisterOperand | Label | Number
+  // RegisterList | RegisterOperand | Label | Number | LiteralLoad
   public static boolean Operand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Operand")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, OPERAND, "<operand>");
-    r = RegisterOperand(b, l + 1);
+    r = RegisterList(b, l + 1);
+    if (!r) r = RegisterOperand(b, l + 1);
     if (!r) r = Label(b, l + 1);
     if (!r) r = Number(b, l + 1);
+    if (!r) r = LiteralLoad(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -469,6 +484,67 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // LBRACE RegisterListItems RBRACE
+  public static boolean RegisterList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterList")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, REGISTER_LIST, null);
+    r = consumeToken(b, LBRACE);
+    p = r; // pin = 1
+    r = r && report_error_(b, RegisterListItems(b, l + 1));
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // RegisterRange | Register
+  static boolean RegisterListItem(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterListItem")) return false;
+    if (!nextTokenIs(b, REG)) return false;
+    boolean r;
+    r = RegisterRange(b, l + 1);
+    if (!r) r = Register(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // RegisterListItem (COMMA RegisterListItem)*
+  static boolean RegisterListItems(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterListItems")) return false;
+    if (!nextTokenIs(b, REG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RegisterListItem(b, l + 1);
+    r = r && RegisterListItems_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA RegisterListItem)*
+  private static boolean RegisterListItems_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterListItems_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!RegisterListItems_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "RegisterListItems_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA RegisterListItem
+  private static boolean RegisterListItems_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterListItems_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && RegisterListItem(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // Postindexed
   //   | Preindexed
   //   | RegisterWithShift
@@ -479,6 +555,20 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = Postindexed(b, l + 1);
     if (!r) r = Preindexed(b, l + 1);
     if (!r) r = RegisterWithShift(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Register MINUS Register
+  public static boolean RegisterRange(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterRange")) return false;
+    if (!nextTokenIs(b, REG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Register(b, l + 1);
+    r = r && consumeToken(b, MINUS);
+    r = r && Register(b, l + 1);
+    exit_section_(b, m, REGISTER_RANGE, r);
     return r;
   }
 

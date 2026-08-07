@@ -10,9 +10,11 @@ abstract class ARMv7OperandMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
     override val operand: ARMv7InstructionOperand
         get() = when {
             label != null -> ARMv7InstructionOperand.Label(label = label!!.text)
+            literalLoad != null -> literalLoad!!.operand
             number != null -> number!!.operand
             postindexed != null -> postindexed!!.operand
             preindexed != null -> preindexed!!.operand
+            registerList != null -> registerList!!.operand
             registerWithShift != null -> registerWithShift!!.operand
 
             else -> unreachable()

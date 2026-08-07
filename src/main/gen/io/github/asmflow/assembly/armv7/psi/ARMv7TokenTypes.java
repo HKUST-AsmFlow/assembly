@@ -20,6 +20,7 @@ public interface ARMv7TokenTypes {
   IElementType INSTRUCTION = new ARMv7ElementType("INSTRUCTION");
   IElementType LABEL = new ARMv7ElementType("LABEL");
   IElementType LABEL_WITH_COLON = new ARMv7ElementType("LABEL_WITH_COLON");
+  IElementType LITERAL_LOAD = new ARMv7ElementType("LITERAL_LOAD");
   IElementType MNEMONIC = new ARMv7ElementType("MNEMONIC");
   IElementType NUMBER = new ARMv7ElementType("NUMBER");
   IElementType OCTAL_LITERAL = new ARMv7ElementType("OCTAL_LITERAL");
@@ -28,6 +29,8 @@ public interface ARMv7TokenTypes {
   IElementType POSTINDEXED = new ARMv7ElementType("POSTINDEXED");
   IElementType PREINDEXED = new ARMv7ElementType("PREINDEXED");
   IElementType REGISTER = new ARMv7ElementType("REGISTER");
+  IElementType REGISTER_LIST = new ARMv7ElementType("REGISTER_LIST");
+  IElementType REGISTER_RANGE = new ARMv7ElementType("REGISTER_RANGE");
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
@@ -40,14 +43,17 @@ public interface ARMv7TokenTypes {
   IElementType COMMENT = new ARMv7TokenType("comment");
   IElementType DECIMAL_NUMBER = new ARMv7TokenType("decimal number");
   IElementType DOT = new ARMv7TokenType(".");
+  IElementType EQUAL = new ARMv7TokenType("=");
   IElementType HEXADECIMAL_NUMBER = new ARMv7TokenType("hexadecimal number");
   IElementType IDENTIFIER = new ARMv7TokenType("identifier");
+  IElementType LBRACE = new ARMv7TokenType("{");
   IElementType LBRACKET = new ARMv7TokenType("[");
   IElementType LINE_FEED = new ARMv7TokenType("lf");
   IElementType MINUS = new ARMv7TokenType("-");
   IElementType OCTAL_NUMBER = new ARMv7TokenType("octal number");
   IElementType PLUS = new ARMv7TokenType("+");
   IElementType POUND = new ARMv7TokenType("#");
+  IElementType RBRACE = new ARMv7TokenType("}");
   IElementType RBRACKET = new ARMv7TokenType("]");
   IElementType REG = new ARMv7TokenType("register");
   IElementType STRING = new ARMv7TokenType("string");
@@ -88,6 +94,9 @@ public interface ARMv7TokenTypes {
       else if (type == LABEL_WITH_COLON) {
         return new ARMv7LabelWithColonImpl(node);
       }
+      else if (type == LITERAL_LOAD) {
+        return new ARMv7LiteralLoadImpl(node);
+      }
       else if (type == MNEMONIC) {
         return new ARMv7MnemonicImpl(node);
       }
@@ -111,6 +120,12 @@ public interface ARMv7TokenTypes {
       }
       else if (type == REGISTER) {
         return new ARMv7RegisterImpl(node);
+      }
+      else if (type == REGISTER_LIST) {
+        return new ARMv7RegisterListImpl(node);
+      }
+      else if (type == REGISTER_RANGE) {
+        return new ARMv7RegisterRangeImpl(node);
       }
       else if (type == REGISTER_WITH_SHIFT) {
         return new ARMv7RegisterWithShiftImpl(node);
