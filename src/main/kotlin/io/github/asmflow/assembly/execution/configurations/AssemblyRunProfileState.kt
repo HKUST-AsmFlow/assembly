@@ -8,7 +8,6 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.util.Computable
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiManager

@@ -59,7 +59,7 @@ class ARMv7RegisterViewTableModel(
         }
 
     fun updateRegisterData(newRegisters: ARMv7RegisterState) {
-        this.registers = newRegisters
+        registers = newRegisters
 
         fireTableDataChanged()
     }
