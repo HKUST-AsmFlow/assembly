@@ -10,10 +10,10 @@ class ARMv7MemoryState(text: List<Int>) {
         ARMv7AddressSpace.TEXT_BASE + (textWords.size * 4).toUInt()
 
     private fun inText(addr: UInt): Boolean =
-        addr >= ARMv7AddressSpace.TEXT_BASE && addr < textEnd
+        addr in ARMv7AddressSpace.TEXT_BASE until textEnd
 
     private fun inWritable(addr: UInt): Boolean =
-        addr >= ARMv7AddressSpace.DATA_BASE && addr < ARMv7AddressSpace.STACK_TOP
+        addr in ARMv7AddressSpace.DATA_BASE until ARMv7AddressSpace.STACK_TOP
 
     fun canFetch(pc: UInt): Boolean =
         pc % 4u == 0u && inText(pc) && inText(pc + 3u)

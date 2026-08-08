@@ -47,7 +47,6 @@ class ARMv7RegisterViewToolWindow {
 
         numberRepresentationProperty.afterChange {
             tableModel.setNumberRepresentation(it)
-            tableModel.fireTableDataChanged()
         }
     }
 

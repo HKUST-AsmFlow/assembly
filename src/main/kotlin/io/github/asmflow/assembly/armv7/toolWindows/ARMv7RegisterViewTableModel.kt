@@ -11,7 +11,10 @@ class ARMv7RegisterViewTableModel(
     private var registers: ARMv7RegisterState = initialRegisters
 
     fun setNumberRepresentation(repr: ARMv7RegisterViewToolWindow.NumberRepresentation) {
+        if (base == repr) return
+
         base = repr
+        fireTableDataChanged()
     }
 
     override fun getColumnName(column: Int): String? = when (column) {
