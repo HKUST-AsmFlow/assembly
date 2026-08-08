@@ -11,7 +11,7 @@ import javax.swing.JPanel
 import javax.swing.JTable
 
 class ARMv7RegisterViewToolWindow {
-    private val numberRepresentationProperty = PropertyGraph().property(NumberRepresentation.Hexadecimal)
+    private val numberRepresentationProperty = PropertyGraph().property(ARMv7ViewNumberRepresentation.Hexadecimal)
     private var repr by numberRepresentationProperty
     private val tableModel =
         ARMv7RegisterViewTableModel(ARMv7RegisterState(), repr)
@@ -34,7 +34,7 @@ class ARMv7RegisterViewToolWindow {
 
         contentPanel = panel {
             row("Number representation: ") {
-                segmentedButton(NumberRepresentation.entries) { text = it.toString() }.align(Align.FILL)
+                segmentedButton(ARMv7ViewNumberRepresentation.entries) { text = it.toString() }.align(Align.FILL)
                     .bind(numberRepresentationProperty)
             }
 
@@ -56,9 +56,5 @@ class ARMv7RegisterViewToolWindow {
 
     fun updateState(registers: ARMv7RegisterState) {
         tableModel.updateRegisterData(registers)
-    }
-
-    enum class NumberRepresentation {
-        Decimal, Hexadecimal
     }
 }

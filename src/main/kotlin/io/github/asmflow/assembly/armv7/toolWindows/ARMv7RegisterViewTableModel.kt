@@ -6,11 +6,11 @@ import javax.swing.table.AbstractTableModel
 
 class ARMv7RegisterViewTableModel(
     initialRegisters: ARMv7RegisterState,
-    var base: ARMv7RegisterViewToolWindow.NumberRepresentation
+    var base: ARMv7RegisterViewToolWindow.ARMv7ViewNumberRepresentation
 ) : AbstractTableModel() {
     private var registers: ARMv7RegisterState = initialRegisters
 
-    fun setNumberRepresentation(repr: ARMv7RegisterViewToolWindow.NumberRepresentation) {
+    fun setNumberRepresentation(repr: ARMv7RegisterViewToolWindow.ARMv7ViewNumberRepresentation) {
         if (base == repr) return
 
         base = repr
@@ -47,13 +47,13 @@ class ARMv7RegisterViewTableModel(
                     18 -> registers.getCPSR().C.toInt()
                     19 -> registers.getCPSR().V.toInt()
                     else -> when (base) {
-                        ARMv7RegisterViewToolWindow.NumberRepresentation.Hexadecimal -> "0x%08X".format(
+                        ARMv7RegisterViewToolWindow.ARMv7ViewNumberRepresentation.Hexadecimal -> "0x%08X".format(
                             registers.get(
                                 rowIndex
                             )
                         )
 
-                        ARMv7RegisterViewToolWindow.NumberRepresentation.Decimal -> registers.get(rowIndex)
+                        ARMv7RegisterViewToolWindow.ARMv7ViewNumberRepresentation.Decimal -> registers.get(rowIndex)
                     }
                 }
             }
