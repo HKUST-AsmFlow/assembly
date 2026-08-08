@@ -10,7 +10,7 @@ class ARMv7MemoryViewTableModel(
     val wordsPerRow = 8
     val rows = 16
 
-    private var baseAddress = ARMv7AddressSpace.DATA_BASE
+    private var baseAddress = ARMv7AddressSpace.DATA_BASE.addr
     private var memory: ARMv7MemoryState = initialMemory
 
     override fun getColumnCount(): Int = wordsPerRow + 1
@@ -46,10 +46,10 @@ class ARMv7MemoryViewTableModel(
 
     fun canMovePage(by: Int): Boolean = when {
         by < 0 ->
-            baseAddress > ARMv7AddressSpace.TEXT_BASE
+            baseAddress > ARMv7AddressSpace.TEXT_BASE.addr
 
         by > 0 ->
-            baseAddress < ARMv7AddressSpace.KERNEL_BASE
+            baseAddress < ARMv7AddressSpace.KERNEL_BASE.addr
 
         else ->
             false
@@ -67,6 +67,11 @@ class ARMv7MemoryViewTableModel(
     fun updateMemoryData(newMemoryState: ARMv7MemoryState) {
         memory = newMemoryState
 
+        fireTableDataChanged()
+    }
+
+    fun setBaseAddress(addr: UInt) {
+        baseAddress = addr
         fireTableDataChanged()
     }
 }

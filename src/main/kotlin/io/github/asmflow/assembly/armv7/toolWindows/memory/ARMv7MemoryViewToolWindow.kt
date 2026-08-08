@@ -40,6 +40,10 @@ class ARMv7MemoryViewToolWindow {
         val group = DefaultActionGroup().apply {
             add(ARMv7MemoryViewToolWindowPreviousMemoryPageAction(tableModel))
             add(ARMv7MemoryViewToolWindowNextMemoryPageAction(tableModel))
+
+            addSeparator()
+
+            add(ARMv7MemoryViewToolWindowStartingAddressDropdownAction(tableModel))
         }
 
         val toolbar = ActionManager.getInstance().createActionToolbar(
