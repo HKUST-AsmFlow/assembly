@@ -1,4 +1,4 @@
-name: check.yml
+name: Plugin Check
 on:
   push:
     branches:
