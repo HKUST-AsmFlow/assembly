@@ -13,19 +13,29 @@ class ARMv7MemoryViewTableModel(
 
     override fun getColumnCount(): Int = wordsPerRow + 1
 
+    override fun getColumnName(column: Int): String? =
+        when (column) {
+            0 -> "Address"
+
+            in 1..wordsPerRow ->
+                "+%02X".format((column - 1) * 4)
+
+            else -> null
+        }
+
     override fun getRowCount(): Int = rows
 
     override fun getValueAt(rowIndex: Int, columnIndex: Int): Any {
         return when (columnIndex) {
             0 -> {
-                val address = 0u + (rowIndex * wordsPerRow * 4).toUInt()
+                val address = 0L + (rowIndex * wordsPerRow * 4).toLong()
                 "0x%08X".format(address)
             }
 
             in 1..wordsPerRow -> {
-                val rowAddress = 0u + (rowIndex * wordsPerRow * 4).toUInt()
-                val address = rowAddress + ((columnIndex - 1) * 4).toUInt()
-                "0x%08X".format(memory.getWord(address))
+                val rowAddress = 0L + (rowIndex * wordsPerRow * 4).toLong()
+                val address = rowAddress + ((columnIndex - 1) * 4).toLong()
+                "0x%08X".format(memory.getWord(address.toUInt()).toLong())
             }
 
             else -> throw IllegalArgumentException("Unexpected column index: $columnIndex")
