@@ -1,5 +1,6 @@
 package io.github.asmflow.assembly.armv7.toolWindows.memory
 
+import io.github.asmflow.assembly.armv7.emulator.ARMv7AddressSpace
 import io.github.asmflow.assembly.armv7.emulator.ARMv7MemoryState
 import javax.swing.table.AbstractTableModel
 
@@ -9,6 +10,7 @@ class ARMv7MemoryViewTableModel(
     val wordsPerRow = 8
     val rows = 16
 
+    private var baseAddress = ARMv7AddressSpace.DATA_BASE
     private var memory: ARMv7MemoryState = initialMemory
 
     override fun getColumnCount(): Int = wordsPerRow + 1
@@ -28,12 +30,12 @@ class ARMv7MemoryViewTableModel(
     override fun getValueAt(rowIndex: Int, columnIndex: Int): Any {
         return when (columnIndex) {
             0 -> {
-                val address = 0L + (rowIndex * wordsPerRow * 4).toLong()
+                val address = (baseAddress + (rowIndex * wordsPerRow * 4).toUInt()).toLong()
                 "0x%08X".format(address)
             }
 
             in 1..wordsPerRow -> {
-                val rowAddress = 0L + (rowIndex * wordsPerRow * 4).toLong()
+                val rowAddress = (baseAddress + (rowIndex * wordsPerRow * 4).toUInt()).toLong()
                 val address = rowAddress + ((columnIndex - 1) * 4).toLong()
                 "0x%08X".format(memory.getWord(address.toUInt()).toLong())
             }
@@ -42,10 +44,24 @@ class ARMv7MemoryViewTableModel(
         }
     }
 
-    fun canMovePage(by: Int): Boolean = TODO()
+    fun canMovePage(by: Int): Boolean = when {
+        by < 0 ->
+            baseAddress > ARMv7AddressSpace.TEXT_BASE
+
+        by > 0 ->
+            baseAddress < ARMv7AddressSpace.KERNEL_BASE
+
+        else ->
+            false
+    }
 
     fun movePage(by: Int) {
-        TODO()
+        when {
+            by < 0 -> baseAddress -= 0x200u
+            by > 0 -> baseAddress += 0x200u
+        }
+
+        fireTableDataChanged()
     }
 
     fun updateMemoryData(newMemoryState: ARMv7MemoryState) {

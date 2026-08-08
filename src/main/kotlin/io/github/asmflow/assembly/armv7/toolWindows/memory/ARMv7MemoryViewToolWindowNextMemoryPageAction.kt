@@ -11,7 +11,7 @@ class ARMv7MemoryViewToolWindowNextMemoryPageAction(private val model: ARMv7Memo
     AllIcons.Actions.Forward
 ) {
     override fun actionPerformed(e: AnActionEvent) {
-        TODO("Not yet implemented")
+        model.movePage(1)
     }
 
     override fun getActionUpdateThread() = ActionUpdateThread.EDT
