@@ -1,3 +1,4 @@
+<?xml version='1.1' ?>
 <ivy-module version="2.0">
   <info organisation="bundledModule" module="intellij-platform-test-runtime" revision="IU-253.30387.90" />
   <configurations>
