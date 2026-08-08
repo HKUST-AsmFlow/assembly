@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.armv7.toolWindows
+package io.github.asmflow.assembly.armv7.toolWindows.memory
 
 import io.github.asmflow.assembly.armv7.emulator.ARMv7MemoryState
 import javax.swing.table.AbstractTableModel
@@ -7,7 +7,7 @@ class ARMv7MemoryViewTableModel(
     initialMemory: ARMv7MemoryState
 ) : AbstractTableModel() {
     val wordsPerRow = 8
-    val rows = 256
+    val rows = 16
 
     private var memory: ARMv7MemoryState = initialMemory
 
@@ -40,6 +40,12 @@ class ARMv7MemoryViewTableModel(
 
             else -> throw IllegalArgumentException("Unexpected column index: $columnIndex")
         }
+    }
+
+    fun canMovePage(by: Int): Boolean = TODO()
+
+    fun movePage(by: Int) {
+        TODO()
     }
 
     fun updateMemoryData(newMemoryState: ARMv7MemoryState) {
