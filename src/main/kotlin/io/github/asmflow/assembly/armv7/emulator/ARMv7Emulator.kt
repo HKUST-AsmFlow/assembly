@@ -41,6 +41,7 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
         }
 
         publisher.onRegisterStateChanged(registers)
+        publisher.onMemoryStateChanged(memory)
     }
 
     override fun backward() {
