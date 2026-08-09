@@ -44,6 +44,14 @@ class ARMv7MemoryViewTableModel(
         }
     }
 
+    override fun isCellEditable(rowIndex: Int, columnIndex: Int): Boolean {
+        return super.isCellEditable(rowIndex, columnIndex)
+    }
+
+    override fun setValueAt(aValue: Any?, rowIndex: Int, columnIndex: Int) {
+        super.setValueAt(aValue, rowIndex, columnIndex)
+    }
+
     fun canMovePage(by: Int): Boolean = when {
         by < 0 ->
             baseAddress > ARMv7AddressSpace.TEXT_BASE.addr

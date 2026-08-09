@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.armv7.toolWindows
+package io.github.asmflow.assembly.armv7.toolWindows.register
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow

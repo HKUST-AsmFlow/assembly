@@ -1,7 +1,8 @@
-package io.github.asmflow.assembly.armv7.toolWindows
+package io.github.asmflow.assembly.armv7.toolWindows.register
 
 import io.github.asmflow.assembly.armv7.assembler.ARMv7DataProcessingEncoder.toInt
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7ViewNumberRepresentation
 import javax.swing.table.AbstractTableModel
 
 class ARMv7RegisterViewTableModel(
@@ -60,6 +61,14 @@ class ARMv7RegisterViewTableModel(
 
             else -> throw IllegalArgumentException("Unexpected column index: $columnIndex")
         }
+
+    override fun isCellEditable(rowIndex: Int, columnIndex: Int): Boolean {
+        return super.isCellEditable(rowIndex, columnIndex)
+    }
+
+    override fun setValueAt(aValue: Any?, rowIndex: Int, columnIndex: Int) {
+        super.setValueAt(aValue, rowIndex, columnIndex)
+    }
 
     fun updateRegisterData(newRegisters: ARMv7RegisterState) {
         registers = newRegisters

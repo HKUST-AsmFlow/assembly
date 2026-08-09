@@ -13,7 +13,7 @@ import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiManager
 import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
-import io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory
+import io.github.asmflow.assembly.armv7.toolWindows.register.ARMv7RegisterViewToolWindowFactory
 import io.github.asmflow.assembly.assembler.AssemblerError
 import io.github.asmflow.assembly.assembler.AssemblerResult
 import io.github.asmflow.assembly.execution.AssemblyExecutionResult

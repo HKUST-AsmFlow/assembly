@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.armv7.toolWindows
+package io.github.asmflow.assembly.armv7.toolWindows.register
 
 import com.intellij.openapi.observable.properties.PropertyGraph
 import com.intellij.ui.components.JBScrollPane
@@ -7,6 +7,7 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
 import com.intellij.util.ui.JBUI
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7ViewNumberRepresentation
 import javax.swing.JPanel
 import javax.swing.JTable
 
