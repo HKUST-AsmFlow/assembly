@@ -1,4 +1,4 @@
-package io.github.asmflow.assembly.armv7.toolWindows
+package io.github.asmflow.assembly.armv7.toolWindows.register
 
 import com.intellij.openapi.observable.properties.PropertyGraph
 import com.intellij.ui.components.JBScrollPane
@@ -7,11 +7,12 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
 import com.intellij.util.ui.JBUI
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7ViewNumberRepresentation
 import javax.swing.JPanel
 import javax.swing.JTable
 
 class ARMv7RegisterViewToolWindow {
-    private val numberRepresentationProperty = PropertyGraph().property(NumberRepresentation.Hexadecimal)
+    private val numberRepresentationProperty = PropertyGraph().property(ARMv7ViewNumberRepresentation.Hexadecimal)
     private var repr by numberRepresentationProperty
     private val tableModel =
         ARMv7RegisterViewTableModel(ARMv7RegisterState(), repr)
@@ -34,7 +35,7 @@ class ARMv7RegisterViewToolWindow {
 
         contentPanel = panel {
             row("Number representation: ") {
-                segmentedButton(NumberRepresentation.entries) { text = it.toString() }.align(Align.FILL)
+                segmentedButton(ARMv7ViewNumberRepresentation.entries) { text = it.toString() }.align(Align.FILL)
                     .bind(numberRepresentationProperty)
             }
 
@@ -47,7 +48,6 @@ class ARMv7RegisterViewToolWindow {
 
         numberRepresentationProperty.afterChange {
             tableModel.setNumberRepresentation(it)
-            tableModel.fireTableDataChanged()
         }
     }
 
@@ -57,9 +57,5 @@ class ARMv7RegisterViewToolWindow {
 
     fun updateState(registers: ARMv7RegisterState) {
         tableModel.updateRegisterData(registers)
-    }
-
-    enum class NumberRepresentation {
-        Decimal, Hexadecimal
     }
 }

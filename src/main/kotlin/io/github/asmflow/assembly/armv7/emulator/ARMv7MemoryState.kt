@@ -7,13 +7,13 @@ class ARMv7MemoryState(text: List<Int>) {
     private val dataMap: MutableMap<UInt, UByte> = mutableMapOf() // Simulate .data and stack using a hashmap
 
     private val textEnd: UInt =
-        ARMv7AddressSpace.TEXT_BASE + (textWords.size * 4).toUInt()
+        ARMv7AddressSpace.TEXT_BASE.addr + (textWords.size * 4).toUInt()
 
     private fun inText(addr: UInt): Boolean =
-        addr >= ARMv7AddressSpace.TEXT_BASE && addr < textEnd
+        addr in ARMv7AddressSpace.TEXT_BASE.addr until textEnd
 
     private fun inWritable(addr: UInt): Boolean =
-        addr >= ARMv7AddressSpace.DATA_BASE && addr < ARMv7AddressSpace.STACK_TOP
+        addr in ARMv7AddressSpace.DATA_BASE.addr until ARMv7AddressSpace.STACK_TOP.addr
 
     fun canFetch(pc: UInt): Boolean =
         pc % 4u == 0u && inText(pc) && inText(pc + 3u)
@@ -27,7 +27,7 @@ class ARMv7MemoryState(text: List<Int>) {
     }
 
     private fun textByte(addr: UInt): UByte {
-        val offset = (addr - ARMv7AddressSpace.TEXT_BASE).toInt()
+        val offset = (addr - ARMv7AddressSpace.TEXT_BASE.addr).toInt()
         val word = textWords[offset / 4].toUInt()
         return ((word shr ((offset % 4) * 8)) and 0xFFu).toUByte()
     }
@@ -75,6 +75,6 @@ class ARMv7MemoryState(text: List<Int>) {
         if (!canFetch(pc)) {
             throw EmulationException("Cannot fetch instruction at 0x${pc.toString(16).uppercase()}")
         }
-        return textWords[((pc - ARMv7AddressSpace.TEXT_BASE) / 4u).toInt()]
+        return textWords[((pc - ARMv7AddressSpace.TEXT_BASE.addr) / 4u).toInt()]
     }
 }

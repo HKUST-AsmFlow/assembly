@@ -1,17 +1,21 @@
-package io.github.asmflow.assembly.armv7.toolWindows
+package io.github.asmflow.assembly.armv7.toolWindows.register
 
 import io.github.asmflow.assembly.armv7.assembler.ARMv7DataProcessingEncoder.toInt
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
+import io.github.asmflow.assembly.armv7.toolWindows.ARMv7ViewNumberRepresentation
 import javax.swing.table.AbstractTableModel
 
 class ARMv7RegisterViewTableModel(
     initialRegisters: ARMv7RegisterState,
-    var base: ARMv7RegisterViewToolWindow.NumberRepresentation
+    var base: ARMv7ViewNumberRepresentation
 ) : AbstractTableModel() {
     private var registers: ARMv7RegisterState = initialRegisters
 
-    fun setNumberRepresentation(repr: ARMv7RegisterViewToolWindow.NumberRepresentation) {
+    fun setNumberRepresentation(repr: ARMv7ViewNumberRepresentation) {
+        if (base == repr) return
+
         base = repr
+        fireTableDataChanged()
     }
 
     override fun getColumnName(column: Int): String? = when (column) {
@@ -44,13 +48,13 @@ class ARMv7RegisterViewTableModel(
                     18 -> registers.getCPSR().C.toInt()
                     19 -> registers.getCPSR().V.toInt()
                     else -> when (base) {
-                        ARMv7RegisterViewToolWindow.NumberRepresentation.Hexadecimal -> "0x%08X".format(
+                        ARMv7ViewNumberRepresentation.Hexadecimal -> "0x%08X".format(
                             registers.get(
                                 rowIndex
                             )
                         )
 
-                        ARMv7RegisterViewToolWindow.NumberRepresentation.Decimal -> registers.get(rowIndex)
+                        ARMv7ViewNumberRepresentation.Decimal -> registers.get(rowIndex)
                     }
                 }
             }
@@ -58,8 +62,16 @@ class ARMv7RegisterViewTableModel(
             else -> throw IllegalArgumentException("Unexpected column index: $columnIndex")
         }
 
+    override fun isCellEditable(rowIndex: Int, columnIndex: Int): Boolean {
+        return super.isCellEditable(rowIndex, columnIndex)
+    }
+
+    override fun setValueAt(aValue: Any?, rowIndex: Int, columnIndex: Int) {
+        super.setValueAt(aValue, rowIndex, columnIndex)
+    }
+
     fun updateRegisterData(newRegisters: ARMv7RegisterState) {
-        this.registers = newRegisters
+        registers = newRegisters
 
         fireTableDataChanged()
     }

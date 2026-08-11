@@ -4,7 +4,7 @@ import io.github.asmflow.assembly.emulator.EmulationException
 
 class ARMv7RegisterState {
     private val registerFile = IntArray(16)
-    private val CPSR = ARMv7CPSR()
+    private val cpsr = ARMv7CPSR()
 
     fun set(id: Int, value: Int) {
         if (id < 0 || id >= registerFile.size) throw EmulationException("Invalid register id: $id")
@@ -26,5 +26,5 @@ class ARMv7RegisterState {
     fun setPC(value: Int) = set(15, value)
     fun incrementPC() = setPC(getPC() + 4)
 
-    fun getCPSR(): ARMv7CPSR = CPSR
+    fun getCPSR(): ARMv7CPSR = cpsr
 }

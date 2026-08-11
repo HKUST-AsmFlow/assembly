@@ -35,9 +35,11 @@
         <programRunner implementation="io.github.asmflow.assembly.armv7.execution.runners.ARMv7DebugProgramRunner" />
         <quoteHandler className="io.github.asmflow.assembly.armv7.editorActions.ARMv7QuoteHandler"
             fileType="ARMv7 Assembly" />
+        <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.memory.ARMv7MemoryViewToolWindowFactory" icon="AllIcons.Toolwindows.ToolWindowComponents"
+            anchor="bottom" id="ARMv7 Memory View" />
         <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory"
             icon="AllIcons.Toolwindows.Documentation" anchor="right" id="ARMv7 Mnemonics Documentation" />
-        <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.ARMv7RegisterViewToolWindowFactory"
+        <toolWindow factoryClass="io.github.asmflow.assembly.armv7.toolWindows.register.ARMv7RegisterViewToolWindowFactory"
             icon="AllIcons.Toolwindows.ToolWindowComponents" anchor="right" id="ARMv7 Register View" />
     </extensions>
 

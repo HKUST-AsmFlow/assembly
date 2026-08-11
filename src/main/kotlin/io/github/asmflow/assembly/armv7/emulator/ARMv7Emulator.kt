@@ -12,14 +12,14 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
     val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
 
     val registers = ARMv7RegisterState().apply {
-        setPC(ARMv7AddressSpace.TEXT_BASE.toInt())
-        setSP(ARMv7AddressSpace.STACK_TOP.toInt())
+        setPC(ARMv7AddressSpace.TEXT_BASE.addr.toInt())
+        setSP(ARMv7AddressSpace.STACK_TOP.addr.toInt())
     }
     val memory = ARMv7MemoryState(text)
     override val name = "armv7"
 
     override val currentIdx: Int
-        get() = ((registers.getPC().toUInt() - ARMv7AddressSpace.TEXT_BASE) / 4u).toInt()
+        get() = ((registers.getPC().toUInt() - ARMv7AddressSpace.TEXT_BASE.addr) / 4u).toInt()
 
     override fun forward() {
         val currentPC = registers.getPC()
@@ -41,6 +41,7 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
         }
 
         publisher.onRegisterStateChanged(registers)
+        publisher.onMemoryStateChanged(memory)
     }
 
     override fun backward() {

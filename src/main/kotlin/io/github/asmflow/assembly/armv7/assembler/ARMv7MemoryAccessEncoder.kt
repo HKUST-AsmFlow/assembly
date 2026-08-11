@@ -181,8 +181,6 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
             // register LDR/STR
             is ARMv7InstructionOperand.Offset.RegisterOffset ->
                 encodeRegisterOffset(instruction, rt, address.register, offset.register, address.flags)
-
-            else -> throw AssemblySyntaxException("Unsupported offset type for ${instruction.baseMnemonic}.")
         }
     }
 
