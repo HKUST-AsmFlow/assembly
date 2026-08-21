@@ -44,9 +44,7 @@ class ARMv7MemoryViewTableModel(
         }
     }
 
-    override fun isCellEditable(rowIndex: Int, columnIndex: Int): Boolean {
-        return super.isCellEditable(rowIndex, columnIndex)
-    }
+    override fun isCellEditable(rowIndex: Int, columnIndex: Int): Boolean = columnIndex > 0
 
     override fun setValueAt(aValue: Any?, rowIndex: Int, columnIndex: Int) {
         super.setValueAt(aValue, rowIndex, columnIndex)

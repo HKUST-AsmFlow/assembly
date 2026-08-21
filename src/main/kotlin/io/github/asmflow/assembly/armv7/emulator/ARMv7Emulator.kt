@@ -6,10 +6,10 @@ import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7MemoryExecutor
 import io.github.asmflow.assembly.emulator.Emulator
-import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
+import io.github.asmflow.assembly.util.messages.EmulatorStateListener
 
 class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
-    val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
+    val publisher: EmulatorStateListener = project.messageBus.syncPublisher(EmulatorStateListener.EMULATOR_STATE_TOPIC)
 
     val registers = ARMv7RegisterState().apply {
         setPC(ARMv7AddressSpace.TEXT_BASE.addr.toInt())

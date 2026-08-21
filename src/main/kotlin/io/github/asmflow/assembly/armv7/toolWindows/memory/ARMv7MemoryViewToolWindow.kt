@@ -12,9 +12,7 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JTable
 
-class ARMv7MemoryViewToolWindow {
-    // TODO: text.
-    private val tableModel = ARMv7MemoryViewTableModel(ARMv7MemoryState(listOf()))
+class ARMv7MemoryViewToolWindow(val tableModel: ARMv7MemoryViewTableModel) {
     private val table = JBTable(tableModel)
     private val contentPanel: JPanel
 

@@ -63,7 +63,7 @@ class ARMv7RegisterViewTableModel(
         }
 
     override fun isCellEditable(rowIndex: Int, columnIndex: Int): Boolean {
-        return super.isCellEditable(rowIndex, columnIndex)
+        return rowIndex > 0 && columnIndex > 0
     }
 
     override fun setValueAt(aValue: Any?, rowIndex: Int, columnIndex: Int) {
