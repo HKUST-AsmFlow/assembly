@@ -27,10 +27,23 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
         if (ARMv7ConditionCodeDecoder.shouldExecute(instruction, registers)) {
             registers.setPC(currentPC + 8)
 
-            when ((instruction ushr 26) and 0b11) {
-                0b00 -> ARMv7DataProcessingExecutor(registers).execute(instruction)
-                0b01 -> ARMv7MemoryExecutor(registers, memory).execute(instruction)
-                0b10 -> ARMv7BranchExecutor(registers).execute(instruction)
+            val router = (instruction ushr 25) and 0b111
+            when (router) {
+                0b101 -> ARMv7BranchExecutor(registers).execute(instruction)
+                // 0b010 -> Immediate-type
+                // 0b011 -> Register-type
+                // 0b100 -> LDM / STM
+                0b010, 0b011, 0b100 -> ARMv7MemoryExecutor(registers, memory).execute(instruction)
+                0b000 -> {
+                    // Annoyingly, MUL / SWP (from data) overlaps into the memory space
+                    // We use this ugly expression to check for it
+                    if (((instruction ushr 7) and 1) == 1
+                        && (((instruction ushr 4) and 1) == 1)
+                        && (((instruction ushr 5) and 0b11) != 0))
+                        ARMv7MemoryExecutor(registers, memory).execute(instruction)
+                    else ARMv7DataProcessingExecutor(registers).execute(instruction)
+                }
+                0b001 -> ARMv7DataProcessingExecutor(registers).execute(instruction)
             }
 
             if (registers.getPC() == currentPC + 8) {
