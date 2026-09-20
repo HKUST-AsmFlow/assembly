@@ -4,6 +4,7 @@ import io.github.asmflow.assembly.armv7.emulator.ARMv7MemoryState
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7MemoryDecoder
 import io.github.asmflow.assembly.armv7.emulator.decoder.DecodedMemoryInstruction
+import io.github.asmflow.assembly.emulator.EmulationException
 
 class ARMv7MemoryExecutor(private val registerState: ARMv7RegisterState, private val memoryState: ARMv7MemoryState) {
     private val decoder = ARMv7MemoryDecoder(registerState)
@@ -19,44 +20,64 @@ class ARMv7MemoryExecutor(private val registerState: ARMv7RegisterState, private
     }
 
     private fun execLdr(inst: DecodedMemoryInstruction) {
-        val (address, writebackAddr) = calculateAddress(inst)
-        val value = memoryState.getWord(address.toUInt()).toInt()
-        registerState.set(inst.rd, value)
-        if (inst.memoryBits.writeBack) {
-            registerState.set(inst.rn, writebackAddr)
+        when (inst.transferType) {
+            is DecodedMemoryInstruction.TransferType.SingleTransfer -> {
+                val (address, writebackAddr) = calculateAddress(inst, inst.transferType)
+                val value = memoryState.getWord(address.toUInt()).toInt()
+                registerState.set(inst.transferType.rd, value)
+                if (inst.memoryBits.writeBack) {
+                    registerState.set(inst.rn, writebackAddr)
+                }
+            }
+            else -> throw EmulationException("Expected single transfer type for LDR; got multiple transfers.")
         }
     }
 
     private fun execStr(inst: DecodedMemoryInstruction) {
-        val (address, writebackAddr) = calculateAddress(inst)
-        val value = registerState.get(inst.rd)
-        memoryState.setWord(address.toUInt(), value.toUInt())
-        if (inst.memoryBits.writeBack) {
-            registerState.set(inst.rn, writebackAddr)
+        when (inst.transferType) {
+            is DecodedMemoryInstruction.TransferType.SingleTransfer -> {
+                val (address, writebackAddr) = calculateAddress(inst, inst.transferType)
+                val value = registerState.get(inst.transferType.rd)
+                memoryState.setWord(address.toUInt(), value.toUInt())
+                if (inst.memoryBits.writeBack) {
+                    registerState.set(inst.rn, writebackAddr)
+                }
+            }
+            else -> throw EmulationException("Expected single transfer type for STR; got multiple transfers.")
         }
     }
 
     private fun execLdrb(inst: DecodedMemoryInstruction) {
-        val (address, writebackAddr) = calculateAddress(inst)
-        val value = memoryState.getByte(address.toUInt()).toInt()
-        registerState.set(inst.rd, value)
-        if (inst.memoryBits.writeBack) {
-            registerState.set(inst.rn, writebackAddr)
+        when (inst.transferType) {
+            is DecodedMemoryInstruction.TransferType.SingleTransfer -> {
+                val (address, writebackAddr) = calculateAddress(inst, inst.transferType)
+                val value = memoryState.getByte(address.toUInt()).toInt()
+                registerState.set(inst.transferType.rd, value)
+                if (inst.memoryBits.writeBack) {
+                    registerState.set(inst.rn, writebackAddr)
+                }
+            }
+            else -> throw EmulationException("Expected single transfer type for LDRB; got multiple transfers.")
         }
     }
 
     private fun execStrb(inst: DecodedMemoryInstruction) {
-        val (address, writebackAddr) = calculateAddress(inst)
-        val value = registerState.get(inst.rd)
-        memoryState.setByte(address.toUInt(), (value and 0xFF).toUByte())
-        if (inst.memoryBits.writeBack) {
-            registerState.set(inst.rn, writebackAddr)
+        when (inst.transferType) {
+            is DecodedMemoryInstruction.TransferType.SingleTransfer -> {
+                val (address, writebackAddr) = calculateAddress(inst, inst.transferType)
+                val value = registerState.get(inst.transferType.rd)
+                memoryState.setByte(address.toUInt(), (value and 0xFF).toUByte())
+                if (inst.memoryBits.writeBack) {
+                    registerState.set(inst.rn, writebackAddr)
+                }
+            }
+            else -> throw EmulationException("Expected single transfer type for STRB; got multiple transfers.")
         }
     }
 
-    private fun calculateAddress(inst: DecodedMemoryInstruction): Pair<Int, Int> {
+    private fun calculateAddress(inst: DecodedMemoryInstruction, transfer: DecodedMemoryInstruction.TransferType.SingleTransfer): Pair<Int, Int> {
         val base = registerState.get(inst.rn)
-        val offset = inst.operand2.getValue()
+        val offset = transfer.operand2.getValue()
         val signedOffset = if (inst.memoryBits.add) offset else -offset
 
         return when {
