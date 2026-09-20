@@ -103,7 +103,7 @@ class ARMv7MemoryExecutor(private val registerState: ARMv7RegisterState, private
             is DecodedMemoryInstruction.TransferType.SingleTransfer -> {
                 val (address, writebackAddr) = calculateAddress(inst, inst.transferType)
                 val value = registerState.get(inst.transferType.rd)
-                memoryState.setHalf(address.toUInt(), (value and 0xFF).toUShort())
+                memoryState.setHalf(address.toUInt(), (value and 0xFFFF).toUShort())
                 if (inst.memoryBits.writeBack) {
                     registerState.set(inst.rn, writebackAddr)
                 }
@@ -141,23 +141,61 @@ class ARMv7MemoryExecutor(private val registerState: ARMv7RegisterState, private
     }
 
     private fun execLdm(inst: DecodedMemoryInstruction) {
-        when (inst.transferType) {
-            is DecodedMemoryInstruction.TransferType.MultiTransfer -> {
+        val mask = extractTransferMask(inst)
 
+        val base = registerState.get(inst.rn)
+        val count = mask.countOneBits()
+        var addr = computeOffsetBase(inst, base, count)
+
+        for (i in 0..15) {
+            if (mask and (1 shl i) != 0) {
+                val word = memoryState.getWord(addr.toUInt()).toInt()
+                if (i == 15) registerState.setPC(word) else registerState.set(i, word)
+                addr += 4
             }
-            else -> throw EmulationException("Expected multiple transfer type for ${inst.instruction.mnemonic}; got single transfer.")
+        }
+
+        if (inst.memoryBits.writeBack && (mask and (1 shl inst.rn)) == 0) {
+            registerState.set(inst.rn, computeWriteback(inst, base, count))
         }
     }
 
     private fun execStm(inst: DecodedMemoryInstruction) {
-        when (inst.transferType) {
-            is DecodedMemoryInstruction.TransferType.MultiTransfer -> {
+        val mask = extractTransferMask(inst)
 
+        val base = registerState.get(inst.rn)
+        val count = mask.countOneBits()
+        var addr = computeOffsetBase(inst, base, count)
+
+        for (i in 0..15) {
+            if (mask and (1 shl i) != 0) {
+                memoryState.setWord(addr.toUInt(), registerState.get(i).toUInt())
+                addr += 4
             }
-            else -> throw EmulationException("Expected multiple transfer type for ${inst.instruction.mnemonic}; got single transfer.")
+        }
+
+        if (inst.memoryBits.writeBack && (mask and (1 shl inst.rn)) == 0) {
+            registerState.set(inst.rn, computeWriteback(inst, base, count))
         }
     }
 
+    private fun computeOffsetBase(inst: DecodedMemoryInstruction, base: Int, count: Int): Int =
+        if (inst.memoryBits.add)
+            base + if (inst.memoryBits.preIdx) 4 else 0
+        else
+            base - 4 * count + if (inst.memoryBits.preIdx) 0 else 4
+
+    private fun computeWriteback(inst: DecodedMemoryInstruction, base: Int, count: Int): Int =
+        if (inst.memoryBits.add) base + 4 * count else base - 4 * count
+
+    private fun extractTransferMask(inst: DecodedMemoryInstruction) : Int {
+        val transfer = inst.transferType as? DecodedMemoryInstruction.TransferType.MultiTransfer
+            ?: throw EmulationException("Expected multiple transfer for ${inst.instruction.mnemonic}.")
+        val mask = transfer.registerMask
+        if (mask == 0) throw EmulationException("Empty register list for ${inst.instruction.mnemonic}.")
+        if (inst.rn == 15) throw EmulationException("PC used as base for ${inst.instruction.mnemonic}.")
+        return mask
+    }
     private fun calculateAddress(inst: DecodedMemoryInstruction, transfer: DecodedMemoryInstruction.TransferType.SingleTransfer): Pair<Int, Int> {
         val base = registerState.get(inst.rn)
         val offset = transfer.operand2.getValue()
