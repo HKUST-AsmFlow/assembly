@@ -34,6 +34,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
             InstructionFormat.BRANCH -> ARMv7BranchEncoder(symbols)
             InstructionFormat.BRANCH_EXCHANGE -> ARMv7BranchExchangeEncoder
             InstructionFormat.MEMORY_ACCESS -> ARMv7MemoryAccessEncoder(symbols)
+            InstructionFormat.SUPERVISOR_CALL -> ARMv7SupervisorCallEncoder
             InstructionFormat.PSUEDO -> PsuedoEncoderFactory.getEncoder(instruction.baseMnemonic, symbols)
             else -> throw AssemblySyntaxException("Mnemonic for ${instruction.text} is invalid in the database.")
         }
