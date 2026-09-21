@@ -24,8 +24,8 @@
 - [x] LDR
 - [x] STR
 - [ ] Byte / Halfword / Signed versions
-- [ ] LDM
-- [ ] STM
+- [x] LDM
+- [x] STM
 
 ### Misc.
 - [ ] SVC
@@ -33,5 +33,5 @@
 ### Psuedo
 - [ ] ADR
 - [ ] LDR (decide MOV+MOVT vs literal pool implementation for large constants)
-- [ ] PUSH
-- [ ] POP
+- [x] PUSH
+- [x] POP

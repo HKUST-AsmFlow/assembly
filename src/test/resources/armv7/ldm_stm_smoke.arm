@@ -1,0 +1,41 @@
+.global main
+
+main:
+  add r0, r0, #1 @ r0 = 1
+  add r1, r1, #2 @ r1 = 2
+  add r2, r2, #3 @ r2 = 3
+  add r3, r3, #4 @ r3 = 4
+
+  @ ---- stack forms (base = sp), expected machine code in comments ----
+  stmdb sp!, {r0-r3}  @ 0xE92D000F, push r0-r3
+  ldmia sp!, {r4-r7}  @ 0xE8BD00F0, r4 = 1, r5 = 2, r6 = 3, r7 = 4, sp restored
+  stmfd sp!, {r0, r1} @ 0xE92D0003, same encoding as stmdb
+  ldmfd sp!, {r8, r9} @ 0xE8BD0300, r8 = 1, r9 = 2, same encoding as ldmia
+  push {r0, r1}       @ 0xE92D0003
+  pop {r2, r3}        @ 0xE8BD000C, r2 = 1, r3 = 2
+  push {r4, lr}       @ 0xE92D4010
+  pop {r4, lr}        @ 0xE8BD4010, r4 and lr restored
+
+  @ ---- every addressing mode on a scratch base below sp ----
+  sub r10, sp, #64
+  stmia r10, {r0-r3}  @ 0xE88A000F
+  stmib r10, {r0, r1} @ 0xE98A0003
+  stmda r10, {r0, r1} @ 0xE80A0003
+  stmdb r10, {r0, r1} @ 0xE90A0003
+  stm r10, {r0, r1}   @ 0xE88A0003, plain stm is stmia
+  ldmia r10, {r4}     @ 0xE89A0010
+  ldmib r10, {r4}     @ 0xE99A0010
+  ldmda r10, {r4}     @ 0xE81A0010
+  ldmdb r10, {r4}     @ 0xE91A0010
+  ldm r10, {r4}       @ 0xE89A0010, plain ldm is ldmia
+
+  @ ---- stack aliases (load and store map to opposite modes) ----
+  ldmed r10, {r4}     @ 0xE99A0010, = ldmib
+  ldmfa r10, {r4}     @ 0xE81A0010, = ldmda
+  ldmea r10, {r4}     @ 0xE91A0010, = ldmdb
+  stmed r10, {r0}     @ 0xE80A0001, = stmda
+  stmfa r10, {r0}     @ 0xE98A0001, = stmib
+
+  @ ---- writeback on a non-stack base (last, since r10 changes) ----
+  stmea r10!, {r1}    @ 0xE8AA0002, = stmia with writeback
+  ldmia r10!, {r4, r5} @ 0xE8BA0030
