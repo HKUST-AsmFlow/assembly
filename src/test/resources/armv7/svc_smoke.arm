@@ -1,0 +1,28 @@
+.global main
+
+@ Syscalls follow the Linux ARM EABI: number in r7, arguments in r0-r2, result in r0.
+@ (add/sub are used instead of mov: the emulator does not execute mov yet.)
+@
+@ Expected: "Hi" + newline on stdout, "Hi" + newline on stderr (red), then the process
+@ exits with code 3. To check the error path, change the last `sub r7, r7, #3` to
+@ `sub r7, r7, #2`: "Execution failed: Unsupported syscall 2".
+main:
+  add r0, r0, #0x48    @ 'H'
+  add r0, r0, #0x6900  @ 'i' << 8
+  add r0, r0, #0xA0000 @ '\n' << 16
+  str r0, [sp, #-4]!   @ "Hi\n" now sits at sp
+  add r1, sp, #0       @ r1 = buffer address
+  add r2, r2, #3       @ r2 = length
+  add r7, r7, #4       @ r7 = 4 (write)
+
+  sub r0, r0, r0
+  add r0, r0, #1       @ fd = 1 (stdout)
+  svc #0               @ write(1, sp, 3), r0 = 3
+
+  sub r0, r0, r0
+  add r0, r0, #2       @ fd = 2 (stderr)
+  svc #0               @ write(2, sp, 3), r0 = 3
+
+  sub r7, r7, #3       @ r7 = 1 (exit)
+  svc #0               @ exit(3), r0 still holds the last write's byte count
+  add r5, r5, #1       @ never executed
