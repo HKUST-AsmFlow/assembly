@@ -7,7 +7,11 @@ sealed class ARMv7InstructionOperand {
     data class Label(val label: String) : ARMv7InstructionOperand()
     data class LiteralLoad(val value: Int) : ARMv7InstructionOperand()
     data class Number(val value: Int) : ARMv7InstructionOperand()
-    data class Register(val register: ARMv7Register, val shift: Option<Shift>) : ARMv7InstructionOperand() {
+    data class Register(
+        val register: ARMv7Register,
+        val shift: Option<Shift>,
+        val writeBack: Boolean = false,
+    ) : ARMv7InstructionOperand() {
         data class Shift(val shiftType: ARMv7ShiftType, val shiftBy: ARMv7InstructionOperand)
     }
     data class RegisterList(val registers: SortedSet<ARMv7Register>) : ARMv7InstructionOperand()

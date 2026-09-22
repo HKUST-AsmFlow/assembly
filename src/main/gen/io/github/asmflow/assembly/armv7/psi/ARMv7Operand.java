@@ -29,4 +29,7 @@ public interface ARMv7Operand extends ARMv7OperandMixin {
   @Nullable
   ARMv7RegisterWithShift getRegisterWithShift();
 
+  @Nullable
+  ARMv7RegisterWithWriteback getRegisterWithWriteback();
+
 }

@@ -24,8 +24,8 @@
 - [x] LDR
 - [x] STR
 - [ ] Byte / Halfword / Signed versions
-- [ ] LDM
-- [ ] STM
+- [x] LDM
+- [x] STM
 
 ### Misc.
 - [x] SVC
@@ -33,8 +33,8 @@
 ### Psuedo
 - [ ] ADR
 - [ ] LDR (decide MOV+MOVT vs literal pool implementation for large constants)
-- [ ] PUSH
-- [ ] POP
+- [x] PUSH
+- [x] POP
 
 ### Syscalls currently supported by emulator
 Linux ARM EABI convention: syscall number in r7, arguments in r0-r2, result in r0 (the `SVC` immediate is ignored).

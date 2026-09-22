@@ -547,6 +547,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Postindexed
   //   | Preindexed
+  //   | RegisterWithWriteback
   //   | RegisterWithShift
   static boolean RegisterOperand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegisterOperand")) return false;
@@ -554,6 +555,7 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     boolean r;
     r = Postindexed(b, l + 1);
     if (!r) r = Preindexed(b, l + 1);
+    if (!r) r = RegisterWithWriteback(b, l + 1);
     if (!r) r = RegisterWithShift(b, l + 1);
     return r;
   }
@@ -600,6 +602,19 @@ public class ARMv7Parser implements PsiParser, LightPsiParser {
     r = consumeToken(b, COMMA);
     r = r && Shift(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Register BANG
+  public static boolean RegisterWithWriteback(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegisterWithWriteback")) return false;
+    if (!nextTokenIs(b, REG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Register(b, l + 1);
+    r = r && consumeToken(b, BANG);
+    exit_section_(b, m, REGISTER_WITH_WRITEBACK, r);
     return r;
   }
 

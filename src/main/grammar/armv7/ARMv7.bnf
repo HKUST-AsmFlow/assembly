@@ -92,7 +92,13 @@ LiteralLoad ::= EQUAL NumberLiteral {
 
 private RegisterOperand ::= Postindexed
   | Preindexed
+  | RegisterWithWriteback
   | RegisterWithShift
+
+RegisterWithWriteback ::= Register BANG {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7RegisterWithWritebackOperandMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7OperandMixin"
+}
 
 Postindexed ::= LBRACKET Register RBRACKET COMMA FlexibleOffset {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7PostindexedOperandMixinImpl"

@@ -15,6 +15,46 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
 
     private fun Boolean.toInt() = if (this) 1 else 0
 
+    private enum class BlockAddressingMode(val preIndexed: Boolean, val add: Boolean) {
+        IA(preIndexed = false, add = true),
+        IB(preIndexed = true, add = true),
+        DA(preIndexed = false, add = false),
+        DB(preIndexed = true, add = false),
+    }
+
+    private data class BlockTransfer(val mode: BlockAddressingMode, val load: Boolean)
+
+    companion object {
+        private val stackMnemonics = setOf("push", "pop")
+
+        // Stack aliases are named after the stack they build, so loads and stores map to opposite modes
+        // (e.g. STMFD is decrement-before, LDMFD is increment-after).
+        private val blockTransfers = mapOf(
+            "ldm" to BlockTransfer(BlockAddressingMode.IA, load = true),
+            "ldmia" to BlockTransfer(BlockAddressingMode.IA, load = true),
+            "ldmib" to BlockTransfer(BlockAddressingMode.IB, load = true),
+            "ldmda" to BlockTransfer(BlockAddressingMode.DA, load = true),
+            "ldmdb" to BlockTransfer(BlockAddressingMode.DB, load = true),
+            "ldmfd" to BlockTransfer(BlockAddressingMode.IA, load = true),
+            "ldmed" to BlockTransfer(BlockAddressingMode.IB, load = true),
+            "ldmfa" to BlockTransfer(BlockAddressingMode.DA, load = true),
+            "ldmea" to BlockTransfer(BlockAddressingMode.DB, load = true),
+            "stm" to BlockTransfer(BlockAddressingMode.IA, load = false),
+            "stmia" to BlockTransfer(BlockAddressingMode.IA, load = false),
+            "stmib" to BlockTransfer(BlockAddressingMode.IB, load = false),
+            "stmda" to BlockTransfer(BlockAddressingMode.DA, load = false),
+            "stmdb" to BlockTransfer(BlockAddressingMode.DB, load = false),
+            "stmfd" to BlockTransfer(BlockAddressingMode.DB, load = false),
+            "stmed" to BlockTransfer(BlockAddressingMode.DA, load = false),
+            "stmfa" to BlockTransfer(BlockAddressingMode.IB, load = false),
+            "stmea" to BlockTransfer(BlockAddressingMode.IA, load = false),
+            "pop" to BlockTransfer(BlockAddressingMode.IA, load = true),
+            "push" to BlockTransfer(BlockAddressingMode.DB, load = false),
+        )
+
+        fun isBlockTransfer(mnemonic: String): Boolean = mnemonic in blockTransfers
+    }
+
     /**
      * Encodes LDR/STR (word, immediate offset) — ARM A1, bits [27:25] = 010.
      *
@@ -184,11 +224,98 @@ class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7Instruc
         }
     }
 
+    /**
+     * Encodes LDM/STM (and PUSH/POP) — ARM A1, bits [27:25] = 100.
+     *
+     * The S bit (bit 22, the `^` suffix) is always 0. Registers are selected by a 16-bit mask in bits [15:0].
+     * Ignore carrot syntax for now: it is only used for return with exceptions or priveleged instructions.
+     */
+    fun encodeBlockTransfer(
+        condition: ARMv7InstructionConditionCode,
+        L: Boolean,
+        P: Boolean,
+        U: Boolean,
+        W: Boolean,
+        Rn: ARMv7Register,
+        registerMask: Int,
+    ): Int =
+        (condition.code shl 28) or
+            (0b100 shl 25) or
+            (P.toInt() shl 24) or
+            (U.toInt() shl 23) or
+            (0 shl 22) or
+            (W.toInt() shl 21) or
+            (L.toInt() shl 20) or
+            (Rn.getIDSafe() shl 16) or
+            (registerMask and 0xFFFF)
+
+    /**
+     * Syntax: `LDM<mode> Rn{!}, {reglist}`, `STM<mode> Rn{!}, {reglist}`, `PUSH {reglist}`, `POP {reglist}`.
+     *
+     * PUSH is STMDB SP!, and POP is LDMIA SP!.
+     */
+    private fun encodeBlockTransferInstruction(
+        instruction: ARMv7InstructionMixin,
+        transfer: BlockTransfer,
+        operands: List<ARMv7Operand>,
+    ): Int {
+        val name = instruction.baseMnemonic.uppercase()
+        val isStack = instruction.baseMnemonic in stackMnemonics
+        val expectedOperands = if (isStack) 1 else 2
+
+        if (operands.size != expectedOperands) {
+            throw AssemblySyntaxException(
+                "Invalid syntax for $name, expected $expectedOperands operands, received ${operands.size}."
+            )
+        }
+
+        val registerList = operands.last().operand as? ARMv7InstructionOperand.RegisterList
+            ?: throw AssemblySyntaxException("$name requires a register list, for example `{r0, r1}`.")
+
+        if (registerList.registers.isEmpty()) {
+            throw AssemblySyntaxException("$name register list must contain at least one register.")
+        }
+
+        val (baseRegister, writeBack) = if (isStack) {
+            ARMv7Register.SP to true
+        } else {
+            val base = operands[0].operand as? ARMv7InstructionOperand.Register
+                ?: throw AssemblySyntaxException("$name requires a base register as the first operand.")
+
+            if (base.shift.isSome()) {
+                throw AssemblySyntaxException("Shift operators are not permitted on the base register of $name.")
+            }
+
+            base.register to base.writeBack
+        }
+
+        if (baseRegister == ARMv7Register.PC) {
+            throw AssemblySyntaxException("PC cannot be used as the base register of $name.")
+        }
+
+        // Build the mask from register numbers; use the standard order based on ID
+        val registerMask = registerList.registers.fold(0) { mask, register -> mask or (1 shl register.getIDSafe()) }
+
+        return encodeBlockTransfer(
+            condition = instruction.conditionCode,
+            L = transfer.load,
+            P = transfer.mode.preIndexed,
+            U = transfer.mode.add,
+            W = writeBack,
+            Rn = baseRegister,
+            registerMask = registerMask,
+        )
+    }
+
     override fun encode(
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>,
         addrCounter: Int,
     ): List<Int> {
+        blockTransfers[instruction.baseMnemonic]?.let { transfer ->
+            return listOf(encodeBlockTransferInstruction(instruction, transfer, operands))
+        }
+
         if (instruction.baseMnemonic !in loadStoreMnemonics) {
             throw AssemblySyntaxException(
                 "Mnemonic ${instruction.baseMnemonic} is not supported by the memory access encoder."
