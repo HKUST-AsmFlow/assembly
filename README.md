@@ -28,10 +28,16 @@
 - [x] STM
 
 ### Misc.
-- [ ] SVC
+- [x] SVC
 
 ### Psuedo
 - [ ] ADR
 - [ ] LDR (decide MOV+MOVT vs literal pool implementation for large constants)
 - [x] PUSH
 - [x] POP
+
+### Syscalls currently supported by emulator
+Linux ARM EABI convention: syscall number in r7, arguments in r0-r2, result in r0 (the `SVC` immediate is ignored).
+- [x] exit (r7 = 1), exit code taken from r0
+- [x] write (r7 = 4), fd 1 (stdout) and fd 2 (stderr) only
+- [ ] read

@@ -5,10 +5,15 @@ import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7ConditionCodeDecod
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7MemoryExecutor
+import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7SupervisorCallExecutor
 import io.github.asmflow.assembly.emulator.Emulator
 import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
 
-class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
+class ARMv7Emulator(
+    val project: Project,
+    val text: List<Int>,
+    private val host: ARMv7SyscallHandler = ARMv7SyscallHandler.None,
+) : Emulator {
     val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
 
     val registers = ARMv7RegisterState().apply {
@@ -17,6 +22,12 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
     }
     val memory = ARMv7MemoryState(text)
     override val name = "armv7"
+
+    /**
+     * The exit code passed to the `exit` syscall, or null while the program is still running.
+     */
+    var exitCode: Int? = null
+        private set
 
     override val currentIdx: Int
         get() = ((registers.getPC().toUInt() - ARMv7AddressSpace.TEXT_BASE.addr) / 4u).toInt()
@@ -44,6 +55,7 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
                     else ARMv7DataProcessingExecutor(registers).execute(instruction)
                 }
                 0b001 -> ARMv7DataProcessingExecutor(registers).execute(instruction)
+                0b111 -> ARMv7SupervisorCallExecutor(registers, memory, host) { exitCode = it }.execute(instruction)
             }
 
             if (registers.getPC() == currentPC + 8) {
@@ -61,5 +73,5 @@ class ARMv7Emulator(val project: Project, val text: List<Int>) : Emulator {
         TODO("Not yet implemented")
     }
 
-    override fun inBounds(): Boolean = memory.canFetch(registers.getPC().toUInt())
+    override fun inBounds(): Boolean = exitCode == null && memory.canFetch(registers.getPC().toUInt())
 }

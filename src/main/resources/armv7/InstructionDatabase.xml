@@ -317,7 +317,9 @@
     <instruction name="strt" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="sub" supportsFlags="true" supportsConditionCodes="true" format="DataProcessing" opcode="0010"/>
     <instruction name="subw" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="svc" supportsFlags="false" supportsConditionCodes="true"/>
+    <instruction name="svc" supportsFlags="false" supportsConditionCodes="true" format="SupervisorCall" opcode="1111">
+        <shortDescription>Supervisor Call</shortDescription>
+    </instruction>
     <instruction name="swp" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="swpb" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="sxtab" supportsFlags="false" supportsConditionCodes="true"/>

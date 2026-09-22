@@ -8,16 +8,19 @@ import java.io.OutputStream
 class AssemblyEmulatorProcessHandler(
     private val runEmulation: AssemblyEmulatorProcessHandler.() -> Unit
 ) : ProcessHandler() {
+    @Volatile
+    var exitCode: Int = 0
+
     override fun detachIsDefault(): Boolean = true
 
     override fun getProcessInput(): OutputStream? = null
 
     override fun destroyProcessImpl() {
-        notifyProcessTerminated(0)
+        notifyProcessTerminated(exitCode)
     }
 
     override fun detachProcessImpl() {
-        notifyProcessTerminated(0)
+        notifyProcessTerminated(exitCode)
     }
 
     override fun startNotify() {

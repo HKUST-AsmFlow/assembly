@@ -4,6 +4,7 @@ import com.intellij.execution.ExecutionResult
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.filters.TextConsoleBuilderFactory
+import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleViewContentType
@@ -13,6 +14,7 @@ import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiManager
 import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
+import io.github.asmflow.assembly.armv7.emulator.ARMv7SyscallHandler
 import io.github.asmflow.assembly.armv7.toolWindows.register.ARMv7RegisterViewToolWindowFactory
 import io.github.asmflow.assembly.assembler.AssemblerError
 import io.github.asmflow.assembly.assembler.AssemblerResult
@@ -53,10 +55,19 @@ class AssemblyRunProfileState(
                     }
 
                     if (!result.isErr()) {
-                        val emulator = ARMv7Emulator(environment.project, result.unwrap())
+                        val host = object : ARMv7SyscallHandler {
+                            override fun write(fd: Int, text: String) {
+                                val type = if (fd == 2) ProcessOutputTypes.STDERR else ProcessOutputTypes.STDOUT
+                                notifyTextAvailable(text, type)
+                            }
+                        }
+
+                        val emulator = ARMv7Emulator(environment.project, result.unwrap(), host)
                         while (emulator.inBounds() && !isProcessTerminating) {
                             emulator.forward()
                         }
+
+                        emulator.exitCode?.let { exitCode = it }
                     }
                 }
             }
