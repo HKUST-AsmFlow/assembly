@@ -32,6 +32,7 @@ public interface ARMv7TokenTypes {
   IElementType REGISTER_LIST = new ARMv7ElementType("REGISTER_LIST");
   IElementType REGISTER_RANGE = new ARMv7ElementType("REGISTER_RANGE");
   IElementType REGISTER_WITH_SHIFT = new ARMv7ElementType("REGISTER_WITH_SHIFT");
+  IElementType REGISTER_WITH_WRITEBACK = new ARMv7ElementType("REGISTER_WITH_WRITEBACK");
   IElementType SHIFT = new ARMv7ElementType("SHIFT");
   IElementType SHIFT_TYPE = new ARMv7ElementType("SHIFT_TYPE");
   IElementType SIGN = new ARMv7ElementType("SIGN");
@@ -129,6 +130,9 @@ public interface ARMv7TokenTypes {
       }
       else if (type == REGISTER_WITH_SHIFT) {
         return new ARMv7RegisterWithShiftImpl(node);
+      }
+      else if (type == REGISTER_WITH_WRITEBACK) {
+        return new ARMv7RegisterWithWritebackImpl(node);
       }
       else if (type == SHIFT) {
         return new ARMv7ShiftImpl(node);

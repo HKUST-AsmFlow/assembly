@@ -101,6 +101,10 @@ public class ARMv7Visitor extends PsiElementVisitor {
     visitOperandMixin(o);
   }
 
+  public void visitRegisterWithWriteback(@NotNull ARMv7RegisterWithWriteback o) {
+    visitOperandMixin(o);
+  }
+
   public void visitShift(@NotNull ARMv7Shift o) {
     visitShiftMixin(o);
   }

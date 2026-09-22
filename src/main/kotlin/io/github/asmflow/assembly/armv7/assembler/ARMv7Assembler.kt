@@ -7,6 +7,7 @@ import io.github.asmflow.assembly.armv7.assembler.psuedo.PsuedoEncoderFactory
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.database.InstructionFormat
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
+import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7LabelWithColon
 import io.github.asmflow.assembly.assembler.*
@@ -77,6 +78,18 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
             return Err(
                 AssemblerError(
                     "Instruction ${instruction.text} does not support condition codes.",
+                    instruction
+                )
+            )
+        }
+
+        val hasWriteback = operands.operandList.any {
+            (it.operand as? ARMv7InstructionOperand.Register)?.writeBack == true
+        }
+        if (hasWriteback && !ARMv7MemoryAccessEncoder.isBlockTransfer(instruction.baseMnemonic)) {
+            return Err(
+                AssemblerError(
+                    "Instruction ${instruction.text} cannot use `!` on a register; it is only valid on the base register of LDM/STM.",
                     instruction
                 )
             )

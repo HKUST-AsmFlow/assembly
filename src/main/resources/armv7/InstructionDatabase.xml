@@ -86,6 +86,21 @@
     <instruction name="ldmdb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple Decrement Before</shortDescription>
     </instruction>
+    <instruction name="ldmea" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Load Multiple Empty Ascending (Decrement Before)</shortDescription>
+    </instruction>
+    <instruction name="ldmed" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Load Multiple Empty Descending (Increment Before)</shortDescription>
+    </instruction>
+    <instruction name="ldmfa" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Load Multiple Full Ascending (Decrement After)</shortDescription>
+    </instruction>
+    <instruction name="ldmfd" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Load Multiple Full Descending (Increment After)</shortDescription>
+    </instruction>
+    <instruction name="ldmia" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Load Multiple Increment After</shortDescription>
+    </instruction>
     <instruction name="ldmib" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Load Multiple Increment Before</shortDescription>
     </instruction>
@@ -177,8 +192,12 @@
     <instruction name="pld" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="pldw" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="pli" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="pop" supportsFlags="false" supportsConditionCodes="true"/>
-    <instruction name="push" supportsFlags="false" supportsConditionCodes="true"/>
+    <instruction name="pop" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Pop Multiple Registers (LDMIA SP!)</shortDescription>
+    </instruction>
+    <instruction name="push" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Push Multiple Registers (STMDB SP!)</shortDescription>
+    </instruction>
     <instruction name="qadd" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="qadd16" supportsFlags="false" supportsConditionCodes="true"/>
     <instruction name="qadd8" supportsFlags="false" supportsConditionCodes="true"/>
@@ -260,6 +279,21 @@
     </instruction>
     <instruction name="stmdb" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Store Multiple Decrement Before</shortDescription>
+    </instruction>
+    <instruction name="stmea" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Empty Ascending (Increment After)</shortDescription>
+    </instruction>
+    <instruction name="stmed" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Empty Descending (Decrement After)</shortDescription>
+    </instruction>
+    <instruction name="stmfa" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Full Ascending (Increment Before)</shortDescription>
+    </instruction>
+    <instruction name="stmfd" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Full Descending (Decrement Before)</shortDescription>
+    </instruction>
+    <instruction name="stmia" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
+        <shortDescription>Store Multiple Increment After</shortDescription>
     </instruction>
     <instruction name="stmib" supportsFlags="false" supportsConditionCodes="true" format="MemoryAccess">
         <shortDescription>Store Multiple Increment Before</shortDescription>
