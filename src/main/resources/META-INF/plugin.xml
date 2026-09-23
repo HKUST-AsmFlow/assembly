@@ -6,8 +6,9 @@
     <description>Various Assembly language support for the IntelliJ Platform. Part of the AsmFlow project.</description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
 
-    <resource-bundle>messages.AssemblyBundle</resource-bundle>
+    <resource-bundle>armv7.messages.AssemblyBundle</resource-bundle>
 
     <actions>
         <action class="io.github.asmflow.assembly.armv7.actionSystem.editor.EditorShowMnemonicDocumentationAction"
@@ -23,8 +24,8 @@
         <completion.contributor language="ARMv7_ASM"
             implementationClass="io.github.asmflow.assembly.armv7.editorActions.ARMv7CompletionContributor" />
         <configurationType
-            implementation="io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationType" />
-        <errorHandler implementation="io.github.asmflow.assembly.openapi.diagnostic.AssemblyErrorReportSubmitter" />
+            implementation="io.github.asmflow.assembly.armv7.execution.configurations.AssemblyRunConfigurationType" />
+        <errorHandler implementation="io.github.asmflow.assembly.armv7.openapi.diagnostic.AssemblyErrorReportSubmitter" />
         <fileType name="ARMv7 Assembly" language="ARMv7_ASM"
             implementationClass="io.github.asmflow.assembly.armv7.ARMv7FileType" extensions="arm"
             fieldName="INSTANCE" />

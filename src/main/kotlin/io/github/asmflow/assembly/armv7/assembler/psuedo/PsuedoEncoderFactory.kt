@@ -1,6 +1,6 @@
 package io.github.asmflow.assembly.armv7.assembler.psuedo
 
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
+import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
 
 /**
  * Factory for converting mnemonics to their corresponding encoders.

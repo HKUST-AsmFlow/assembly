@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.emulator
 
-import io.github.asmflow.assembly.emulator.EmulationException
 
 class ARMv7MemoryState(text: List<Int>) {
     private val textWords: IntArray = text.toIntArray()

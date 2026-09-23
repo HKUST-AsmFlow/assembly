@@ -1,12 +1,12 @@
 package io.github.asmflow.assembly.armv7
 
 import com.intellij.openapi.util.NlsSafe
-import io.github.asmflow.assembly.icons.AssemblyIcons
-import io.github.asmflow.assembly.openapi.AssemblyFileType
+import com.intellij.openapi.fileTypes.LanguageFileType
+import io.github.asmflow.assembly.armv7.icons.AssemblyIcons
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
-object ARMv7FileType : AssemblyFileType(ARMv7Language) {
+object ARMv7FileType : LanguageFileType(ARMv7Language) {
     override fun getDescription(): String = "ARMv7 Assembly file"
 
     override fun getDefaultExtension(): @NlsSafe String = ".arm"

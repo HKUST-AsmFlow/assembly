@@ -1,7 +1,7 @@
 package io.github.asmflow.assembly.armv7.assembler.utils
 
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
+import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
 
 /**
  * Utility object for converting string-type immediates into their integer representation.

@@ -2,12 +2,11 @@ package io.github.asmflow.assembly.armv7.toolWindows.register
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
+import com.intellij.openapi.wm.ToolWindowFactory
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
-import io.github.asmflow.assembly.openapi.wm.AssemblyToolWindowFactory
-import io.github.asmflow.assembly.openapi.wm.AssemblyToolWindowFactoryCompanion
-import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
+import io.github.asmflow.assembly.armv7.emulator.EmulatorStateNotifier
 
-class ARMv7RegisterViewToolWindowFactory : AssemblyToolWindowFactory {
+class ARMv7RegisterViewToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         toolWindow.setStripeShortTitleProvider { "ARMv7 Registers" }
 
@@ -27,7 +26,7 @@ class ARMv7RegisterViewToolWindowFactory : AssemblyToolWindowFactory {
             })
     }
 
-    object Companion : AssemblyToolWindowFactoryCompanion {
-        override val toolWindowId = "ARMv7 Register View"
+    companion object {
+        const val TOOL_WINDOW_ID = "ARMv7 Register View"
     }
 }

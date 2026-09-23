@@ -3,7 +3,7 @@ package io.github.asmflow.assembly.armv7.emulator.executor
 import io.github.asmflow.assembly.armv7.emulator.ARMv7MemoryState
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.emulator.ARMv7SyscallHandler
-import io.github.asmflow.assembly.emulator.EmulationException
+import io.github.asmflow.assembly.armv7.emulator.EmulationException
 
 /**
  * Executes `SVC` following the Linux ARM EABI convention: the syscall number is in R7,

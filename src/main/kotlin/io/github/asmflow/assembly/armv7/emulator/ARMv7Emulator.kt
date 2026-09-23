@@ -6,8 +6,6 @@ import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7MemoryExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7SupervisorCallExecutor
-import io.github.asmflow.assembly.emulator.Emulator
-import io.github.asmflow.assembly.util.messages.EmulatorStateNotifier
 
 class ARMv7Emulator(
     val project: Project,

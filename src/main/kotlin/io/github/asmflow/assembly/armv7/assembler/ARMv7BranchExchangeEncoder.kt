@@ -3,8 +3,6 @@ package io.github.asmflow.assembly.armv7.assembler
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
-import io.github.asmflow.assembly.armv7.execution.ARMv7Register
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
 object ARMv7BranchExchangeEncoder : ARMv7InstructionEncoder {
     private const val BX_OPCODE = 0x012FFF10

@@ -10,10 +10,9 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7LabelWithColon
-import io.github.asmflow.assembly.assembler.*
-import io.github.asmflow.assembly.util.functional.Err
-import io.github.asmflow.assembly.util.functional.Ok
-import io.github.asmflow.assembly.util.functional.resultOfException
+import io.github.asmflow.assembly.armv7.util.functional.Err
+import io.github.asmflow.assembly.armv7.util.functional.Ok
+import io.github.asmflow.assembly.armv7.util.functional.resultOfException
 
 /**
  * Class representing a ARMv7 assembler which transforms assembly into encoded instructions (integers).

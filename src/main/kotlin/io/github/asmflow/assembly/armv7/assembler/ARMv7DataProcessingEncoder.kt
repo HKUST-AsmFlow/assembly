@@ -8,8 +8,7 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7Register
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
-import io.github.asmflow.assembly.util.functional.Option
+import io.github.asmflow.assembly.armv7.util.functional.Option
 
 /**
  * Object providing support for encoding data processing instructions.

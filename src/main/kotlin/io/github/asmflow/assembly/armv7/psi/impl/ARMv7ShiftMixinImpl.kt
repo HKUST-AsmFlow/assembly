@@ -4,8 +4,8 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.psi.ARMv7Shift
-import io.github.asmflow.assembly.util.functional.None
-import io.github.asmflow.assembly.util.unreachable
+import io.github.asmflow.assembly.armv7.util.functional.None
+import io.github.asmflow.assembly.armv7.util.unreachable
 
 abstract class ARMv7ShiftMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Shift {
     override val shift: ARMv7InstructionOperand.Register.Shift

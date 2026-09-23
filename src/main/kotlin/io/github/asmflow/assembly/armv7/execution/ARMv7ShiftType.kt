@@ -1,6 +1,6 @@
 package io.github.asmflow.assembly.armv7.execution
 
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
+import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
 
 
 data class ShiftResult(

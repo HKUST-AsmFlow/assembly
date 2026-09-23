@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.assembler
 
-import io.github.asmflow.assembly.assembler.AssembledInstruction
 
 /**
  * Class modelling an assembled ARM instruction.

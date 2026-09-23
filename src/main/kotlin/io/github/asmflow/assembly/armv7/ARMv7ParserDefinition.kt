@@ -2,6 +2,7 @@ package io.github.asmflow.assembly.armv7
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiParser
+import com.intellij.lang.ParserDefinition
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
@@ -14,9 +15,8 @@ import io.github.asmflow.assembly.armv7.parser.ARMv7Parser
 import io.github.asmflow.assembly.armv7.psi.ARMv7FileElementType
 import io.github.asmflow.assembly.armv7.psi.ARMv7TokenSets
 import io.github.asmflow.assembly.armv7.psi.ARMv7TokenTypes
-import io.github.asmflow.assembly.lang.AssemblyParserDefinition
 
-class ARMv7ParserDefinition : AssemblyParserDefinition() {
+class ARMv7ParserDefinition : ParserDefinition {
     override fun createLexer(p0: Project?): Lexer = ARMv7Lexer()
 
     override fun createParser(p0: Project?): PsiParser = ARMv7Parser()

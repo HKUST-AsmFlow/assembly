@@ -1,7 +1,6 @@
 package io.github.asmflow.assembly.armv7.emulator.decoder
 
-import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
-import io.github.asmflow.assembly.emulator.EmulationException
+import io.github.asmflow.assembly.armv7.emulator.EmulationException
 
 /**
  * Basic decoded representation for ARM B and BL instructions.

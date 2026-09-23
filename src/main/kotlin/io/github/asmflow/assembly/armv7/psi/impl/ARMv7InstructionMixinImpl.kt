@@ -5,7 +5,7 @@ import com.intellij.lang.ASTNode
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
-import io.github.asmflow.assembly.util.functional.*
+import io.github.asmflow.assembly.armv7.util.functional.*
 
 abstract class ARMv7InstructionMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7Instruction {
     override val baseMnemonic: String
