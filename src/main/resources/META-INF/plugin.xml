@@ -6,6 +6,7 @@
     <description>Various Assembly language support for the IntelliJ Platform. Part of the AsmFlow project.</description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
 
     <resource-bundle>messages.AssemblyBundle</resource-bundle>
 

@@ -1,6 +1,6 @@
 package io.github.asmflow.assembly.psi.tree
 
 import com.intellij.psi.tree.IElementType
-import io.github.asmflow.assembly.lang.AssemblyLanguage
+import com.intellij.lang.Language
 
-open class AssemblyTokenType(debugName: String, language: AssemblyLanguage) : IElementType(debugName, language)
+open class AssemblyTokenType(debugName: String, language: Language) : IElementType(debugName, language)
