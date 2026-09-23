@@ -6,7 +6,7 @@ import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 import com.intellij.openapi.util.NlsContexts
-import io.github.asmflow.assembly.AssemblyBundle
+import io.github.asmflow.assembly.armv7.AssemblyBundle
 import io.github.asmflow.assembly.armv7.ARMv7FileType
 import io.github.asmflow.assembly.armv7.editor.colors.ARMv7SyntaxHighlighter
 import io.github.asmflow.assembly.armv7.editor.colors.ARMv7TextAttributes

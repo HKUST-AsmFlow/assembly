@@ -4,8 +4,8 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.psi.ARMv7FlexibleOffset
-import io.github.asmflow.assembly.util.functional.toOption
-import io.github.asmflow.assembly.util.unreachable
+import io.github.asmflow.assembly.armv7.util.functional.toOption
+import io.github.asmflow.assembly.armv7.util.unreachable
 import kotlin.math.abs
 
 abstract class ARMv7FlexibleOffsetMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), ARMv7FlexibleOffset {

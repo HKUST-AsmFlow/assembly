@@ -3,7 +3,7 @@ package io.github.asmflow.assembly.armv7.emulator.decoder
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
-import io.github.asmflow.assembly.emulator.EmulationException
+import io.github.asmflow.assembly.armv7.emulator.EmulationException
 
 data class MemoryControlBits(val preIdx: Boolean, val add: Boolean, val writeBack: Boolean)
 sealed class MemoryOperand2 {

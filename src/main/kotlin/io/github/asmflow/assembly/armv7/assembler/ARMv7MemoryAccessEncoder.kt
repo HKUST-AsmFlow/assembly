@@ -7,8 +7,7 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.execution.ARMv7Register
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
-import io.github.asmflow.assembly.util.functional.Option
+import io.github.asmflow.assembly.armv7.util.functional.Option
 
 class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7InstructionEncoder {
     private val loadStoreMnemonics = setOf("ldr", "str")

@@ -3,7 +3,6 @@ package io.github.asmflow.assembly.armv7.assembler
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
-import io.github.asmflow.assembly.assembler.AssemblySyntaxException
 
 /**
  * Object providing support for encoding the supervisor call instruction.

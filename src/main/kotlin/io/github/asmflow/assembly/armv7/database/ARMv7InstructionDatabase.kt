@@ -1,9 +1,9 @@
 package io.github.asmflow.assembly.armv7.database
 
 import io.github.asmflow.assembly.armv7.database.InstructionFormat.Companion.toInstructionFormat
-import io.github.asmflow.assembly.openapi.BundledXmlDatabase
-import io.github.asmflow.assembly.util.functional.Option
-import io.github.asmflow.assembly.util.functional.toOption
+import io.github.asmflow.assembly.armv7.openapi.BundledXmlDatabase
+import io.github.asmflow.assembly.armv7.util.functional.Option
+import io.github.asmflow.assembly.armv7.util.functional.toOption
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 

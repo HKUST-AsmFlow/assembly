@@ -1,6 +1,5 @@
 package io.github.asmflow.assembly.armv7.emulator
 
-import io.github.asmflow.assembly.emulator.EmulationException
 
 class ARMv7RegisterState {
     private val registerFile = IntArray(16)

@@ -2,10 +2,9 @@ package io.github.asmflow.assembly.armv7.toolWindows
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
-import io.github.asmflow.assembly.openapi.wm.AssemblyToolWindowFactory
-import io.github.asmflow.assembly.openapi.wm.AssemblyToolWindowFactoryCompanion
+import com.intellij.openapi.wm.ToolWindowFactory
 
-class ARMv7MnemonicDocumentationToolWindowFactory : AssemblyToolWindowFactory {
+class ARMv7MnemonicDocumentationToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         toolWindow.setStripeShortTitleProvider { "ARMv7 Mnemonics" }
 
@@ -17,7 +16,7 @@ class ARMv7MnemonicDocumentationToolWindowFactory : AssemblyToolWindowFactory {
         toolWindow.contentManager.addContent(content)
     }
 
-    object Companion : AssemblyToolWindowFactoryCompanion {
-        override val toolWindowId = "ARMv7 Mnemonics Documentation"
+    companion object {
+        const val TOOL_WINDOW_ID = "ARMv7 Mnemonics Documentation"
     }
 }

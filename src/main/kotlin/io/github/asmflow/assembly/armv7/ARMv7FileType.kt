@@ -2,7 +2,7 @@ package io.github.asmflow.assembly.armv7
 
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.fileTypes.LanguageFileType
-import io.github.asmflow.assembly.icons.AssemblyIcons
+import io.github.asmflow.assembly.armv7.icons.AssemblyIcons
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 

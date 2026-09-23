@@ -1,9 +1,7 @@
 package io.github.asmflow.assembly.armv7.editorActions
 
 import com.intellij.psi.PsiElement
-import io.github.asmflow.assembly.editorActions.AssemblyCompletionContext
-import io.github.asmflow.assembly.editorActions.AssemblyCompletionContextDetector
-import io.github.asmflow.assembly.util.functional.toOption
+import io.github.asmflow.assembly.armv7.util.functional.toOption
 
 object ARMv7CompletionContextDetector : AssemblyCompletionContextDetector() {
     override val contextRules = emptyList<Rule>()

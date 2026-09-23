@@ -4,7 +4,7 @@ import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.execution.ShiftResult
-import io.github.asmflow.assembly.emulator.EmulationException
+import io.github.asmflow.assembly.armv7.emulator.EmulationException
 
 /**
  * Basic decoded representation for ARM data-processing instructions.

@@ -1,6 +1,6 @@
 package io.github.asmflow.assembly.armv7.execution
 
-import io.github.asmflow.assembly.util.functional.Option
+import io.github.asmflow.assembly.armv7.util.functional.Option
 import java.util.SortedSet
 
 sealed class ARMv7InstructionOperand {

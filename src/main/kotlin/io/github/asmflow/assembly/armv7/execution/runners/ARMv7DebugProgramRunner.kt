@@ -12,8 +12,8 @@ import com.intellij.xdebugger.XDebugProcessStarter
 import com.intellij.xdebugger.XDebugSession
 import com.intellij.xdebugger.XDebuggerManager
 import io.github.asmflow.assembly.armv7.debugger.ARMv7DebugProcess
-import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfiguration
-import io.github.asmflow.assembly.execution.configurations.AssemblyRunConfigurationOptions
+import io.github.asmflow.assembly.armv7.execution.configurations.AssemblyRunConfiguration
+import io.github.asmflow.assembly.armv7.execution.configurations.AssemblyRunConfigurationOptions
 
 class ARMv7DebugProgramRunner : GenericProgramRunner<RunnerSettings>() {
     override fun canRun(executorId: String, profile: RunProfile): Boolean =

@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.psi.ARMv7Mnemonic
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7MnemonicDocumentationToolWindowFactory
-import io.github.asmflow.assembly.util.functional.toOption
+import io.github.asmflow.assembly.armv7.util.functional.toOption
 
 /**
  * Class representin an action which shows the documentation for assembly mnemonics.
@@ -21,7 +21,7 @@ class EditorShowMnemonicDocumentationAction : AnAction() {
             return
 
         val toolWindow = ToolWindowManager.getInstance(project.unwrap()).getToolWindow(
-            ARMv7MnemonicDocumentationToolWindowFactory.Companion.toolWindowId
+            ARMv7MnemonicDocumentationToolWindowFactory.TOOL_WINDOW_ID
         ).toOption()
 
         toolWindow.isSomeThen { it.show() }

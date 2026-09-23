@@ -4,7 +4,7 @@ import io.github.asmflow.assembly.armv7.emulator.ARMv7MemoryState
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7MemoryDecoder
 import io.github.asmflow.assembly.armv7.emulator.decoder.DecodedMemoryInstruction
-import io.github.asmflow.assembly.emulator.EmulationException
+import io.github.asmflow.assembly.armv7.emulator.EmulationException
 
 class ARMv7MemoryExecutor(private val registerState: ARMv7RegisterState, private val memoryState: ARMv7MemoryState) {
     private val decoder = ARMv7MemoryDecoder(registerState)
