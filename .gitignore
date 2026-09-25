@@ -10,6 +10,7 @@ build/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+src/main/gen
 *.iws
 *.iml
 *.ipr

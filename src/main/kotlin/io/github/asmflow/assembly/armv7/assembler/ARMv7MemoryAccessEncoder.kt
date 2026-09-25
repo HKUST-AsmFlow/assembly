@@ -9,7 +9,7 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.util.functional.Option
 
-class ARMv7MemoryAccessEncoder(val symbols: HashMap<String, Int>) : ARMv7InstructionEncoder {
+class ARMv7MemoryAccessEncoder(val symbols: Map<String, UInt>) : ARMv7InstructionEncoder {
     private val loadStoreMnemonics = setOf("ldr", "str")
 
     private fun Boolean.toInt() = if (this) 1 else 0
