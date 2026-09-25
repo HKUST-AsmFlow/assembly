@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiManager
 import io.github.asmflow.assembly.armv7.assembler.ARMv7Assembler
+import io.github.asmflow.assembly.armv7.assembler.AssembledProgram
 import io.github.asmflow.assembly.armv7.emulator.ARMv7Emulator
 import io.github.asmflow.assembly.armv7.emulator.ARMv7SyscallHandler
 import io.github.asmflow.assembly.armv7.toolWindows.register.ARMv7RegisterViewToolWindowFactory
@@ -50,7 +51,7 @@ class AssemblyRunProfileState(
             when (config.getEmulatorFlavour()) {
                 AssemblyRunConfigurationOptions.EmulatorFlavour.ARMv7 -> {
                     val assembler = ARMv7Assembler(console)
-                    val result = ApplicationManager.getApplication().runReadAction<AssemblerResult<List<Int>, List<AssemblerError>>> {
+                    val result = ApplicationManager.getApplication().runReadAction<AssemblerResult<AssembledProgram, List<AssemblerError>>> {
                         return@runReadAction assembler.assemble(listOf(psiFile))
                     }
 

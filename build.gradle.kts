@@ -52,7 +52,7 @@ tasks {
         targetRootOutputDir.set(
             layout.projectDirectory.dir("src/main/gen/")
         )
-        pathToParser.set("io/github/asmflow/assembly/armv7/parser")
+        pathToParser.set("io/github/asmflow/assembly/armv7/parser/ARMv7ParserImpl.java")
         pathToPsiRoot.set("io/github/asmflow/assembly/armv7/psi")
         purgeOldFiles.set(true)
     }

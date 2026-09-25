@@ -1,6 +1,7 @@
 package io.github.asmflow.assembly.armv7.emulator
 
 import com.intellij.openapi.project.Project
+import io.github.asmflow.assembly.armv7.assembler.AssembledProgram
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7ConditionCodeDecoder
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
@@ -9,7 +10,7 @@ import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7SupervisorCallExe
 
 class ARMv7Emulator(
     val project: Project,
-    val text: List<Int>,
+    val text: AssembledProgram,
     private val host: ARMv7SyscallHandler = ARMv7SyscallHandler.None,
 ) : Emulator {
     val publisher: EmulatorStateNotifier = project.messageBus.syncPublisher(EmulatorStateNotifier.EMULATOR_STATE_TOPIC)
@@ -18,7 +19,7 @@ class ARMv7Emulator(
         setPC(ARMv7AddressSpace.TEXT_BASE.addr.toInt())
         setSP(ARMv7AddressSpace.STACK_TOP.addr.toInt())
     }
-    val memory = ARMv7MemoryState(text)
+    val memory = ARMv7MemoryState(text.text)
     override val name = "armv7"
 
     /**
