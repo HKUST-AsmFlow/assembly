@@ -11,7 +11,7 @@ import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
  * - ldr
  */
 object PsuedoEncoderFactory {
-    fun getEncoder(mnemonic: String, symbols: HashMap<String, Int>): ARMv7PseudoEncoder {
+    fun getEncoder(mnemonic: String, symbols: Map<String, UInt>): ARMv7PseudoEncoder {
         return when (mnemonic.lowercase()) {
             "adr" -> AdrEncoder(symbols)
             "adrl" -> AdrlEncoder(symbols)

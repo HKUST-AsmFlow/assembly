@@ -226,37 +226,5 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                 context.symbols,
             )
         )
-
-//        // ROUND 2: Convert all the instructions into bytecode
-//        addrCounter = 0 // Assuming text section starts at 0x00000000
-//        val instructions = mutableListOf<Int>()
-//        for (child in file.children) {
-//            if (child is ARMv7Instruction) {
-//                val encoder = getEncoderFromInstruction(child, symbols)
-//                val result = encodeInstruction(child, symbols, addrCounter)
-//                if (result.isErr()) {
-//                    errors.add(result.unwrapErr())
-//                    debug("Error: ${result.unwrapErr().message} \n")
-//                } else {
-//                    val encoded = result.unwrap()
-//                    encoded.forEach { word ->
-//                        debug(
-//                            "Encoded ${child.text} -> 0x${word.toUInt().toString(16).uppercase().padStart(8, '0')}\n"
-//                        )
-//                    }
-//                    instructions.addAll(encoded)
-//                }
-//
-//                addrCounter += if (encoder is ARMv7PseudoEncoder) {
-//                    encoder.expandsTo
-//                } else {
-//                    1
-//                }
-//            }
-//        }
-//
-//        if (errors.isNotEmpty()) {
-//            return Err(errors)
-//        }
     }
 }
