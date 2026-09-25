@@ -2,12 +2,14 @@ package io.github.asmflow.assembly.armv7.assembler
 
 import com.intellij.execution.ui.ConsoleView
 import com.intellij.psi.PsiFile
-import io.github.asmflow.assembly.armv7.assembler.psuedo.ARMv7PsuedoEncoder
+import io.github.asmflow.assembly.armv7.assembler.context.AssemblerContext
+import io.github.asmflow.assembly.armv7.assembler.psuedo.ARMv7PseudoEncoder
 import io.github.asmflow.assembly.armv7.assembler.psuedo.PsuedoEncoderFactory
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.database.InstructionFormat
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
+import io.github.asmflow.assembly.armv7.psi.ARMv7Directive
 import io.github.asmflow.assembly.armv7.psi.ARMv7Instruction
 import io.github.asmflow.assembly.armv7.psi.ARMv7LabelWithColon
 import io.github.asmflow.assembly.armv7.util.functional.Err
@@ -109,14 +111,68 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         }
     }
 
+    fun collectSymbolsAndSizes(file: PsiFile, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        file.children.forEach {
+            when (it) {
+                is ARMv7LabelWithColon -> defineLabel(it, ctx, errors)
+                is ARMv7Instruction -> advance(it, ctx, errors)
+                is ARMv7Directive -> advance(it, ctx, errors)
+            }
+        }
+    }
+
+    fun emitInstructions(file: PsiFile, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {}
+
+    private fun defineLabel(label: ARMv7LabelWithColon, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        val name = label.label.text
+        if (name in ctx.symbols) {
+            errors.add(AssemblerError("duplicate label $name", label))
+            return
+        }
+
+        ctx.symbols[name] = AssemblerContext.Symbol(ctx.section, ctx.currentOffset())
+    }
+
+    fun advance(instruction: ARMv7Instruction, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        if (ctx.section != AssemblerContext.Section.Text) {
+            errors.add(AssemblerError("instructions can only be in the text section", instruction))
+            return
+        }
+
+        // todo: we do not need the symbols to compute word-size of instructions, but we will pass the symbols from
+        //       context eventually anyway, so the function needs to be updated
+        val encoder = getEncoderFromInstruction(instruction, HashMap())
+        val words = if (encoder is ARMv7PseudoEncoder) encoder.expandsTo else 1
+
+        ctx.advanceText(words)
+    }
+
+    fun advance(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {}
+
     /**
      * Assembles a file.
      *
      * Currently, the implementation only supports a single file; multi-file support may be implemented in the future.
      */
-    override fun assemble(files: List<PsiFile>): AssemblerResult<List<Int>, List<AssemblerError>> {
+    override fun assemble(files: List<PsiFile>): AssemblerResult<AssembledProgram, List<AssemblerError>> {
         val file = files[0] // For now support one file
+        val context = AssemblerContext()
         val errors = mutableListOf<AssemblerError>()
+
+        collectSymbolsAndSizes(file, context, errors)
+        if (errors.isNotEmpty())
+            return Err(errors)
+
+        emitInstructions(file, context, errors)
+        if (errors.isNotEmpty())
+            return Err(errors)
+
+        return Ok(AssembledProgram(
+            context.text,
+            context.data.toByteArray(),
+            context.symbols,
+        ))
+
         val symbols = HashMap<String, Int>()
         // ROUND 1: Resolve labels
         // Use PsuedoEncoder.expandsTo to get the number of real instructions
@@ -127,7 +183,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         for (child in file.children) {
             if (child is ARMv7Instruction) {
                 val encoder = getEncoderFromInstruction(child, symbols)
-                addrCounter += if (encoder is ARMv7PsuedoEncoder) {
+                addrCounter += if (encoder is ARMv7PseudoEncoder) {
                     encoder.expandsTo
                 } else {
                     1
@@ -158,7 +214,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
                     instructions.addAll(encoded)
                 }
 
-                addrCounter += if (encoder is ARMv7PsuedoEncoder) {
+                addrCounter += if (encoder is ARMv7PseudoEncoder) {
                     encoder.expandsTo
                 } else {
                     1
@@ -169,7 +225,5 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         if (errors.isNotEmpty()) {
             return Err(errors)
         }
-
-        return Ok(instructions)
     }
 }
