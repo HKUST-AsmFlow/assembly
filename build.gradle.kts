@@ -52,7 +52,7 @@ tasks {
         targetRootOutputDir.set(
             layout.projectDirectory.dir("src/main/gen/")
         )
-        pathToParser.set("io/github/asmflow/assembly/armv7/parser/ARMv7Parser.java")
+        pathToParser.set("io/github/asmflow/assembly/armv7/parser")
         pathToPsiRoot.set("io/github/asmflow/assembly/armv7/psi")
         purgeOldFiles.set(true)
     }
@@ -92,8 +92,7 @@ kotlin {
 
 sourceSets {
     main {
-        java.srcDir(tasks.generateLexer)
-        java.srcDir(tasks.generateParser)
+        java.srcDir("src/main/gen")
         resources.srcDirs("src/main/resources")
     }
 }

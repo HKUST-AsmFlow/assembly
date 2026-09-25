@@ -3,6 +3,8 @@ package io.github.asmflow.assembly.armv7.assembler
 import com.intellij.execution.ui.ConsoleView
 import com.intellij.psi.PsiFile
 import io.github.asmflow.assembly.armv7.assembler.context.AssemblerContext
+import io.github.asmflow.assembly.armv7.assembler.context.ProgramSection
+import io.github.asmflow.assembly.armv7.assembler.context.ProgramSymbol
 import io.github.asmflow.assembly.armv7.assembler.psuedo.ARMv7PseudoEncoder
 import io.github.asmflow.assembly.armv7.assembler.psuedo.PsuedoEncoderFactory
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
@@ -28,7 +30,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
      */
     fun getEncoderFromInstruction(
         instruction: ARMv7Instruction,
-        symbols: HashMap<String, Int>
+        symbols: Map<String, UInt>
     ): ARMv7InstructionEncoder {
         // TODO: Special-case LDR pseudoinstructions vs regular LDR instructions
         return when (ARMv7InstructionDatabase.get(instruction.baseMnemonic).unwrap().format) {
@@ -48,7 +50,7 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
      */
     fun encodeInstruction(
         instruction: ARMv7Instruction,
-        symbols: HashMap<String, Int>,
+        symbols: Map<String, UInt>,
         addrCounter: Int
     ): AssemblerResult<List<Int>, AssemblerError> {
         // TODO: make sure the instruction actually takes operands before returning an error
@@ -121,7 +123,39 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         }
     }
 
-    fun emitInstructions(file: PsiFile, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {}
+    fun emitInstructions(file: PsiFile, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        ctx.reset()
+
+        val resolved = ctx.symbols.mapValues { it.value.absoluteAddress() }
+        file.children.forEach {
+            when (it) {
+                is ARMv7Instruction -> emitInstruction(it, ctx, resolved, errors)
+                is ARMv7Directive -> when (it.directiveName.text.lowercase()) {
+                    "data" -> ctx.section = ProgramSection.Data
+                    "text" -> ctx.section = ProgramSection.Text
+                }
+            }
+        }
+    }
+
+    private fun advance(instruction: ARMv7Instruction, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        if (ctx.section != ProgramSection.Text) {
+            errors.add(AssemblerError("instructions can only be in the text section", instruction))
+            return
+        }
+
+        val encoder = getEncoderFromInstruction(instruction, mapOf())
+        val words = if (encoder is ARMv7PseudoEncoder) encoder.expandsTo else 1
+        ctx.advanceText(words)
+    }
+
+    private fun advance(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        when (val name = directive.directiveName.text.lowercase()) {
+            "data" -> ctx.section = ProgramSection.Data
+            "text" -> ctx.section = ProgramSection.Text
+            else -> errors.add(AssemblerError("unknown directive $name", directive))
+        }
+    }
 
     private fun defineLabel(label: ARMv7LabelWithColon, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
         val name = label.label.text
@@ -130,29 +164,41 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
             return
         }
 
-        ctx.symbols[name] = AssemblerContext.Symbol(ctx.section, ctx.currentOffset())
+        ctx.symbols[name] = ProgramSymbol(ctx.section, ctx.currentOffset())
     }
 
-    fun advance(instruction: ARMv7Instruction, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
-        if (ctx.section != AssemblerContext.Section.Text) {
+    private fun emitInstruction(
+        instruction: ARMv7Instruction,
+        ctx: AssemblerContext,
+        symbols: Map<String, UInt>,
+        errors: MutableList<AssemblerError>
+    ) {
+        if (ctx.section != ProgramSection.Text) {
             errors.add(AssemblerError("instructions can only be in the text section", instruction))
             return
         }
 
-        // todo: we do not need the symbols to compute word-size of instructions, but we will pass the symbols from
-        //       context eventually anyway, so the function needs to be updated
-        val encoder = getEncoderFromInstruction(instruction, HashMap())
-        val words = if (encoder is ARMv7PseudoEncoder) encoder.expandsTo else 1
+        val encoder = getEncoderFromInstruction(instruction, symbols)
+        val result = encodeInstruction(instruction, symbols, ctx.textOffsetWords)
 
-        ctx.advanceText(words)
-    }
+        if (result.isErr()) {
+            errors.add(result.unwrapErr())
+            debug("Error: ${result.unwrapErr().message}\n")
+        } else {
+            val encoded = result.unwrap()
+            encoded.forEach { word ->
+                debug(
+                    "Encoded ${instruction.text} -> 0x${
+                        word.toUInt().toString(16).uppercase().padStart(8, '0')
+                    }\n"
+                )
+            }
 
-    fun advance(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
-        when (val name = directive.directiveName.text.lowercase()) {
-            "data" -> ctx.section = AssemblerContext.Section.Data
-            "text" -> ctx.section = AssemblerContext.Section.Text
-            else -> errors.add(AssemblerError("unknown directive $name", directive))
+            ctx.text.addAll(encoded)
         }
+
+        val words = if (encoder is ARMv7PseudoEncoder) encoder.expandsTo else 1
+        ctx.advanceText(words)
     }
 
     /**
@@ -173,63 +219,44 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         if (errors.isNotEmpty())
             return Err(errors)
 
-        return Ok(AssembledProgram(
-            context.text,
-            context.data.toByteArray(),
-            context.symbols,
-        ))
+        return Ok(
+            AssembledProgram(
+                context.text,
+                context.data.toByteArray(),
+                context.symbols,
+            )
+        )
 
-        val symbols = HashMap<String, Int>()
-        // ROUND 1: Resolve labels
-        // Use PsuedoEncoder.expandsTo to get the number of real instructions
-        // for each psuedo,
-        // otherwise increment by 1
-        // Build a map of labels corresponding to the Address/4
-        var addrCounter: Int = 0 // Assuming text section starts at 0x00000000
-        for (child in file.children) {
-            if (child is ARMv7Instruction) {
-                val encoder = getEncoderFromInstruction(child, symbols)
-                addrCounter += if (encoder is ARMv7PseudoEncoder) {
-                    encoder.expandsTo
-                } else {
-                    1
-                }
-            }
-            if (child is ARMv7LabelWithColon) {
-                symbols[child.label.text] = addrCounter
-            }
-        }
-
-        // ROUND 2: Convert all the instructions into bytecode
-        addrCounter = 0 // Assuming text section starts at 0x00000000
-        val instructions = mutableListOf<Int>()
-        for (child in file.children) {
-            if (child is ARMv7Instruction) {
-                val encoder = getEncoderFromInstruction(child, symbols)
-                val result = encodeInstruction(child, symbols, addrCounter)
-                if (result.isErr()) {
-                    errors.add(result.unwrapErr())
-                    debug("Error: ${result.unwrapErr().message} \n")
-                } else {
-                    val encoded = result.unwrap()
-                    encoded.forEach { word ->
-                        debug(
-                            "Encoded ${child.text} -> 0x${word.toUInt().toString(16).uppercase().padStart(8, '0')}\n"
-                        )
-                    }
-                    instructions.addAll(encoded)
-                }
-
-                addrCounter += if (encoder is ARMv7PseudoEncoder) {
-                    encoder.expandsTo
-                } else {
-                    1
-                }
-            }
-        }
-
-        if (errors.isNotEmpty()) {
-            return Err(errors)
-        }
+//        // ROUND 2: Convert all the instructions into bytecode
+//        addrCounter = 0 // Assuming text section starts at 0x00000000
+//        val instructions = mutableListOf<Int>()
+//        for (child in file.children) {
+//            if (child is ARMv7Instruction) {
+//                val encoder = getEncoderFromInstruction(child, symbols)
+//                val result = encodeInstruction(child, symbols, addrCounter)
+//                if (result.isErr()) {
+//                    errors.add(result.unwrapErr())
+//                    debug("Error: ${result.unwrapErr().message} \n")
+//                } else {
+//                    val encoded = result.unwrap()
+//                    encoded.forEach { word ->
+//                        debug(
+//                            "Encoded ${child.text} -> 0x${word.toUInt().toString(16).uppercase().padStart(8, '0')}\n"
+//                        )
+//                    }
+//                    instructions.addAll(encoded)
+//                }
+//
+//                addrCounter += if (encoder is ARMv7PseudoEncoder) {
+//                    encoder.expandsTo
+//                } else {
+//                    1
+//                }
+//            }
+//        }
+//
+//        if (errors.isNotEmpty()) {
+//            return Err(errors)
+//        }
     }
 }
