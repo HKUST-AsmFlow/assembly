@@ -147,7 +147,13 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         ctx.advanceText(words)
     }
 
-    fun advance(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {}
+    fun advance(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
+        when (val name = directive.directiveName.text.lowercase()) {
+            "data" -> ctx.section = AssemblerContext.Section.Data
+            "text" -> ctx.section = AssemblerContext.Section.Text
+            else -> errors.add(AssemblerError("unknown directive $name", directive))
+        }
+    }
 
     /**
      * Assembles a file.
