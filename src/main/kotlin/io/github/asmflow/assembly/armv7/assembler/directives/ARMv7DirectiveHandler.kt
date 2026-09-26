@@ -5,7 +5,12 @@ import io.github.asmflow.assembly.armv7.assembler.context.AssemblerContext
 import io.github.asmflow.assembly.armv7.psi.ARMv7Directive
 
 interface ARMv7DirectiveHandler {
-    fun emit(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>)
+    fun emit(
+        directive: ARMv7Directive,
+        ctx: AssemblerContext,
+        symbols: Map<String, UInt>,
+        errors: MutableList<AssemblerError>
+    )
 
     fun size(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>): Int?
 }
