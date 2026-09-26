@@ -21,10 +21,10 @@ COMMENT = @.*
 DIRECTIVE = [.]{IDENTIFIER}
 IDENTIFIER = [a-zA-Z_]+
 
-BINARY_NUMBER = b[0|1]+
+BINARY_NUMBER = (0)?b[0|1]+
 DECIMAL_NUMBER = [\d]+
-HEXADECIMAL_NUMBER = x[0-9a-fA-F]+
-OCTAL_NUMBER = o[0-7]+
+HEXADECIMAL_NUMBER = (0)?x[0-9a-fA-F]+
+OCTAL_NUMBER = (0)?o[0-7]+
 
 STRING = \"([^\\\"\r\n]|\\[^\r\n])*\"?
 

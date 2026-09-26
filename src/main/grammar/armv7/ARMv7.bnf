@@ -72,7 +72,7 @@ Directive ::= DOT DirectiveName DirectiveParameters? {
 }
 DirectiveName ::= IDENTIFIER
 DirectiveParameters ::= DirectiveParameter (COMMA DirectiveParameter)*
-DirectiveParameter ::= Label | STRING
+DirectiveParameter ::= Label | Number | STRING
 
 Instruction ::= Mnemonic Operands? {
   pin = 1
