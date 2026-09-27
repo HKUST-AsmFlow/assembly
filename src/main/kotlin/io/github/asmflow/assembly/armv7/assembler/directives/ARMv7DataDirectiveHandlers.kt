@@ -12,7 +12,6 @@ object ARMv7ByteDataDirectiveHandler : ARMv7DirectiveHandler {
         symbols: Map<String, UInt>,
         errors: MutableList<AssemblerError>
     ) {
-        TODO("Not yet implemented")
     }
 
     override fun size(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>): Int? {
@@ -21,6 +20,12 @@ object ARMv7ByteDataDirectiveHandler : ARMv7DirectiveHandler {
             return null
         }
 
-        TODO("not yet implemented")
+        val parameters = directive.parameters
+        parameters.find { it !is ARMv7DirectiveParameter.Number }?.let {
+            errors.add(AssemblerError("invalid parameter type in byte directive", it.element))
+            return null
+        }
+
+        return parameters.size
     }
 }

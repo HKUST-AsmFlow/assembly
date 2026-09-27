@@ -67,12 +67,14 @@ RegisterList ::= LBRACE RegisterListItems RBRACE {
 private RegisterListItems ::= RegisterListItem (COMMA RegisterListItem)*
 private RegisterListItem ::= RegisterRange | Register
 
-Directive ::= DOT DirectiveName DirectiveParameters? {
+Directive ::= DOT DirectiveName DirectiveParameterList? {
   pin = 2
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7DirectiveMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7DirectiveMixin"
 }
 DirectiveName ::= IDENTIFIER
-DirectiveParameters ::= DirectiveParameter (COMMA DirectiveParameter)*
-DirectiveParameter ::= Label | Number | STRING
+DirectiveParameterList ::= Parameter (COMMA Parameter)*
+Parameter ::= Label | Number | STRING
 
 Instruction ::= Mnemonic Operands? {
   pin = 1
