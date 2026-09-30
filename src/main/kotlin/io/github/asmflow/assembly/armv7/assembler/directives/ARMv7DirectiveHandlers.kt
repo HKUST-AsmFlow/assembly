@@ -8,8 +8,12 @@ object ARMv7DirectiveHandlers {
         "data" to ARMv7DataSectionSwitchHandler,
         "text" to ARMv7TextSectionSwitchHandler,
 
-        // size 1
+        // size 1 * n
         "byte" to ARMv7ByteDataDirectiveHandler,
+
+        // size 2 * n
+        "half" to ARMv7HalfWordDataDirectiveHandler,
+        "short" to ARMv7HalfWordDataDirectiveHandler,
     )
 
     fun get(name: String) = handlers[name].toOption()
