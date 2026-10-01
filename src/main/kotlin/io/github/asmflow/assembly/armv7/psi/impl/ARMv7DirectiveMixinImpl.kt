@@ -13,7 +13,7 @@ abstract class ARMv7DirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiElement(nod
     fun ARMv7Parameter.toParameter(): ARMv7DirectiveParameter = when {
         number != null -> ARMv7DirectiveParameter.Number(number!!.value, number!!)
         label != null -> ARMv7DirectiveParameter.Label(label!!.text, label!!)
-        // todo: add string literal
+        stringLiteral != null -> ARMv7DirectiveParameter.StringLit(stringLiteral!!.value, stringLiteral!!)
         else -> error("invalid directive parameter")
     }
 }

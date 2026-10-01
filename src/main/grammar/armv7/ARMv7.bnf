@@ -74,7 +74,7 @@ Directive ::= DOT DirectiveName DirectiveParameterList? {
 }
 DirectiveName ::= IDENTIFIER
 DirectiveParameterList ::= Parameter (COMMA Parameter)*
-Parameter ::= Label | Number | STRING
+Parameter ::= Label | Number | StringLiteral
 
 Instruction ::= Mnemonic Operands? {
   pin = 1
@@ -163,4 +163,9 @@ HexadecimalLiteral ::= HEXADECIMAL_NUMBER {
 OctalLiteral ::= OCTAL_NUMBER {
   mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7OctalNumberMixinImpl"
   implements = "io.github.asmflow.assembly.armv7.psi.ARMv7NumberMixin"
+}
+
+StringLiteral ::= STRING {
+  mixin = "io.github.asmflow.assembly.armv7.psi.impl.ARMv7StringLiteralMixinImpl"
+  implements = "io.github.asmflow.assembly.armv7.psi.ARMv7StringLiteralMixin"
 }

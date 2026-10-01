@@ -17,6 +17,10 @@ object ARMv7DirectiveHandlers {
 
         // size 4 * n
         "word" to ARMv7WordDataDirectiveHandler,
+
+        // strings
+        "ascii" to ARMv7StringDirectiveHandler,
+        "asciz" to ARMv7NullTerminatedStringDirectiveHandler,
     )
 
     fun get(name: String) = handlers[name].toOption()
