@@ -10,6 +10,13 @@ fun MutableList<Byte>.writeHalfLE(value: Int) {
     add(((value ushr 8) and 0xFF).toByte())
 }
 
+fun MutableList<Byte>.writeWordLE(value: Int) {
+    add((value and 0xFF).toByte())
+    add(((value ushr 8) and 0xFF).toByte())
+    add(((value ushr 16) and 0xFF).toByte())
+    add(((value ushr 24) and 0xFF).toByte())
+}
+
 object ARMv7ByteDataDirectiveHandler : ARMv7DirectiveHandler {
     override fun emit(
         directive: ARMv7Directive,
@@ -116,7 +123,7 @@ object ARMv7WordDataDirectiveHandler : ARMv7DirectiveHandler {
         val pad = alignPad(ctx.data.size, 4)
         repeat(pad) { ctx.data.add(0) }
 
-        values.forEach { ctx.data.writeHalfLE(it) }
+        values.forEach { ctx.data.writeWordLE(it) }
     }
 
     override fun size(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>): Int? {
