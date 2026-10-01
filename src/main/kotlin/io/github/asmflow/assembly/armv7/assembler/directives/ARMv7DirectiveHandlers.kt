@@ -14,6 +14,9 @@ object ARMv7DirectiveHandlers {
         // size 2 * n
         "half" to ARMv7HalfWordDataDirectiveHandler,
         "short" to ARMv7HalfWordDataDirectiveHandler,
+
+        // size 4 * n
+        "word" to ARMv7WordDataDirectiveHandler,
     )
 
     fun get(name: String) = handlers[name].toOption()
