@@ -19,7 +19,7 @@ class ARMv7Emulator(
         setPC(ARMv7AddressSpace.TEXT_BASE.addr.toInt())
         setSP(ARMv7AddressSpace.STACK_TOP.addr.toInt())
     }
-    val memory = ARMv7MemoryState(text.text)
+    val memory = ARMv7MemoryState(text.text, text.data)
     override val name = "armv7"
 
     /**

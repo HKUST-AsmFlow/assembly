@@ -1,6 +1,6 @@
-package io.github.asmflow.assembly.armv7.assembler.psuedo
+package io.github.asmflow.assembly.armv7.assembler.encoder.pseudo
 
-import io.github.asmflow.assembly.armv7.assembler.ARMv7InstructionEncoder
+import io.github.asmflow.assembly.armv7.assembler.encoder.ARMv7InstructionEncoder
 
 /**
  * Interface for all encoders of ARMv7 psuedoinstructions.

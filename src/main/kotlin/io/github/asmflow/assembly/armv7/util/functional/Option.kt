@@ -1,5 +1,6 @@
 package io.github.asmflow.assembly.armv7.util.functional
 
+
 sealed class Option<out T> {
     fun isSomeThen(f: (T) -> Unit) = when (this) {
         is Some -> f(data)
@@ -13,6 +14,11 @@ sealed class Option<out T> {
     fun <R> map(f: (T) -> R): Option<R> = when (this) {
         is Some -> Some(f(data))
         is None -> None
+    }
+
+    fun <E> okOr(error: E): Result<T, E> = when (this) {
+        is Some -> Ok(data)
+        is None -> Err(error)
     }
 
     fun unwrap(): T = when (this) {

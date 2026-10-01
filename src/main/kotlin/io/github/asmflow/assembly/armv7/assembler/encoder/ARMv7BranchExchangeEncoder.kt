@@ -1,5 +1,6 @@
-package io.github.asmflow.assembly.armv7.assembler
+package io.github.asmflow.assembly.armv7.assembler.encoder
 
+import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand

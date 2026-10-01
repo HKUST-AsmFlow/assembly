@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.3.10"
-    id("org.jetbrains.intellij.platform") version "2.18.1"
-    id("org.jetbrains.intellij.platform.grammarkit") version "2.18.1"
+    id("org.jetbrains.intellij.platform") version "2.19.0"
+    id("org.jetbrains.intellij.platform.grammarkit") version "2.19.0"
 }
 
 group = "io.github.asmflow"
@@ -52,7 +52,7 @@ tasks {
         targetRootOutputDir.set(
             layout.projectDirectory.dir("src/main/gen/")
         )
-        pathToParser.set("io/github/asmflow/assembly/armv7/parser/ARMv7ParserImpl.java")
+        pathToParser.set("io/github/asmflow/assembly/armv7/parser/ARMv7Parser.java")
         pathToPsiRoot.set("io/github/asmflow/assembly/armv7/psi")
         purgeOldFiles.set(true)
     }

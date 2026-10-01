@@ -1,5 +1,6 @@
-package io.github.asmflow.assembly.armv7.assembler
+package io.github.asmflow.assembly.armv7.assembler.encoder
 
+import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionOperand
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
@@ -7,7 +8,7 @@ import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 /**
  * Object providing support for encoding the supervisor call instruction.
  *
- * `SVC` (called `SWI` before UAL) is encoding A1 in the ARM ARM, section A8.8.229:
+ * `SVC` (called `SWI` before UAL) is encoding A1 in the ARM, section A8.8.229:
  *
  * ```
  *  31   28 27 26 25 24 23                                    0
