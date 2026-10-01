@@ -5,8 +5,6 @@ import io.github.asmflow.assembly.armv7.assembler.context.AssemblerContext
 import io.github.asmflow.assembly.armv7.assembler.context.ProgramSection
 import io.github.asmflow.assembly.armv7.psi.ARMv7Directive
 
-fun alignPad(offset: Int, align: Int): Int = (align - (offset % align)) % align
-
 fun MutableList<Byte>.writeHalfLE(value: Int) {
     add((value and 0xFF).toByte())
     add(((value ushr 8) and 0xFF).toByte())
