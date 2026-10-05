@@ -1,0 +1,33 @@
+package io.github.asmflow.assembly.armv7.assembler.directives
+
+import io.github.asmflow.assembly.armv7.util.functional.toOption
+
+fun alignPad(offset: Int, align: Int): Int = (align - (offset % align)) % align
+
+object ARMv7DirectiveHandlers {
+    private val handlers = mapOf(
+        // size 0
+        "data" to ARMv7DataSectionSwitchHandler,
+        "text" to ARMv7TextSectionSwitchHandler,
+
+        // size 1 * n
+        "byte" to ARMv7ByteDataDirectiveHandler,
+
+        // size 2 * n
+        "half" to ARMv7HalfWordDataDirectiveHandler,
+        "short" to ARMv7HalfWordDataDirectiveHandler,
+
+        // size 4 * n
+        "word" to ARMv7WordDataDirectiveHandler,
+
+        // strings
+        "ascii" to ARMv7StringDirectiveHandler,
+        "asciz" to ARMv7NullTerminatedStringDirectiveHandler,
+
+        // memory alignment stuff
+        "align" to ARMv7AlignDirectiveHandler,
+        "space" to ARMv7SpaceDirectiveHandler,
+    )
+
+    fun get(name: String) = handlers[name].toOption()
+}

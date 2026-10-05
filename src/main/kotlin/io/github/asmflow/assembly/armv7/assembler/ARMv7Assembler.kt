@@ -5,8 +5,10 @@ import com.intellij.psi.PsiFile
 import io.github.asmflow.assembly.armv7.assembler.context.AssemblerContext
 import io.github.asmflow.assembly.armv7.assembler.context.ProgramSection
 import io.github.asmflow.assembly.armv7.assembler.context.ProgramSymbol
-import io.github.asmflow.assembly.armv7.assembler.psuedo.ARMv7PseudoEncoder
-import io.github.asmflow.assembly.armv7.assembler.psuedo.PsuedoEncoderFactory
+import io.github.asmflow.assembly.armv7.assembler.directives.ARMv7DirectiveHandlers
+import io.github.asmflow.assembly.armv7.assembler.encoder.*
+import io.github.asmflow.assembly.armv7.assembler.encoder.pseudo.ARMv7PseudoEncoder
+import io.github.asmflow.assembly.armv7.assembler.encoder.pseudo.PsuedoEncoderFactory
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase
 import io.github.asmflow.assembly.armv7.database.InstructionFormat
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode
@@ -129,11 +131,8 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         val resolved = ctx.symbols.mapValues { it.value.absoluteAddress() }
         file.children.forEach {
             when (it) {
+                is ARMv7Directive -> emitDirective(it, ctx, resolved, errors)
                 is ARMv7Instruction -> emitInstruction(it, ctx, resolved, errors)
-                is ARMv7Directive -> when (it.directiveName.text.lowercase()) {
-                    "data" -> ctx.section = ProgramSection.Data
-                    "text" -> ctx.section = ProgramSection.Text
-                }
             }
         }
     }
@@ -150,11 +149,17 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
     }
 
     private fun advance(directive: ARMv7Directive, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
-        when (val name = directive.directiveName.text.lowercase()) {
-            "data" -> ctx.section = ProgramSection.Data
-            "text" -> ctx.section = ProgramSection.Text
-            else -> errors.add(AssemblerError("unknown directive $name", directive))
+        val name = directive.directiveName.text.lowercase()
+        val result = ARMv7DirectiveHandlers.get(name).okOr(AssemblerError("unknown directive $name", directive))
+        if (result.isErr()) {
+            errors.add(result.unwrapErr())
+            return
         }
+
+        val handler = result.unwrap()
+        val n = handler.size(directive, ctx, errors) ?: return
+
+        if (n > 0) ctx.advanceData(n)
     }
 
     private fun defineLabel(label: ARMv7LabelWithColon, ctx: AssemblerContext, errors: MutableList<AssemblerError>) {
@@ -165,6 +170,23 @@ class ARMv7Assembler(console: ConsoleView) : Assembler(console) {
         }
 
         ctx.symbols[name] = ProgramSymbol(ctx.section, ctx.currentOffset())
+    }
+
+    private fun emitDirective(
+        directive: ARMv7Directive,
+        ctx: AssemblerContext,
+        symbols: Map<String, UInt>,
+        errors: MutableList<AssemblerError>
+    ) {
+        val name = directive.directiveName.text.lowercase()
+        val result = ARMv7DirectiveHandlers.get(name).okOr(AssemblerError("unknown directive $name", directive))
+        if (result.isErr()) {
+            errors.add(result.unwrapErr())
+            return
+        }
+
+        val handler = result.unwrap()
+        handler.emit(directive, ctx, symbols, errors)
     }
 
     private fun emitInstruction(

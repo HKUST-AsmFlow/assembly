@@ -1,9 +1,24 @@
 package io.github.asmflow.assembly.armv7.emulator
 
-
-class ARMv7MemoryState(text: List<Int>) {
+class ARMv7MemoryState(text: List<Int>, data: ByteArray = byteArrayOf()) {
     private val textWords: IntArray = text.toIntArray()
     private val dataMap: MutableMap<UInt, UByte> = mutableMapOf() // Simulate .data and stack using a hashmap
+
+    init {
+        val base = ARMv7AddressSpace.DATA_BASE.addr
+        val end = base + data.size.toUInt()
+        if (end > ARMv7AddressSpace.STACK_TOP.addr) {
+            throw EmulationException(
+                ".data (${data.size} bytes) exceeds available space below STACK_TOP"
+            )
+        }
+
+        var addr = base
+        data.forEach {
+            dataMap[addr] = it.toUByte()
+            addr += 1u
+        }
+    }
 
     private val textEnd: UInt =
         ARMv7AddressSpace.TEXT_BASE.addr + (textWords.size * 4).toUInt()

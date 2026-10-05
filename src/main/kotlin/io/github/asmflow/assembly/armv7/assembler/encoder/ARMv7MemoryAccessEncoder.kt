@@ -1,5 +1,6 @@
-package io.github.asmflow.assembly.armv7.assembler
+package io.github.asmflow.assembly.armv7.assembler.encoder
 
+import io.github.asmflow.assembly.armv7.assembler.AssemblySyntaxException
 import io.github.asmflow.assembly.armv7.assembler.utils.ARMv7Immediate
 import io.github.asmflow.assembly.armv7.database.ARMv7InstructionDatabase.getOpcode
 import io.github.asmflow.assembly.armv7.execution.ARMv7InstructionConditionCode

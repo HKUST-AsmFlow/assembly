@@ -1,6 +1,6 @@
 package io.github.asmflow.assembly.armv7.toolWindows.register
 
-import io.github.asmflow.assembly.armv7.assembler.ARMv7DataProcessingEncoder.toInt
+import io.github.asmflow.assembly.armv7.assembler.encoder.ARMv7DataProcessingEncoder.toInt
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
 import io.github.asmflow.assembly.armv7.toolWindows.ARMv7ViewNumberRepresentation
 import javax.swing.table.AbstractTableModel
