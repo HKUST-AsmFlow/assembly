@@ -5,9 +5,21 @@ class ARMv7RegisterState {
     private val registerFile = IntArray(16)
     private val cpsr = ARMv7CPSR()
 
+    /**
+     * Whether PC has been written since the last [clearPCWritten]. The emulator uses this to tell a
+     * taken branch apart from sequential execution, since a branch can land on any address.
+     */
+    var pcWritten = false
+        private set
+
+    fun clearPCWritten() {
+        pcWritten = false
+    }
+
     fun set(id: Int, value: Int) {
         if (id < 0 || id >= registerFile.size) throw EmulationException("Invalid register id: $id")
         registerFile[id] = value
+        if (id == 15) pcWritten = true
     }
 
     fun get(id: Int): Int {

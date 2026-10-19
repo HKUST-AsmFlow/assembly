@@ -1,0 +1,10 @@
+.global main
+
+@ Every line should fail to assemble, with the error in its comment.
+main:
+  blx main               @ BLX with a label switches to Thumb state, which is not supported. Use BL.
+  blx pc                 @ BLX pc is UNPREDICTABLE.
+  bxs lr                 @ bx does not support the S suffix
+  add r0, r1, r2, lsl pc @ PC cannot be used in a register-shifted register operation (UNPREDICTABLE).
+  add pc, r1, r2, lsl r3 @ PC cannot be used in a register-shifted register operation (UNPREDICTABLE).
+  mov r0, r1, rrx r2     @ RRX does not take a shift amount.
