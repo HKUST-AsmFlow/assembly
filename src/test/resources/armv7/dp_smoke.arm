@@ -1,0 +1,45 @@
+.global main
+
+@ Working with a packed 0x00RRGGBB colour: build it with MOVW / MOVT, invert it with MVN,
+@ and pull channels out with a shift by a register.
+@
+@ Expected: r4 = 0x00FF8040, r5 = 0x00007FBF, r0 = 0xFF + 0x80 + 0x40 = 447 (0x1BF), then exit
+@ with code 191: like Linux, the exit code keeps only the low byte of r0.
+main:
+  movw r4, #0x8040      @ green = 0x80, blue = 0x40
+  movt r4, #0x00FF      @ red = 0xFF: r4 = 0x00FF8040
+
+  @ invert the colour: move it to the top 24 bits, flip every bit, then move it back down
+  @ so the unused top byte stays 0
+  mvn r5, r4, lsl #8
+  mov r5, r5, lsr #8    @ r5 = 0x00007FBF
+
+  mov r0, r4
+  bl brightness         @ r0 = 447, and r4 still holds the colour
+
+  mov r7, #1
+  svc #0                @ exit(447), seen as exit code 191
+
+@ brightness(colour) = red + green + blue
+brightness:
+  push {r4, r5, lr}
+  mov r4, r0            @ r4 = colour, kept safe across the calls
+  mov r1, #0
+  bl get_byte           @ blue
+  mov r5, r0            @ r5 = running total
+  mov r0, r4
+  mov r1, #1
+  bl get_byte           @ green
+  add r5, r5, r0
+  mov r0, r4
+  mov r1, #2
+  bl get_byte           @ red
+  add r0, r5, r0
+  pop {r4, r5, pc}
+
+@ get_byte(word, index) = byte number `index` of word, counting from the low end
+get_byte:
+  mov r1, r1, lsl #3    @ bit offset = index * 8
+  mov r0, r0, lsr r1    @ shift right by a register amount
+  and r0, r0, #0xFF
+  bx lr
