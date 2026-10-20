@@ -27,10 +27,16 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7Register,
         shift: Option<ARMv7InstructionOperand.Register.Shift>
     ): Int {
+        // A shift by a register amount is the register-shifted register (RSR) form
+        val shiftByRegister = if (shift.isSome()) shift.unwrap().shiftBy as? ARMv7InstructionOperand.Register else null
+        if (shiftByRegister != null) {
+            return encodeRSRVariant(condition, opcode, S, Rn, Rd, shiftByRegister.register, Rm, shift.unwrap().shiftType)
+        }
+
         val shiftType = shift.map { it.shiftType }.unwrapOr(ARMv7ShiftType.LSL)
         val shiftImmediate = if (shift.isSome()) {
             val number = shift.unwrap().shiftBy as? ARMv7InstructionOperand.Number
-                ?: throw AssemblySyntaxException("No number provided for $shiftType shift.")
+                ?: throw AssemblySyntaxException("No amount provided for $shiftType shift.")
             ARMv7Immediate.encode5bitImmediate(
                 number.value.toString(),
                 shiftType
@@ -67,6 +73,13 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7Register,
         shiftType: ARMv7ShiftType,
     ): Int {
+        if (shiftType == ARMv7ShiftType.RRX) {
+            throw AssemblySyntaxException("RRX does not take a shift amount.")
+        }
+        if (ARMv7Register.PC in setOf(Rn, Rd, Rs, Rm)) {
+            throw AssemblySyntaxException("PC cannot be used in a register-shifted register operation (UNPREDICTABLE).")
+        }
+
         val instruction =
             ((condition.code shl 28) or (0b000 shl 25) or (opcode shl 21) or (S.toInt() shl 20) or (Rn.getIDSafe() shl 16) or
                     (Rd.getIDSafe() shl 12) or (Rs.getIDSafe() shl 8) or (0b0 shl 7) or (shiftType.code shl 5) or (0b1 shl 4) or (Rm.getIDSafe()))
@@ -190,29 +203,6 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         else -> throw AssemblySyntaxException("Invalid mnemonic for immediate DP format: ${instruction.baseMnemonic}")
     }
 
-    fun processRSRVariant(
-        instruction: ARMv7InstructionMixin,
-        Rn: ARMv7InstructionOperand.Register,
-        Rd: ARMv7InstructionOperand.Register,
-        Rm: ARMv7Register,
-        Rs: ARMv7Register,
-        shiftType: ARMv7ShiftType
-    ) = when {
-        instruction.baseMnemonic in binaryDataProcessingMnemonics -> encodeRSRVariant(
-            instruction.conditionCode,
-            getOpcode(instruction.baseMnemonic),
-            instruction.setsFlags,
-            Rn.register,
-            Rd.register,
-            Rs,
-            Rm,
-            shiftType
-        )
-
-        else -> throw AssemblySyntaxException("Invalid mnemonic for immediate RSR format: ${instruction.baseMnemonic}")
-
-    }
-
     fun processCmpRegisterVariant(
         instruction: ARMv7InstructionMixin,
         Rn: ARMv7InstructionOperand.Register,
@@ -250,7 +240,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         immediateNumber: Int
     ): Int {
         val (imm4, imm12) = ARMv7Immediate.encode16bitImmediate(immediateNumber.toUInt())
-        val instruction = ((instruction.conditionCode.code shl 28) or (0b00110 shl 23) or (instruction.baseMnemonic == "movt").toInt() shl 22
+        val instruction = ((instruction.conditionCode.code shl 28) or (0b00110 shl 23) or ((instruction.baseMnemonic == "movt").toInt() shl 22)
                 or (0b00 shl 20) or (imm4 shl 16) or (Rd.register.getIDSafe() shl 12) or imm12)
         return instruction
     }
@@ -333,25 +323,6 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
                         rn,
                         rd,
                         imm.value
-                    )
-                )
-            }
-        }
-
-        // RSR variant
-        if (operands.size == 3) {
-            val (rd, rn, rsr) = operands.map { it.operand }
-            if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && rsr is ARMv7InstructionOperand.Register
-                && rsr.shift.isSome() && rsr.shift.unwrap().shiftBy is ARMv7InstructionOperand.Register
-            ) {
-                return listOf(
-                    processRSRVariant(
-                        instruction,
-                        rn,
-                        rd,
-                        rsr.register,
-                        (rsr.shift.unwrap().shiftBy as ARMv7InstructionOperand.Register).register,
-                        rsr.shift.unwrap().shiftType
                     )
                 )
             }

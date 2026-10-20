@@ -1,0 +1,48 @@
+.global main
+
+@ Recursive Fibonacci, and a higher-order function that calls it through a function pointer.
+@ Arguments go in r0-r1 and the result comes back in r0. A function that makes calls saves
+@ the registers it uses (r4-r6) and lr with push, and returns by popping lr straight into pc.
+@
+@ Expected: r8 = fib(10) = 55, then exit with code fib(1) + ... + fib(10) = 143.
+@ To see the Thumb error, change `add r0, pc, #12` to `add r0, pc, #13`.
+main:
+  mov r0, #10
+  bl fib                @ r0 = fib(10) = 55
+  mov r8, r0            @ r8 = 55
+
+  add r0, pc, #12       @ r0 = &fib: pc reads as this + 8, and fib is 12 bytes past that
+  mov r1, #10
+  bl sum_map            @ r0 = fib(1) + fib(2) + ... + fib(10) = 143
+
+  mov r7, #1
+  svc #0                @ exit(143)
+
+@ fib(n) = n for n < 2, otherwise fib(n - 1) + fib(n - 2)
+fib:
+  cmp r0, #2
+  bxlt lr               @ base case: return n
+  push {r4, r5, lr}
+  mov r4, r0            @ r4 = n, kept safe across the calls
+  sub r0, r4, #1
+  bl fib
+  mov r5, r0            @ r5 = fib(n - 1)
+  sub r0, r4, #2
+  bl fib                @ r0 = fib(n - 2)
+  add r0, r0, r5
+  pop {r4, r5, pc}      @ restore r4, r5 and return
+
+@ sum_map(fn, n) = fn(1) + fn(2) + ... + fn(n)
+sum_map:
+  push {r4, r5, r6, lr}
+  mov r4, r0            @ r4 = fn
+  mov r5, r1            @ r5 = i, counts down from n
+  mov r6, #0            @ r6 = total
+sum_loop:
+  mov r0, r5
+  blx r4                @ r0 = fn(i)
+  add r6, r6, r0
+  subs r5, r5, #1
+  bne sum_loop
+  mov r0, r6
+  pop {r4, r5, r6, pc}

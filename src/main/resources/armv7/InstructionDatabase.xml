@@ -32,7 +32,7 @@
     <instruction name="bl" supportsFlags="false" supportsConditionCodes="true" format="Branch" opcode="1011">
         <shortDescription>Branch with Link</shortDescription>
     </instruction>
-    <instruction name="blx" supportsFlags="false" supportsConditionCodes="true">
+    <instruction name="blx" supportsFlags="false" supportsConditionCodes="true" format="BranchExchange">
         <shortDescription>Branch with Link and Exchange</shortDescription>
     </instruction>
     <instruction name="bx" supportsFlags="false" supportsConditionCodes="true" format="BranchExchange">

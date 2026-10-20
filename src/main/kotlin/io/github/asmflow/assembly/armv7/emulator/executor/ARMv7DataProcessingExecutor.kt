@@ -2,6 +2,7 @@ package io.github.asmflow.assembly.armv7.emulator.executor
 
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7DataProcessingDecoder
 import io.github.asmflow.assembly.armv7.emulator.ARMv7RegisterState
+import io.github.asmflow.assembly.armv7.emulator.EmulationException
 import io.github.asmflow.assembly.armv7.emulator.decoder.DecodedDataProcessingInstruction
 
 class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
@@ -20,12 +21,21 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         when (decoded.instruction.mnemonic) {
             "add" -> execAdd(decoded, withCarry = false)
             "adc" -> execAdd(decoded, withCarry = true)
-            "and" -> execAnd(decoded)
+            "and" -> execLogical(decoded) { op1, op2 -> op1 and op2 }
             "sub" -> execSub(decoded)
             "cmp" -> execCmp(decoded)
-            "eor" -> execEor(decoded)
-            "orr" -> execOrr(decoded)
-            "bic" -> execBic(decoded)
+            "eor" -> execLogical(decoded) { op1, op2 -> op1 xor op2 }
+            "orr" -> execLogical(decoded) { op1, op2 -> op1 or op2 }
+            "bic" -> execLogical(decoded) { op1, op2 -> op1 and op2.inv() }
+            "mov" -> execLogical(decoded) { _, op2 -> op2 }
+            "mvn" -> execLogical(decoded) { _, op2 -> op2.inv() }
+            "movw" -> registers.set(decoded.rd, decoded.operand2.getValue())
+            "movt" -> {
+                val low = registers.get(decoded.rd) and 0xFFFF
+                registers.set(decoded.rd, low or (decoded.operand2.getValue() shl 16))
+            }
+            // Fail loudly: a silently skipped instruction is how missing MOV went unnoticed
+            else -> throw EmulationException("Data-processing instruction ${decoded.instruction.mnemonic} is not executable yet")
         }
     }
 
@@ -40,30 +50,26 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         }
     }
 
-    private fun execAnd(inst: DecodedDataProcessingInstruction) {
-        val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
-        val result = op1 and op2
-        registers.set(inst.rd, result)
-        if (inst.setFlags) {
-            val cpsr = registers.getCPSR()
-            cpsr.N = result < 0
-            cpsr.Z = result == 0
-            cpsr.C = inst.operand2.getCarryOut()
+    /**
+     * Logical operations (AND, EOR, ORR, BIC, MOV, MVN). With S set, N and Z come from the result,
+     * C is the barrel shifter's carry-out, and V is left unchanged. MOV / MVN ignore Rn.
+     */
+    private fun execLogical(inst: DecodedDataProcessingInstruction, operation: (Int, Int) -> Int) {
+        if (inst.setFlags && inst.rd == 15) {
+            throw EmulationException("${inst.instruction.mnemonic.uppercase()}S to PC (exception return) is not supported")
         }
-    }
 
-    private fun execBic(inst: DecodedDataProcessingInstruction) {
         val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
+        // Evaluate the shifter once, before writing Rd, which may also be Rm or Rs
+        val shifted = inst.operand2.evaluate()
 
-        val result = op1 and op2.inv()
+        val result = operation(op1, shifted.result)
         registers.set(inst.rd, result)
         if (inst.setFlags) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
-            cpsr.C = inst.operand2.getCarryOut()
+            cpsr.C = shifted.carryOut
         }
     }
 
@@ -83,21 +89,6 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
     }
 
-    private fun execEor(inst: DecodedDataProcessingInstruction) {
-        val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
-
-        val result = op1 xor op2
-        registers.set(inst.rd, result)
-
-        if (inst.setFlags) {
-            val cpsr = registers.getCPSR()
-            cpsr.N = result < 0
-            cpsr.Z = result == 0
-            cpsr.C = inst.operand2.getCarryOut()
-        }
-    }
-
     private fun execSub(inst: DecodedDataProcessingInstruction) {
         val op1 = registers.get(inst.rn)
         val op2 = inst.operand2.getValue()
@@ -115,21 +106,6 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
             cpsr.C = unsignedOp1 >= unsignedOp2
 
             cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
-        }
-    }
-
-    private fun execOrr(inst: DecodedDataProcessingInstruction) {
-        val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
-
-        val result = op1 or op2
-        registers.set(inst.rd, result)
-
-        if (inst.setFlags) {
-            val cpsr = registers.getCPSR()
-            cpsr.N = result < 0
-            cpsr.Z = result == 0
-            cpsr.C = inst.operand2.getCarryOut()
         }
     }
 

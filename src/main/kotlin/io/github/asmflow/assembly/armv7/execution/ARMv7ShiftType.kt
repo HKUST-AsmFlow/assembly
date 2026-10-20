@@ -15,56 +15,14 @@ enum class ARMv7ShiftType(val code: Int, val description: String) {
     ROR(0b11, "Rotate right"),
     RRX(0b11, "Rotate right extended");
 
+    /**
+     * Shifts [item] by an amount encoded as a 5-bit immediate, applying the spec's DecodeImmShift:
+     * LSR #0 and ASR #0 encode a shift by 32, and ROR #0 encodes RRX.
+     */
     fun shift(item: Int, imm5: Int, carryIn: Boolean): ShiftResult {
         return when (this) {
-            LSL -> {
-                if (imm5 == 0) {
-                    // LSL #0 means no shift happens. Carry is untouched.
-                    ShiftResult(result = item, carryOut = carryIn)
-                } else {
-                    val result = item shl imm5
-                    // The last bit pushed off the left side is at position (32 - imm5)
-                    val carryOut = ((item ushr (32 - imm5)) and 1) == 1
-                    ShiftResult(result, carryOut)
-                }
-            }
-
-            LSR -> {
-                if (imm5 == 0) {
-                    // ARM Quirk: LSR #0 is actually LSR #32.
-                    // Result is 0. Carry out is the last bit pushed out (Bit 31 of original).
-                    val carryOut = (item ushr 31) == 1
-                    ShiftResult(result = 0, carryOut = carryOut)
-                } else {
-                    val result = item ushr imm5
-                    // The last bit pushed off the right side is at position (imm5 - 1)
-                    val carryOut = ((item ushr (imm5 - 1)) and 1) == 1
-                    ShiftResult(result, carryOut)
-                }
-            }
-
-            ASR -> {
-                if (imm5 == 0) {
-                    // ARM Quirk: ASR #0 is actually ASR #32.
-                    // It copies the sign bit (Bit 31) across the entire register.
-                    val result = item shr 31
-                    val carryOut = (item ushr 31) == 1
-                    ShiftResult(result, carryOut)
-                } else {
-                    val result = item shr imm5
-                    // The last bit pushed off the right side is at position (imm5 - 1)
-                    val carryOut = ((item ushr (imm5 - 1)) and 1) == 1
-                    ShiftResult(result, carryOut)
-                }
-            }
-
-            ROR -> {
-                val result = Integer.rotateRight(item, imm5)
-                // The last bit pushed off the right side is at position (imm5 - 1)
-                val carryOut = ((item ushr (imm5 - 1)) and 1) == 1
-                ShiftResult(result, carryOut)
-            }
-
+            LSL, ROR -> shiftC(item, imm5, carryIn)
+            LSR, ASR -> shiftC(item, if (imm5 == 0) 32 else imm5, carryIn)
             RRX -> {
                 // RRX shifts right by exactly 1. imm5 is completely ignored.
                 // It shifts the number right by 1, and inserts the old Carry flag into Bit 31.
@@ -75,6 +33,58 @@ enum class ARMv7ShiftType(val code: Int, val description: String) {
                 val carryOut = (item and 1) == 1
                 ShiftResult(result, carryOut)
             }
+        }
+    }
+
+    /**
+     * Shifts [item] by an actual [amount] (0..255), following the spec's Shift_C.
+     * An amount of 0 leaves both the value and the carry unchanged.
+     *
+     * JVM shifts only use the low 5 bits of the count (`x shl 32 == x`), so amounts of 32 and
+     * above are handled explicitly.
+     */
+    fun shiftC(item: Int, amount: Int, carryIn: Boolean): ShiftResult {
+        if (amount == 0) return ShiftResult(result = item, carryOut = carryIn)
+
+        return when (this) {
+            LSL -> when {
+                amount < 32 -> ShiftResult(
+                    result = item shl amount,
+                    // The last bit pushed off the left side is at position (32 - amount)
+                    carryOut = ((item ushr (32 - amount)) and 1) == 1
+                )
+                amount == 32 -> ShiftResult(result = 0, carryOut = (item and 1) == 1)
+                else -> ShiftResult(result = 0, carryOut = false)
+            }
+
+            LSR -> when {
+                amount < 32 -> ShiftResult(
+                    result = item ushr amount,
+                    // The last bit pushed off the right side is at position (amount - 1)
+                    carryOut = ((item ushr (amount - 1)) and 1) == 1
+                )
+                amount == 32 -> ShiftResult(result = 0, carryOut = (item ushr 31) == 1)
+                else -> ShiftResult(result = 0, carryOut = false)
+            }
+
+            ASR -> if (amount < 32) {
+                ShiftResult(
+                    result = item shr amount,
+                    carryOut = ((item ushr (amount - 1)) and 1) == 1
+                )
+            } else {
+                // Shifting by 32 or more copies the sign bit (Bit 31) across the entire register.
+                ShiftResult(result = item shr 31, carryOut = (item ushr 31) == 1)
+            }
+
+            ROR -> {
+                // Rotating by a multiple of 32 leaves the value unchanged; carry is always the new Bit 31
+                val result = Integer.rotateRight(item, amount and 31)
+                ShiftResult(result, carryOut = (result ushr 31) == 1)
+            }
+
+            // RRX always shifts by exactly 1, so the amount is irrelevant
+            RRX -> shift(item, 1, carryIn)
         }
     }
 

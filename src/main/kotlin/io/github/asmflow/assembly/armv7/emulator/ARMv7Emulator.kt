@@ -2,6 +2,7 @@ package io.github.asmflow.assembly.armv7.emulator
 
 import com.intellij.openapi.project.Project
 import io.github.asmflow.assembly.armv7.assembler.AssembledProgram
+import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7BranchDecoder
 import io.github.asmflow.assembly.armv7.emulator.decoder.ARMv7ConditionCodeDecoder
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7BranchExecutor
 import io.github.asmflow.assembly.armv7.emulator.executor.ARMv7DataProcessingExecutor
@@ -35,7 +36,9 @@ class ARMv7Emulator(
         val currentPC = registers.getPC()
         val instruction = memory.fetchInstruction(currentPC.toUInt())
         if (ARMv7ConditionCodeDecoder.shouldExecute(instruction, registers)) {
+            // PC reads as the current instruction + 8; executors that branch overwrite it
             registers.setPC(currentPC + 8)
+            registers.clearPCWritten()
 
             val router = (instruction ushr 25) and 0b111
             when (router) {
@@ -45,9 +48,12 @@ class ARMv7Emulator(
                 // 0b100 -> LDM / STM
                 0b010, 0b011, 0b100 -> ARMv7MemoryExecutor(registers, memory).execute(instruction)
                 0b000 -> {
+                    // BX / BLX (register) sit in the TEQ opcode space with S = 0
+                    if (ARMv7BranchDecoder.isBranchRegister(instruction))
+                        ARMv7BranchExecutor(registers).executeRegister(instruction)
                     // Annoyingly, MUL / SWP (from data) overlaps into the memory space
                     // We use this ugly expression to check for it
-                    if (((instruction ushr 7) and 1) == 1
+                    else if (((instruction ushr 7) and 1) == 1
                         && (((instruction ushr 4) and 1) == 1)
                         && (((instruction ushr 5) and 0b11) != 0))
                         ARMv7MemoryExecutor(registers, memory).execute(instruction)
@@ -57,7 +63,7 @@ class ARMv7Emulator(
                 0b111 -> ARMv7SupervisorCallExecutor(registers, memory, host) { exitCode = it }.execute(instruction)
             }
 
-            if (registers.getPC() == currentPC + 8) {
+            if (!registers.pcWritten) {
                 registers.setPC(currentPC + 4)
             }
         } else {

@@ -1,7 +1,7 @@
 # AsmFlow: ARMv7 assembler and emulator
 
 
-### Instructions currently supported by assembler
+### Instructions currently supported by AsmFlow
 ### DP
 - [x] ADC 
 - [x] ADD
@@ -19,6 +19,7 @@
 - [x] B
 - [x] BL
 - [x] BX
+- [x] BLX (register)
 
 ### Memory
 - [x] LDR
