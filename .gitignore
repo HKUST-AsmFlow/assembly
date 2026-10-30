@@ -43,4 +43,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+.intellijPlatform/layoutIndex
+.intellijPlatform/localPlatformArtifacts
+.intellijPlatform/productReleases
 .intellijPlatform/sandbox
+
