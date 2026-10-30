@@ -27,7 +27,7 @@
 ### Memory
 - [x] LDR
 - [x] STR
-- [ ] Byte / Halfword / Signed versions
+- [x] Byte / Halfword / Signed versions
 - [x] LDM
 - [x] STM
 
