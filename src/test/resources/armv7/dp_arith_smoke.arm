@@ -1,0 +1,66 @@
+.global main
+
+@ Phase 2: RSB, SBC, RSC, CMN, TST, TEQ and the shift aliases LSL, LSR, ASR, ROR, RRX.
+@ Each check adds 1 to r5 when it passes, and the program exits with r5.
+@
+@ Expected: exit code 10. A lower code means a check failed; count the `@ check n` lines to find it.
+@ To check the assembler errors, change the `lsl r4, r2, #4` line to one of:
+@   lsl r4, r2, #32   -> Shift amount 32 out of range for LSL (must be 0-31).
+@   ror r4, r2, #0    -> Shift amount 0 out of range for ROR (must be 1-31).
+@   teqs r3, r2       -> Instruction teqs r3, r2 does not support the S suffix.
+main:
+  mov r5, #0
+
+  @ 64-bit subtract: r1:r0 = 0x00000001_00000000 - 1 = 0x00000000_FFFFFFFF
+  mov r0, #0
+  mov r1, #1
+  subs r0, r0, #1       @ r0 = 0xFFFFFFFF, borrow so C = 0
+  sbc r1, r1, #0        @ e2c11000: r1 = 1 - 0 - NOT(C) = 0
+  cmp r1, #0
+  addeq r5, r5, #1      @ check 1: high word is 0
+  cmn r0, #1            @ e3700001: 0xFFFFFFFF + 1 = 0, so Z = 1
+  addeq r5, r5, #1      @ check 2: low word is -1
+
+  @ 64-bit negate: r1:r0 = -(0:5) = 0xFFFFFFFF_FFFFFFFB
+  mov r0, #5
+  mov r1, #0
+  rsbs r0, r0, #0       @ r0 = 0 - 5 = -5, borrow so C = 0
+  rsc r1, r1, #0        @ e2e11000: r1 = 0 - 0 - NOT(C) = -1
+  cmn r1, #1
+  addeq r5, r5, #1      @ check 3: high word is -1
+  cmn r0, #5
+  addeq r5, r5, #1      @ check 4: low word is -5
+
+  @ TST tests bits, TEQ compares signs; neither writes a register
+  mov r2, #0x40
+  tst r2, #0x40         @ e3120040: bit 6 is set, so Z = 0
+  addne r5, r5, #1      @ check 5
+  mvn r3, #0            @ r3 = -1
+  teq r3, r2            @ e1330002: signs differ, so N = 1
+  addmi r5, r5, #1      @ check 6
+
+  @ Shift aliases encode as MOV with a shifted register
+  mov r2, #3
+  lsl r4, r2, #4        @ e1a04202 (mov r4, r2, lsl #4): r4 = 48
+  lsr r4, r4, #2        @ r4 = 12
+  mov r6, #2
+  lsl r4, r6            @ e1a04614 (mov r4, r4, lsl r6): r4 = 48
+  cmp r4, #48
+  addeq r5, r5, #1      @ check 7
+  mvn r4, #0xF          @ r4 = 0xFFFFFFF0 = -16
+  asr r4, r4, #2        @ sign is kept: r4 = -4
+  cmn r4, #4
+  addeq r5, r5, #1      @ check 8
+
+  @ Carry from the shifter, rotated back in by RRX
+  mov r4, #0xFF
+  ror r4, r4, #8        @ r4 = 0xFF000000
+  lsrs r4, r4, #32      @ e1b04024 (#32 is encoded as 0): r4 = 0, C = old bit 31 = 1
+  addeq r5, r5, #1      @ check 9: Z = 1
+  rrx r4, r4            @ e1a04064 (mov r4, r4, ror #0): r4 = C:r4 >> 1 = 0x80000000
+  lsls r4, r4, #1       @ bit 31 shifted out: r4 = 0, C = 1
+  adc r5, r5, #0        @ check 10: adds the carry
+
+  mov r0, r5
+  mov r7, #1
+  svc #0                @ exit(10)

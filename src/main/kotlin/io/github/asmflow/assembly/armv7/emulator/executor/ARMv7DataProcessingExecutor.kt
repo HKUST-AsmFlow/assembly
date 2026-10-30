@@ -19,14 +19,20 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
     fun execute(raw: Int) {
         val decoded = decoder.decode(raw)
         when (decoded.instruction.mnemonic) {
-            "add" -> execAdd(decoded, withCarry = false)
-            "adc" -> execAdd(decoded, withCarry = true)
+            "add" -> execArith(decoded) { rn, op2, _ -> Triple(rn, op2, false) }
+            "adc" -> execArith(decoded) { rn, op2, c -> Triple(rn, op2, c) }
+            "sub" -> execArith(decoded) { rn, op2, _ -> Triple(rn, op2.inv(), true) }
+            "sbc" -> execArith(decoded) { rn, op2, c -> Triple(rn, op2.inv(), c) }
+            "rsb" -> execArith(decoded) { rn, op2, _ -> Triple(rn.inv(), op2, true) }
+            "rsc" -> execArith(decoded) { rn, op2, c -> Triple(rn.inv(), op2, c) }
+            "cmp" -> execArith(decoded, writeResult = false) { rn, op2, _ -> Triple(rn, op2.inv(), true) }
+            "cmn" -> execArith(decoded, writeResult = false) { rn, op2, _ -> Triple(rn, op2, false) }
             "and" -> execLogical(decoded) { op1, op2 -> op1 and op2 }
-            "sub" -> execSub(decoded)
-            "cmp" -> execCmp(decoded)
             "eor" -> execLogical(decoded) { op1, op2 -> op1 xor op2 }
             "orr" -> execLogical(decoded) { op1, op2 -> op1 or op2 }
             "bic" -> execLogical(decoded) { op1, op2 -> op1 and op2.inv() }
+            "tst" -> execLogical(decoded, writeResult = false) { op1, op2 -> op1 and op2 }
+            "teq" -> execLogical(decoded, writeResult = false) { op1, op2 -> op1 xor op2 }
             "mov" -> execLogical(decoded) { _, op2 -> op2 }
             "mvn" -> execLogical(decoded) { _, op2 -> op2.inv() }
             "movw" -> registers.set(decoded.rd, decoded.operand2.getValue())
@@ -39,23 +45,55 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         }
     }
 
-    private fun execAdd(inst: DecodedDataProcessingInstruction, withCarry: Boolean) {
-        val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
-        val carryIn = if (withCarry && registers.getCPSR().C) 1 else 0
-        val result = op1 + op2 + carryIn
-        registers.set(inst.rd, result)
-        if (inst.setFlags) {
-            updateAddFlags(op1, op2, carryIn, result)
+    /**
+     * Arithmetic operations, all expressed through the spec's AddWithCarry: [operands] maps
+     * (Rn, operand2, C) to (x, y, carryIn), e.g. SUB is Rn + NOT(op2) + 1. N and Z come from the
+     * result; C and V come from AddWithCarry. CMP / CMN only set the flags.
+     */
+    private fun execArith(
+        inst: DecodedDataProcessingInstruction,
+        writeResult: Boolean = true,
+        operands: (Int, Int, Boolean) -> Triple<Int, Int, Boolean>
+    ) {
+        if (writeResult && inst.setFlags && inst.rd == 15) {
+            throw EmulationException("${inst.instruction.mnemonic.uppercase()}S to PC (exception return) is not supported")
         }
+
+        val cpsr = registers.getCPSR()
+        // Read both operands before writing Rd, which may also be Rn or Rm
+        val (x, y, carryIn) = operands(registers.get(inst.rn), inst.operand2.getValue(), cpsr.C)
+        val (result, carryOut, overflow) = addWithCarry(x, y, carryIn)
+
+        if (writeResult) registers.set(inst.rd, result)
+        if (inst.setFlags) {
+            cpsr.N = result < 0
+            cpsr.Z = result == 0
+            cpsr.C = carryOut
+            cpsr.V = overflow
+        }
+    }
+
+    /**
+     * The spec's AddWithCarry(x, y, carry_in): returns (result, carry_out, overflow).
+     */
+    private fun addWithCarry(x: Int, y: Int, carryIn: Boolean): Triple<Int, Boolean, Boolean> {
+        val unsignedSum = (x.toLong() and 0xFFFFFFFFL) + (y.toLong() and 0xFFFFFFFFL) + (if (carryIn) 1 else 0)
+        val signedSum = x.toLong() + y.toLong() + (if (carryIn) 1 else 0)
+        val result = unsignedSum.toInt()
+        return Triple(result, unsignedSum != (result.toLong() and 0xFFFFFFFFL), signedSum != result.toLong())
     }
 
     /**
      * Logical operations (AND, EOR, ORR, BIC, MOV, MVN). With S set, N and Z come from the result,
      * C is the barrel shifter's carry-out, and V is left unchanged. MOV / MVN ignore Rn.
+     * TST / TEQ only set the flags.
      */
-    private fun execLogical(inst: DecodedDataProcessingInstruction, operation: (Int, Int) -> Int) {
-        if (inst.setFlags && inst.rd == 15) {
+    private fun execLogical(
+        inst: DecodedDataProcessingInstruction,
+        writeResult: Boolean = true,
+        operation: (Int, Int) -> Int
+    ) {
+        if (writeResult && inst.setFlags && inst.rd == 15) {
             throw EmulationException("${inst.instruction.mnemonic.uppercase()}S to PC (exception return) is not supported")
         }
 
@@ -64,58 +102,12 @@ class ARMv7DataProcessingExecutor(private val registers: ARMv7RegisterState) {
         val shifted = inst.operand2.evaluate()
 
         val result = operation(op1, shifted.result)
-        registers.set(inst.rd, result)
+        if (writeResult) registers.set(inst.rd, result)
         if (inst.setFlags) {
             val cpsr = registers.getCPSR()
             cpsr.N = result < 0
             cpsr.Z = result == 0
             cpsr.C = shifted.carryOut
         }
-    }
-
-    private fun execCmp(inst: DecodedDataProcessingInstruction) {
-        val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
-
-        val result = op1 - op2
-        val cpsr = registers.getCPSR()
-        cpsr.N = result < 0
-        cpsr.Z = result == 0
-
-        val unsignedOp1 = op1.toLong() and 0xFFFFFFFFL
-        val unsignedOp2 = op2.toLong() and 0xFFFFFFFFL
-        cpsr.C = unsignedOp1 >= unsignedOp2
-
-        cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
-    }
-
-    private fun execSub(inst: DecodedDataProcessingInstruction) {
-        val op1 = registers.get(inst.rn)
-        val op2 = inst.operand2.getValue()
-
-        val result = op1 - op2
-        registers.set(inst.rd, result)
-
-        if (inst.setFlags) {
-            val cpsr = registers.getCPSR()
-            cpsr.N = result < 0
-            cpsr.Z = result == 0
-
-            val unsignedOp1 = op1.toLong() and 0xFFFFFFFFL
-            val unsignedOp2 = op2.toLong() and 0xFFFFFFFFL
-            cpsr.C = unsignedOp1 >= unsignedOp2
-
-            cpsr.V = ((op1 xor op2) < 0) && ((op1 xor result) < 0)
-        }
-    }
-
-    private fun updateAddFlags(op1: Int, op2: Int, carryIn: Int, result: Int) {
-        val cpsr = registers.getCPSR()
-        cpsr.N = result < 0
-        cpsr.Z = result == 0
-        val sumUnsigned = op1.toUInt().toULong() + op2.toUInt().toULong() + carryIn.toULong()
-        cpsr.C = sumUnsigned > 0xFFFF_FFFFu
-        // signed overflow for addition
-        cpsr.V = (((op1 xor result) and (op2 xor result)) < 0)
     }
 }

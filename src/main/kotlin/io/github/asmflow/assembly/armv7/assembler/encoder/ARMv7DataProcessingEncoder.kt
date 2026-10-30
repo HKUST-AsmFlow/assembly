@@ -10,12 +10,24 @@ import io.github.asmflow.assembly.armv7.execution.ARMv7ShiftType
 import io.github.asmflow.assembly.armv7.psi.ARMv7InstructionMixin
 import io.github.asmflow.assembly.armv7.psi.ARMv7Operand
 import io.github.asmflow.assembly.armv7.util.functional.Option
+import io.github.asmflow.assembly.armv7.util.functional.Some
 
 /**
  * Object providing support for encoding data processing instructions.
  */
 object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
-    private val binaryDataProcessingMnemonics = setOf("adc", "add", "and", "bic", "eor", "orr", "sub")
+    private val binaryDataProcessingMnemonics = setOf("adc", "add", "and", "bic", "eor", "orr", "rsb", "rsc", "sbc", "sub")
+
+    // Compare / test instructions: no Rd, S always set
+    private val compareMnemonics = setOf("cmn", "cmp", "teq", "tst")
+
+    // LSL, LSR, ASR and ROR are aliases for MOV with a shifted register operand
+    private val shiftAliases = mapOf(
+        "lsl" to ARMv7ShiftType.LSL,
+        "lsr" to ARMv7ShiftType.LSR,
+        "asr" to ARMv7ShiftType.ASR,
+        "ror" to ARMv7ShiftType.ROR,
+    )
 
     fun Boolean.toInt() = if (this) 1 else 0
     fun encodeRegisterVariant(
@@ -209,7 +221,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         Rm: ARMv7InstructionOperand.Register
     ) = encodeRegisterVariant(
         instruction.conditionCode,
-        getOpcode("cmp"),
+        getOpcode(instruction.baseMnemonic),
         true,
         Rn.register,
         ARMv7Register.R0,
@@ -223,7 +235,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         immediateNumber: Int
     ) = encodeImmediateVariant(
         instruction.conditionCode,
-        getOpcode("cmp"),
+        getOpcode(instruction.baseMnemonic),
         true,
         Rn.register,
         ARMv7Register.R0,
@@ -245,6 +257,64 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         return instruction
     }
 
+    /**
+     * Encodes `lsl Rd, Rm, #n|Rs` as `mov Rd, Rm, lsl #n|Rs` (same for LSR, ASR and ROR).
+     * The two-operand form `lsl Rd, #n|Rs` shifts Rd in place.
+     */
+    fun processShiftAlias(
+        instruction: ARMv7InstructionMixin,
+        operands: List<ARMv7InstructionOperand>
+    ): Int {
+        val (rd, rm, amount) = when (operands.size) {
+            2 -> Triple(operands[0], operands[0], operands[1])
+            3 -> Triple(operands[0], operands[1], operands[2])
+            else -> throw invalidOperands(instruction)
+        }
+        if (rd !is ARMv7InstructionOperand.Register || rm !is ARMv7InstructionOperand.Register) {
+            throw invalidOperands(instruction)
+        }
+
+        // A register amount is encoded as the RSR form by encodeRegisterVariant
+        val shiftType = shiftAliases.getValue(instruction.baseMnemonic)
+        val shift = ARMv7InstructionOperand.Register.Shift(shiftType, amount)
+        return encodeMovWithShift(instruction, rd, rm, shift)
+    }
+
+    /**
+     * Encodes `rrx Rd, Rm` as `mov Rd, Rm, rrx`.
+     */
+    fun processRrxAlias(
+        instruction: ARMv7InstructionMixin,
+        operands: List<ARMv7InstructionOperand>
+    ): Int {
+        if (operands.size != 2) throw invalidOperands(instruction)
+        val (rd, rm) = operands
+        if (rd !is ARMv7InstructionOperand.Register || rm !is ARMv7InstructionOperand.Register) {
+            throw invalidOperands(instruction)
+        }
+
+        val shift = ARMv7InstructionOperand.Register.Shift(ARMv7ShiftType.RRX, ARMv7InstructionOperand.Number(0))
+        return encodeMovWithShift(instruction, rd, rm, shift)
+    }
+
+    private fun encodeMovWithShift(
+        instruction: ARMv7InstructionMixin,
+        Rd: ARMv7InstructionOperand.Register,
+        Rm: ARMv7InstructionOperand.Register,
+        shift: ARMv7InstructionOperand.Register.Shift
+    ) = encodeRegisterVariant(
+        instruction.conditionCode,
+        getOpcode("mov"),
+        instruction.setsFlags,
+        ARMv7Register.R0,
+        Rd.register,
+        Rm.register,
+        Some(shift)
+    )
+
+    private fun invalidOperands(instruction: ARMv7InstructionMixin) =
+        AssemblySyntaxException("Invalid operands for ${instruction.baseMnemonic.uppercase()}")
+
     override fun encode(
         instruction: ARMv7InstructionMixin,
         operands: List<ARMv7Operand>,
@@ -263,6 +333,13 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         // a) The bottom 12 bits are an immediate. The I bit must be set to 1 and, it is split into an 8 bit immediate and 4 bit rotate right multipler.
         // b) Register shift encoding: Bottom 12 bits specify another register, type of shift, and 5 bit immediate for shift amount
         // c) Register shifted register: Bottom 12 bits specify a register, which is shifted by the amount specified in another register, according to a certain type.
+
+        if (instruction.baseMnemonic in shiftAliases) {
+            return listOf(processShiftAlias(instruction, operands.map { it.operand }))
+        }
+        if (instruction.baseMnemonic == "rrx") {
+            return listOf(processRrxAlias(instruction, operands.map { it.operand }))
+        }
 
         if (operands.size !in 1..3) throw AssemblySyntaxException("Too few or too little operands in instruction ${instruction.baseMnemonic}") // Register with shift is encoded as one operand
         // TODO: perform some common checks on operands,
@@ -288,7 +365,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
 
         if (operands.size == 2){
             val (rd, rm) = operands.map{it.operand}
-            if (instruction.baseMnemonic == "cmp" && rd is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register) {
+            if (instruction.baseMnemonic in compareMnemonics && rd is ARMv7InstructionOperand.Register && rm is ARMv7InstructionOperand.Register) {
                 return listOf(processCmpRegisterVariant(instruction, rd, rm))
             }
 
@@ -307,7 +384,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
         if (operands.size == 2){
             val (rd, imm) = operands.map{it.operand}
             if (rd is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number && !rd.shift.isSome()){
-                if (instruction.baseMnemonic == "cmp") return listOf(processCmpImmediateVariant(instruction, rd, imm.value))
+                if (instruction.baseMnemonic in compareMnemonics) return listOf(processCmpImmediateVariant(instruction, rd, imm.value))
                 if (instruction.baseMnemonic in setOf("movw", "movt")) return listOf(processMovTWVariants(instruction, rd, imm.value))
                 return listOf(processTwoArgImmediateVariant(instruction, rd, imm.value))
             }
@@ -315,7 +392,7 @@ object ARMv7DataProcessingEncoder : ARMv7InstructionEncoder {
 
         // Check for immediate variant
         if (operands.size == 3) {
-            val (rd, rn, imm) = operands.map { it.operand }
+            val (rd , rn, imm) = operands.map { it.operand }
             if (rd is ARMv7InstructionOperand.Register && rn is ARMv7InstructionOperand.Register && imm is ARMv7InstructionOperand.Number) {
                 if (!rd.shift.isSome() && !rn.shift.isSome()) return listOf(
                     processImmediateVariant(
