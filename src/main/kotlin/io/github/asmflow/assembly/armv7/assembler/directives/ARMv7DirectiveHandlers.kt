@@ -27,6 +27,8 @@ object ARMv7DirectiveHandlers {
         // memory alignment stuff
         "align" to ARMv7AlignDirectiveHandler,
         "space" to ARMv7SpaceDirectiveHandler,
+
+        "global" to ARMv7GlobalDirectiveHandler
     )
 
     fun get(name: String) = handlers[name].toOption()
