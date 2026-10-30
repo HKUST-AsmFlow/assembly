@@ -94,15 +94,24 @@ object ARMv7Immediate {
         return immediate
     }
 
+    /**
+     * Encodes a shift amount as imm5, the inverse of the spec's DecodeImmShift:
+     * LSL takes 0-31, LSR / ASR take 1-32 (32 is encoded as 0), and ROR takes 1-31 (ROR #0 is RRX).
+     */
     fun encode5bitImmediate(input: String, type: ARMv7ShiftType): Int {
         if (type == ARMv7ShiftType.RRX) return 0
-        // For bit shifts with immediates
-        val value = preProcessImmediate(input)
-        if (type == ARMv7ShiftType.LSL)
-            if (value == 32u) return 0
-        if (value !in 1u..32u) throw AssemblySyntaxException("Shift value $value out of range.")
-        return value.toInt()
-
+        val value = preProcessImmediate(input).toLong()
+        val range = when (type) {
+            ARMv7ShiftType.LSL -> 0L..31L
+            ARMv7ShiftType.LSR, ARMv7ShiftType.ASR -> 1L..32L
+            else -> 1L..31L
+        }
+        if (value !in range) {
+            throw AssemblySyntaxException("Shift amount $value out of range for ${type.name} (must be ${range.first}-${range.last}).")
+        }
+        return (value and 0x1F).toInt()
+        // NOTE: a 32 bit shift is functionally encoded as
+        // a 0 as it is a NOOP and redundant for right shifts.
     }
 
     /**
