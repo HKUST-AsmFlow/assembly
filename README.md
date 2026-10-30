@@ -14,6 +14,9 @@
 - [x] EOR
 - [x] ORR
 - [x] BIC
+- [x] RSB / SBC / RSC
+- [x] CMN / TST / TEQ
+- [x] LSL / LSR / ASR / ROR / RRX (aliases for MOV with a shift)
 
 ### Branch
 - [x] B
